@@ -1,0 +1,28 @@
+---
+description: TAAM Works portfolio design and data rules
+alwaysApply: true
+---
+
+# TAAM Works
+
+## Design sources
+
+- Visual authority: [TaamWorks Figma](https://www.figma.com/design/5bLFt80FrBMHNTd7s1Zu6B/TaamWorks?node-id=0-1&p=f&m=dev). Expect ongoing layout, type, and asset edits from Dev Mode.
+- Architecture / staging: `docs/taamworks-build-brief.md` (v0.2).
+- Keep palette, type, spacing, and hero coordinates in CSS variables / typed config so Figma refinements do not require page rewrites.
+
+## Brand and copy
+
+- Preserve supplied layouts and original branding. Do not present TEMPORARY placeholders as final.
+- English interface, navigation, forms, metadata, and editorial body copy only.
+- Preserve Arabic (or other) lettering inside supplied artwork; do not invent bilingual UI.
+- Do not fabricate project outcomes or copy inaccessible sources.
+
+## Structure
+
+- Homepage animation and studio/service copy are code-managed (`src/content/`).
+- Portfolio content is data-driven (fixtures now; Supabase later) via a stable `Project` type.
+- About and Services are homepage anchors (`/#about`, `/#services`), not separate pages.
+- The three hero compositions are animation states of **one** hero (A → B → C), not three sections.
+- Initiatives has no confirmed destination — do not invent a link target.
+- Keep public and admin data access separate. Never expose secrets or draft/private content.

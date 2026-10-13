@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# Design walkthrough — keep locally under design-reference/; do not ship in git
+design-reference/*.mp4
+*.mp4
+
 # debug
 npm-debug.log*
 yarn-debug.log*

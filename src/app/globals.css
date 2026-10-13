@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Sampled from brief PNGs — replace with Figma variables when exported */
+  --bg: #000000;
+  --cream: #fbf5d5;
+  --pink: #ff7dff;
+  --blue: #0064ff;
+  --red: #f72528;
+  --yellow: #f5e600;
+  --gray: #afafaf;
+
+  --background: var(--bg);
+  --foreground: var(--cream);
+
+  --space-section: clamp(4rem, 10vw, 8rem);
+  --space-gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --header-offset: 4.5rem;
+  --content-max: 90rem;
+
+  --type-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --type-lead: clamp(1.125rem, 1rem + 0.5vw, 1.35rem);
+  --type-display: clamp(2.5rem, 4vw + 1rem, 5.5rem);
+  --type-nav: clamp(1.25rem, 1rem + 1vw, 2rem);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: var(--cream);
+  --color-pink: var(--pink);
+  --color-blue: var(--blue);
+  --color-red: var(--red);
+  --color-yellow: var(--yellow);
+  --color-gray: var(--gray);
+  --color-bg: var(--bg);
+  --font-sans: var(--font-body-temporary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--cream);
+  font-family: var(--font-body-temporary), "Segoe UI", sans-serif;
+  font-size: var(--type-body);
+  line-height: 1.55;
+}
+
+::selection {
+  background: var(--yellow);
+  color: var(--bg);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+.site-shell {
+  width: min(100%, var(--content-max));
+  margin-inline: auto;
+  padding-inline: var(--space-gutter);
 }
