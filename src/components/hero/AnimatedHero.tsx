@@ -53,7 +53,6 @@ export function AnimatedHero() {
       return clearTimers;
     }
 
-    // All arrangement updates are scheduled asynchronously (lint-safe).
     timersRef.current.push(
       window.setTimeout(() => {
         if (frozenRef.current) return;
@@ -109,10 +108,10 @@ export function AnimatedHero() {
 
   return (
     <section
-      className="site-shell relative min-h-[70vh] py-8 md:min-h-[85vh] md:py-12"
+      className="site-shell relative overflow-visible py-6 pb-16 md:py-8 md:pb-20"
       aria-label="TAAM navigation hero"
     >
-      <div className="relative mx-auto aspect-[4/3] w-full max-w-6xl md:aspect-[16/10]">
+      <div className="relative mx-auto w-full max-w-[1076px] overflow-visible aspect-[1076/395]">
         <TaamWordmark />
         {labelOrder.map((id) => {
           const item = heroNav.find((n) => n.id === id)!;

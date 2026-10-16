@@ -3,11 +3,11 @@ import type { CSSProperties } from "react";
 import type { NavItem } from "@/content/site";
 
 const colorClass: Record<NavItem["color"], string> = {
-  blue: "text-blue",
-  red: "text-red",
-  pink: "text-pink",
-  yellow: "text-yellow",
-  gray: "text-gray",
+  blue: "bg-blue",
+  red: "bg-red",
+  pink: "bg-pink",
+  yellow: "bg-yellow",
+  gray: "bg-gray",
 };
 
 type HeroBadgeProps = {
@@ -23,7 +23,7 @@ export function HeroBadge({
   onInteractStart,
   onInteractEnd,
 }: HeroBadgeProps) {
-  const className = `absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[length:var(--type-nav)] font-medium tracking-wide transition-[left,top] will-change-[left,top] ${colorClass[item.color]}`;
+  const className = `absolute flex h-[clamp(2.25rem,4.2vw,3.6875rem)] items-center justify-center rounded-[var(--radius-cta)] px-[clamp(0.9rem,2vw,1.5rem)] text-[length:var(--type-nav)] leading-none tracking-[var(--tracking-nav)] text-black whitespace-nowrap transition-[left,top] will-change-[left,top] ${colorClass[item.color]}`;
 
   const interaction = {
     onFocus: onInteractStart,

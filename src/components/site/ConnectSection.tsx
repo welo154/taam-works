@@ -8,12 +8,12 @@ type ConnectSectionProps = {
 export function ConnectSection({ className = "" }: ConnectSectionProps) {
   return (
     <section
-      className={`site-shell flex justify-center py-16 md:py-24 ${className}`}
+      className={`site-shell flex justify-center py-10 md:py-14 ${className}`}
       aria-label="Connect"
     >
       <Link
         href="/connect"
-        className="inline-flex min-h-12 items-center justify-center bg-yellow px-8 py-3 text-sm font-semibold tracking-[0.12em] text-bg transition-transform hover:scale-[1.02] md:min-h-14 md:px-12 md:text-base"
+        className="inline-flex h-[61px] w-[303px] items-center justify-center rounded-[var(--radius-cta)] bg-yellow text-[40px] leading-none tracking-[-0.08em] text-black transition-transform hover:scale-[1.02]"
       >
         {connectCta}
       </Link>

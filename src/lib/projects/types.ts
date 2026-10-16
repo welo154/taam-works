@@ -41,6 +41,8 @@ export type Project = {
   description: string;
   tags: string[];
   cardMeta?: string;
+  /** Caption chips above a home/works card, matching Figma metadata rows. */
+  homeLabels?: string[];
   status: ProjectStatus;
   cover: MediaAsset;
   media: ProjectMediaRow[];

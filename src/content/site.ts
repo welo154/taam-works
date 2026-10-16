@@ -1,24 +1,22 @@
 /**
  * Static English studio copy and navigation.
  * Homepage animation/copy are code-managed; portfolio content is data-driven.
+ * Type, spacing, and hero coordinates come from TaamWorks Figma (Page 1).
  */
 
 export const siteMeta = {
   name: "TAAM Works",
   studioLabel: "taamworks",
   copyrightYear: 2026,
-  temporaryFontNote:
-    "Body type is a TEMPORARY Google font until Figma webfonts are supplied.",
+  fontNote:
+    "Figma specifies Acumin Pro. Source Sans 3 stands in until licensed Acumin files are added.",
 } as const;
 
 export const contact = {
-  email: "hello@taamworks.example",
-  phone: "+00 000 000 0000",
-  emailNote: "Placeholder — replace with verified address before launch.",
-  phoneNote: "Placeholder — replace with verified number before launch.",
+  email: "hello@taamworks.com",
+  phone: "+(20) 109 180 2996",
   behance: "https://www.behance.net/",
   instagram: "https://www.instagram.com/",
-  socialNote: "Placeholder social destinations until verified.",
 } as const;
 
 export type NavItem = {
@@ -29,55 +27,198 @@ export type NavItem = {
 };
 
 export const heroNav: NavItem[] = [
-  { id: "about", label: "About", color: "blue", href: "/#about" },
-  { id: "works", label: "Works", color: "red", href: "/works" },
-  { id: "services", label: "Services", color: "pink", href: "/#services" },
-  { id: "contact", label: "Contact", color: "yellow", href: "/connect" },
+  { id: "about", label: "ABOUT", color: "blue", href: "/#about" },
+  { id: "works", label: "WORKS", color: "red", href: "/works" },
+  { id: "services", label: "SERVICES", color: "pink", href: "/#services" },
+  { id: "contact", label: "CONTACT", color: "yellow", href: "/connect" },
   // Initiatives has no confirmed destination — non-navigating label.
-  { id: "initiatives", label: "Initiatives", color: "gray", href: null },
+  { id: "initiatives", label: "INITIATIVES", color: "gray", href: null },
 ];
 
 export const studioIntro = {
   id: "about",
   label: "taamworks",
-  paragraphs: [
-    "TAAM is a multidisciplinary studio working across design, technology, events, and spatial practice. We shape identities, digital products, cultural programs, and environments with equal care for concept and craft.",
-    "Our collaborators include cultural institutions, technology companies, and independent makers who need clear direction and considered execution.",
-  ],
+  paragraph:
+    "an interdisciplinary studio based in London, working across design, technology, experiences, and spaces. We bring together diverse disciplines to create purposeful identities, products, environments, and experiences that bring ideas to life across physical and digital experiences.",
 } as const;
 
-/**
- * Shorter service lists match the supplied screenshots.
- * The walkthrough video shows longer lists (Creative Direction, Communication
- * Design, Type Design & Lettering, Digital Design, Product Design, Furniture &
- * Object Design, Wayfinding & Environmental Graphics, etc.). Keep this file
- * editable; revise if Figma lists differ.
- */
-export const serviceGroups = [
+export type ServiceItem = {
+  title: string;
+  description: string;
+};
+
+export type ServiceGroup = {
+  number: string;
+  title: string;
+  titleLines?: readonly string[];
+  intro: string;
+  items: readonly ServiceItem[];
+};
+
+export const serviceGroups: readonly ServiceGroup[] = [
   {
     number: "01",
-    title: "Design",
-    items: ["Brand Identity", "Brand Strategy"],
+    title: "DESIGN",
+    intro:
+      "We build identities and communication systems that help brands, organizations, and ideas establish a distinctive and consistent presence.",
+    items: [
+      {
+        title: "Brand Identity",
+        description:
+          "Creating visual identity systems that translate a brand’s character into a recognizable visual language.",
+      },
+      {
+        title: "Brand Strategy",
+        description:
+          "Defining positioning, personality, audience, and strategic direction to build meaningful brands.",
+      },
+      {
+        title: "Creative Direction",
+        description:
+          "Establishing and overseeing the creative vision across different mediums and touchpoints.",
+      },
+      {
+        title: "Communication Design",
+        description:
+          "Designing visual communication across print, digital, editorial, campaigns, and other brand applications.",
+      },
+      {
+        title: "Type Design & Lettering",
+        description:
+          "Creating custom typefaces, lettering, and typographic systems tailored to specific identities and contexts.",
+      },
+      {
+        title: "Digital Design",
+        description:
+          "Designing websites and digital experiences that extend identities into interactive environments.",
+      },
+      {
+        title: "Campaign Design",
+        description:
+          "Developing visual concepts and communication systems for launches, campaigns, and cultural initiatives.",
+      },
+    ],
   },
   {
     number: "02",
-    title: "Tech",
-    items: ["UI/UX Design", "Web Design & Development"],
+    title: "TECH",
+    intro:
+      "We design and develop digital products and systems where technology, functionality, and user experience work together.",
+    items: [
+      {
+        title: "UI/UX Design",
+        description:
+          "Designing intuitive interfaces and user journeys around real behaviors and needs.",
+      },
+      {
+        title: "Web Design & Development",
+        description:
+          "Creating responsive digital platforms from experience and interface design through development.",
+      },
+      {
+        title: "App Design & Development",
+        description:
+          "Designing and developing digital applications with coherent user experiences and scalable structures.",
+      },
+      {
+        title: "Digital Product Design",
+        description:
+          "Developing digital products from initial concept and functionality to interface and experience.",
+      },
+      {
+        title: "Automation & Workflow Systems",
+        description:
+          "Building automated processes that simplify operations, connect tools, and reduce repetitive work.",
+      },
+      {
+        title: "System Design",
+        description:
+          "Structuring interconnected digital systems, workflows, and platforms around complex organizational needs.",
+      },
+      {
+        title: "Creative Technology",
+        description:
+          "Exploring technology as a creative medium through interactive experiences, installations, generative systems, and experimental digital applications.",
+      },
+    ],
   },
   {
     number: "03",
-    title: "Events",
+    title: "EVENTS",
+    intro:
+      "We create physical and cultural experiences from concept to execution, combining strategy, storytelling, design, curation, and production.",
     items: [
-      "Event Strategy, Concept & Creative Direction",
-      "Curation & Programming",
+      {
+        title: "Event Strategy, Concept & Creative Direction",
+        description:
+          "Developing the central concept, strategic direction, and creative vision that shape the event and connect its content, identity, spaces, and overall experience.",
+      },
+      {
+        title: "Curation & Programming",
+        description:
+          "Developing meaningful programs through speakers, exhibitions, performances, workshops, and other forms of content.",
+      },
+      {
+        title: "Event Identity & Communication",
+        description:
+          "Developing visual identities and communication systems specifically for events and cultural programs.",
+      },
+      {
+        title: "Event Management & Production",
+        description:
+          "Planning and coordinating the operational elements required to deliver an event from preparation to execution.",
+      },
+      {
+        title: "Exhibitions & Installations",
+        description:
+          "Conceptualizing and designing exhibitions and installations that bring content and narratives into physical space.",
+      },
     ],
   },
   {
     number: "04",
-    title: "Space & Objects",
-    items: ["Interior Design", "Spatial Design"],
+    title: "SPACE & OBJECTS",
+    titleLines: ["SPACE", "&OBJECTS"],
+    intro:
+      "We translate ideas and identities into physical environments and objects, connecting spatial thinking with design, function, and experience.",
+    items: [
+      {
+        title: "Interior Design",
+        description:
+          "Designing interior environments around function, atmosphere, identity, and human experience.",
+      },
+      {
+        title: "Spatial Design",
+        description:
+          "Creating physical environments and spatial interventions that communicate ideas through space.",
+      },
+      {
+        title: "Retail & Pop-up Design",
+        description:
+          "Creating temporary and permanent branded environments for retail, activations, and public engagement.",
+      },
+      {
+        title: "Product Design",
+        description:
+          "Developing physical products from concept and form to functionality and user experience.",
+      },
+      {
+        title: "Furniture & Object Design",
+        description:
+          "Designing functional objects and furniture with attention to material, form, and context.",
+      },
+      {
+        title: "Wayfinding & Environmental Graphics",
+        description:
+          "Integrating typography, signage, information, and visual identity into physical environments.",
+      },
+    ],
   },
 ] as const;
 
-export const closingLine = "LET TAAM WORK!" as const;
+export const closingLine = {
+  lead: "LET ",
+  emphasis: "TAAM WORK!",
+} as const;
+
 export const connectCta = "LET'S CONNECT" as const;

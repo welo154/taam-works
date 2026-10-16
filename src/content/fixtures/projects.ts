@@ -2,8 +2,8 @@ import type { Project } from "@/lib/projects/types";
 
 /**
  * LOCAL FIXTURES — not production CMS data.
- * Media paths point at TEMPORARY placeholders under /public/placeholders.
- * Replace with original exports from Figma / DAM before launch.
+ * Home covers are Figma exports. Remaining gallery rows still use
+ * placeholders until project-page media is supplied.
  */
 
 const ph = (
@@ -20,18 +20,40 @@ const ph = (
   height,
 });
 
+const figmaCover = (
+  id: string,
+  file: string,
+  width: number,
+  height: number,
+  alt: string,
+): Project["cover"] => ({
+  id,
+  kind: "image",
+  src: `/work/${file}`,
+  alt,
+  width,
+  height,
+});
+
 export const fixtureProjects: Project[] = [
   {
     id: "proj-tech-valley",
     slug: "tech-valley",
     title: "Tech Valley",
-    projectYear: 2024,
+    projectYear: 2026,
     description:
       "Identity and digital presence for a technology community program. Fixture description pending client-approved English copy.",
     tags: ["Branding", "Digital"],
-    cardMeta: "Tech",
+    cardMeta: "CAI",
+    homeLabels: ["TECH VALLEY", "CAI"],
     status: "published",
-    cover: ph("cover-tech-valley", 800, 1000, "Tech Valley project cover placeholder"),
+    cover: figmaCover(
+      "cover-tech-valley",
+      "tech-valley.jpg",
+      435,
+      263,
+      "Tech Valley project cover",
+    ),
     media: [
       {
         id: "tv-m1",
@@ -55,14 +77,14 @@ export const fixtureProjects: Project[] = [
     id: "proj-idea",
     slug: "idea",
     title: "IDEA",
-    projectYear: 2024,
-    // Sample mockup reused studio intro — keep clearly as placeholder.
+    projectYear: 2026,
     description:
       "[PLACEHOLDER — not a real project description] Multidisciplinary studio work spanning brand systems and exhibition presence. Replace with project-specific English copy: client/context, work delivered, approach, and outcomes where available.",
     tags: ["Branding", "Exhibition"],
-    cardMeta: "Design",
+    cardMeta: "AMM",
+    homeLabels: ["IDEA", "AMM"],
     status: "published",
-    cover: ph("cover-idea", 900, 900, "IDEA project cover placeholder"),
+    cover: figmaCover("cover-idea", "idea.png", 434, 455, "IDEA project cover"),
     media: [
       {
         id: "idea-m1",
@@ -90,14 +112,21 @@ export const fixtureProjects: Project[] = [
   {
     id: "proj-events",
     slug: "events-program",
-    title: "Events Program",
-    projectYear: 2023,
+    title: "Events",
+    projectYear: 2026,
     description:
       "Creative direction and programming support for a cultural events series. Fixture description pending confirmed English copy.",
     tags: ["Events", "Direction"],
-    cardMeta: "Events",
+    cardMeta: "2026",
+    homeLabels: ["EVENTS", "2026"],
     status: "published",
-    cover: ph("cover-events", 800, 1100, "Events program cover placeholder"),
+    cover: figmaCover(
+      "cover-events",
+      "events.png",
+      435,
+      525,
+      "Events project cover",
+    ),
     media: [
       {
         id: "ev-m1",
@@ -114,14 +143,21 @@ export const fixtureProjects: Project[] = [
   {
     id: "proj-calligraphy",
     slug: "calligraphy-gathering",
-    title: "Calligraphy Gathering",
-    projectYear: 2024,
+    title: "Multaqa Alkhatt",
+    projectYear: 2025,
     description:
-      "Spatial and graphic support for a large calligraphy-focused gathering. Fixture description pending confirmed English copy. Arabic lettering in artwork is preserved when original media replace placeholders.",
+      "Spatial and graphic support for a large calligraphy-focused gathering. Fixture description pending confirmed English copy. Arabic lettering in artwork is preserved.",
     tags: ["Events", "Spatial"],
-    cardMeta: "Featured",
+    cardMeta: "EVENT",
+    homeLabels: ["MULTAQA ALKHATT", "EVENT", "MALAYSIA", "2025"],
     status: "published",
-    cover: ph("cover-featured", 1600, 900, "Featured calligraphy cover placeholder"),
+    cover: figmaCover(
+      "cover-featured",
+      "multaqa-alkhatt.png",
+      1340,
+      825,
+      "Multaqa Alkhatt event cover",
+    ),
     media: [
       {
         id: "cal-m1",

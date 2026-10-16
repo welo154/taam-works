@@ -6,8 +6,9 @@ export function LetTaamWork() {
       className="site-shell py-[var(--space-section)]"
       aria-label="Closing"
     >
-      <p className="max-w-5xl text-[length:var(--type-display)] font-semibold leading-[0.95] tracking-tight text-cream uppercase">
-        {closingLine}
+      <p className="text-center text-[length:var(--type-display)] leading-none tracking-[var(--tracking-display)] text-cream uppercase md:text-left">
+        <span className="font-normal">{closingLine.lead}</span>
+        <span className="font-bold">{closingLine.emphasis}</span>
       </p>
     </section>
   );

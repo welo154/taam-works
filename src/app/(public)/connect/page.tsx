@@ -22,11 +22,10 @@ export default function ConnectPage() {
       </p>
       <a
         href={`mailto:${contact.email}`}
-        className="mt-10 inline-flex min-h-12 items-center bg-yellow px-8 py-3 text-sm font-semibold tracking-[0.12em] text-bg"
+        className="mt-10 inline-flex h-[61px] min-w-[303px] items-center justify-center rounded-[var(--radius-cta)] bg-yellow px-8 text-[40px] leading-none tracking-[-0.08em] text-black"
       >
-        {contact.email}
+        {contact.email.toUpperCase()}
       </a>
-      <p className="mt-4 text-xs text-cream/40">{contact.emailNote}</p>
     </section>
   );
 }

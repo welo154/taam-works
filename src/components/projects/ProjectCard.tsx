@@ -15,20 +15,43 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project, layout }: ProjectCardProps) {
   const { cover } = project;
+  const labels = project.homeLabels ?? [
+    project.title.toUpperCase(),
+    project.cardMeta ?? String(project.projectYear),
+  ];
 
   return (
-    <article className={spanClass[layout]}>
+    <article className={`${spanClass[layout]} self-start`}>
       <Link
         href={`/works/${project.slug}`}
         className="group block focus-visible:outline-offset-4"
       >
-        <div className="relative w-full overflow-hidden bg-cream/5">
+        <div
+          className={`mb-3 flex gap-x-4 text-[length:var(--type-caption)] leading-[19px] text-cream ${
+            labels.length > 2 ? "justify-between" : "justify-between"
+          }`}
+        >
+          {labels.map((label) => (
+            <span
+              key={label}
+              className={
+                labels.length > 2 && label === labels[labels.length - 1]
+                  ? "italic"
+                  : undefined
+              }
+            >
+              {label}
+            </span>
+          ))}
+        </div>
+        <div className="overflow-hidden bg-cream/5">
           <Image
             src={cover.src}
             alt={cover.alt}
             width={cover.width}
             height={cover.height}
-            className="h-auto w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+            className="w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+            style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
             sizes={
               layout === "full"
                 ? "100vw"
@@ -37,12 +60,6 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
                   : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             }
           />
-        </div>
-        <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2">
-          <h3 className="text-base text-cream md:text-lg">{project.title}</h3>
-          {project.cardMeta ? (
-            <span className="text-sm text-cream/50">{project.cardMeta}</span>
-          ) : null}
         </div>
       </Link>
     </article>

@@ -2,7 +2,10 @@ import type { NavItem } from "@/content/site";
 
 export type HeroLabelId = NavItem["id"];
 
-/** Position as percentages of the bounded hero stage (not the viewport). */
+/**
+ * Position as percentages of the Figma hero stage (951×349, node 4:960).
+ * Values are top-left of each badge, matching Component 1 Frames 2–4.
+ */
 export type HeroPoint = {
   x: number;
   y: number;
@@ -10,55 +13,55 @@ export type HeroPoint = {
 
 export type HeroArrangement = Record<HeroLabelId, HeroPoint>;
 
-/**
- * Desktop arrangements A → B → C from the brief / walkthrough.
- * Coordinates are approximate until Figma exports refine them.
- */
+const stage = { width: 951, height: 349 } as const;
+
+const pct = (left: number, top: number): HeroPoint => ({
+  x: (left / stage.width) * 100,
+  y: (top / stage.height) * 100,
+});
+
+/** Desktop arrangements A → B → C from Figma Component 1 Frames 2, 3, 4. */
 export const heroStatesDesktop: {
   A: HeroArrangement;
   B: HeroArrangement;
   C: HeroArrangement;
 } = {
   A: {
-    services: { x: 8, y: 18 },
-    about: { x: 10, y: 72 },
-    works: { x: 42, y: 38 },
-    contact: { x: 78, y: 36 },
-    initiatives: { x: 72, y: 78 },
+    services: pct(33, 0),
+    about: pct(0, 267),
+    works: pct(362, 161),
+    contact: pct(729, 174),
+    initiatives: pct(572, 290),
   },
   B: {
-    works: { x: 48, y: 14 },
-    services: { x: 8, y: 42 },
-    about: { x: 38, y: 78 },
-    contact: { x: 78, y: 48 },
-    initiatives: { x: 55, y: 88 },
+    works: pct(449, 50),
+    services: pct(81, 116),
+    about: pct(236, 217),
+    contact: pct(533, 173),
+    initiatives: pct(393, 319),
   },
   C: {
-    works: { x: 10, y: 16 },
-    about: { x: 78, y: 18 },
-    contact: { x: 12, y: 78 },
-    initiatives: { x: 48, y: 82 },
-    services: { x: 78, y: 76 },
+    works: pct(160, 69),
+    about: pct(684, 92),
+    contact: pct(89, 260),
+    initiatives: pct(327, 208),
+    services: pct(601, 267),
   },
 };
 
 /** Collision-free mobile arrangement (settled / reduced-motion). */
 export const heroStateMobile: HeroArrangement = {
-  about: { x: 18, y: 12 },
-  works: { x: 78, y: 12 },
-  services: { x: 16, y: 88 },
-  contact: { x: 52, y: 88 },
-  initiatives: { x: 86, y: 88 },
+  about: { x: 4, y: 4 },
+  works: { x: 52, y: 4 },
+  services: { x: 4, y: 78 },
+  contact: { x: 4, y: 58 },
+  initiatives: { x: 48, y: 78 },
 };
 
 export const heroTiming = {
-  /** Hold at A before first move */
   holdAMs: 400,
-  /** Transition duration A→B and B→C */
   transitionMs: 900,
-  /** Hold at B before moving to C */
   holdBMs: 700,
-  /** CSS easing — exact Figma curves unknown */
   easing: "cubic-bezier(0.4, 0, 0.2, 1)",
 } as const;
 
@@ -67,3 +70,10 @@ export const heroSequence: Array<keyof typeof heroStatesDesktop> = [
   "B",
   "C",
 ];
+
+/** Wordmark placement inside the 951×349 stage (Asset 1@300x). */
+export const heroWordmarkBox = {
+  left: (118 / stage.width) * 100,
+  top: (21 / stage.height) * 100,
+  width: (640 / stage.width) * 100,
+} as const;

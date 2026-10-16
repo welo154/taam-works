@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Syne } from "next/font/google";
+import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 
 /**
- * TEMPORARY body font until licensed webfonts are exported from Figma.
- * Not presented as the final brand typeface.
+ * Figma specifies Acumin Pro. Source Sans 3 is the licensed stand-in
+ * until Acumin files are supplied.
  */
-const bodyTemporary = Syne({
-  variable: "--font-body-temporary",
+const acuminStandIn = Source_Sans_3({
+  variable: "--font-acumin",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s · TAAM Works",
   },
   description:
-    "TAAM is a multidisciplinary studio working across design, technology, events, and spatial practice.",
+    "An interdisciplinary studio based in London, working across design, technology, experiences, and spaces.",
 };
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${bodyTemporary.variable} h-full antialiased`}>
+    <html lang="en" className={`${acuminStandIn.variable} h-full antialiased`}>
       <body className="min-h-full bg-bg text-cream">{children}</body>
     </html>
   );

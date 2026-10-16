@@ -1,13 +1,21 @@
 import Image from "next/image";
+import { heroWordmarkBox } from "@/content/hero-states";
 
 export function TaamWordmark() {
   return (
-    <div className="pointer-events-none absolute left-1/2 top-1/2 w-[min(88%,42rem)] -translate-x-1/2 -translate-y-1/2 md:w-[min(78%,52rem)]">
+    <div
+      className="pointer-events-none absolute"
+      style={{
+        left: `${heroWordmarkBox.left}%`,
+        top: `${heroWordmarkBox.top}%`,
+        width: `${heroWordmarkBox.width}%`,
+      }}
+    >
       <Image
-        src="/brand/taam-wordmark-temporary.svg"
+        src="/brand/taam-wordmark.png"
         alt="TAAM"
-        width={800}
-        height={220}
+        width={641}
+        height={280}
         priority
         className="h-auto w-full select-none"
       />

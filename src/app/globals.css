@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Sampled from brief PNGs — replace with Figma variables when exported */
+  /* TaamWorks Figma (Page 1 / Home Page/Taam) */
   --bg: #000000;
   --cream: #fbf5d5;
   --pink: #ff7dff;
@@ -14,14 +14,22 @@
   --foreground: var(--cream);
 
   --space-section: clamp(4rem, 10vw, 8rem);
-  --space-gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --space-gutter: clamp(1.25rem, 3.5vw, 3.125rem);
   --header-offset: 4.5rem;
   --content-max: 90rem;
+  --radius-cta: 10px;
+  --hero-stage-w: 951;
+  --hero-stage-h: 349;
 
   --type-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
-  --type-lead: clamp(1.125rem, 1rem + 0.5vw, 1.35rem);
-  --type-display: clamp(2.5rem, 4vw + 1rem, 5.5rem);
-  --type-nav: clamp(1.25rem, 1rem + 1vw, 2rem);
+  --type-lead: clamp(1.125rem, 1rem + 0.6vw, 1.75rem);
+  --type-display: clamp(2.75rem, 8vw + 1rem, 10.6875rem);
+  --type-nav: clamp(1.15rem, 0.6rem + 2vw, 2.5rem);
+  --type-service-num: clamp(1.5rem, 1rem + 1.5vw, 3rem);
+  --type-service-title: clamp(1.35rem, 1rem + 1.1vw, 2.25rem);
+  --type-caption: 1rem;
+  --tracking-nav: -0.05em;
+  --tracking-display: -0.04em;
 }
 
 @theme inline {
@@ -34,7 +42,7 @@
   --color-yellow: var(--yellow);
   --color-gray: var(--gray);
   --color-bg: var(--bg);
-  --font-sans: var(--font-body-temporary);
+  --font-sans: var(--font-acumin);
 }
 
 html {
@@ -50,7 +58,7 @@ html {
 body {
   background: var(--bg);
   color: var(--cream);
-  font-family: var(--font-body-temporary), "Segoe UI", sans-serif;
+  font-family: var(--font-acumin), "Segoe UI", sans-serif;
   font-size: var(--type-body);
   line-height: 1.55;
 }

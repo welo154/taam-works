@@ -4,20 +4,26 @@ import { siteMeta } from "@/content/site";
 
 export function SiteHeader() {
   return (
-    <header className="site-shell flex items-center justify-between py-5 md:py-6">
-      <Link href="/" className="inline-flex items-center gap-2">
+    <header className="site-shell flex items-center justify-between pt-8 pb-2 md:pt-9">
+      <Link href="/" className="inline-flex items-center gap-[7px]">
         <Image
-          src="/brand/taamworks-mark-temporary.svg"
+          src="/brand/taamworks-logo.svg"
           alt={`${siteMeta.name} home`}
-          width={140}
-          height={24}
+          width={126}
+          height={22}
           priority
-          className="h-5 w-auto md:h-6"
+        />
+        <Image
+          src="/brand/logo-dot.svg"
+          alt=""
+          width={7}
+          height={7}
+          priority
         />
         <span className="sr-only">{siteMeta.name}</span>
       </Link>
-      <p className="text-sm tracking-wide text-cream/70 md:text-base">
-        © {siteMeta.copyrightYear}
+      <p className="text-[20px] font-light tracking-[-0.05em] text-cream">
+        ©{siteMeta.copyrightYear}
       </p>
     </header>
   );
