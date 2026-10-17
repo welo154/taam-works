@@ -26,22 +26,9 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
         href={`/works/${project.slug}`}
         className="group block focus-visible:outline-offset-4"
       >
-        <div
-          className={`mb-3 flex gap-x-4 text-[length:var(--type-caption)] leading-[19px] text-cream ${
-            labels.length > 2 ? "justify-between" : "justify-between"
-          }`}
-        >
+        <div className="project-card-label">
           {labels.map((label) => (
-            <span
-              key={label}
-              className={
-                labels.length > 2 && label === labels[labels.length - 1]
-                  ? "italic"
-                  : undefined
-              }
-            >
-              {label}
-            </span>
+            <span key={label}>{label}</span>
           ))}
         </div>
         <div className="overflow-hidden bg-cream/5">

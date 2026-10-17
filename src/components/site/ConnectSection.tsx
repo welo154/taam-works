@@ -5,23 +5,36 @@ import { connectCta } from "@/content/site";
 
 type ConnectSectionProps = {
   className?: string;
+  /** Homepage placement: 565px from the 1440px page’s left, 174px above the page bottom. */
+  pinToPage?: boolean;
 };
 
-export function ConnectSection({ className = "" }: ConnectSectionProps) {
+export function ConnectSection({
+  className = "",
+  pinToPage = false,
+}: ConnectSectionProps) {
   const { open } = useConsultation();
+
+  const button = (
+    <button type="button" onClick={open} className="connect-button">
+      <span className="connect-button-label">{connectCta}</span>
+    </button>
+  );
+
+  if (pinToPage) {
+    return (
+      <div className={`connect-pin ${className}`} aria-label="Connect">
+        {button}
+      </div>
+    );
+  }
 
   return (
     <section
       className={`site-shell flex justify-center py-10 md:py-14 ${className}`}
       aria-label="Connect"
     >
-      <button
-        type="button"
-        onClick={open}
-        className="inline-flex h-[61px] w-[303px] items-center justify-center rounded-[var(--radius-cta)] bg-yellow text-[40px] leading-none tracking-[-0.08em] text-black transition-transform hover:scale-[1.02]"
-      >
-        {connectCta}
-      </button>
+      {button}
     </section>
   );
 }

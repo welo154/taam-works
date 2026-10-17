@@ -2,44 +2,28 @@ import { contact, siteMeta } from "@/content/site";
 
 export function SiteFooter() {
   return (
-    <footer className="site-shell pb-16 pt-6 md:pb-20">
-      <div className="grid gap-8 text-[24px] leading-normal text-cream md:grid-cols-[1fr_auto_1fr] md:items-start">
-        <div>
-          <a
-            href={`mailto:${contact.email}`}
-            className="block uppercase transition-opacity hover:opacity-80"
-          >
-            {contact.email}
-          </a>
-          <a
-            href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
-            className="block transition-opacity hover:opacity-80"
-          >
+    <footer className="site-footer">
+      <div className="site-footer-cluster">
+        <div className="site-footer-contact">
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          <a href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}>
             {contact.phone}
           </a>
         </div>
-        <div className="uppercase md:justify-self-center">
-          <a
-            href={contact.behance}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block transition-opacity hover:opacity-80"
-          >
+        <div className="site-footer-social">
+          <a href={contact.behance} target="_blank" rel="noopener noreferrer">
             Behance
           </a>
           <a
             href={contact.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="block transition-opacity hover:opacity-80"
           >
             Instagram
           </a>
         </div>
-        <p className="uppercase md:justify-self-end">
-          ©{siteMeta.copyrightYear} TAAMWORKS
-        </p>
       </div>
+      <p className="site-footer-copy">©{siteMeta.copyrightYear} TAAMWORKS</p>
     </footer>
   );
 }

@@ -10,7 +10,7 @@ export default function PublicLayout({
 }) {
   return (
     <ConsultationProvider>
-      <div className="flex min-h-full flex-col">
+      <div className="relative flex min-h-full flex-col">
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

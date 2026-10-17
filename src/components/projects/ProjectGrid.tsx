@@ -13,7 +13,7 @@ type ProjectGridProps = {
 export function ProjectGrid({ placements, labelledBy }: ProjectGridProps) {
   return (
     <div
-      className="grid grid-cols-6 items-start gap-x-[18px] gap-y-10 md:gap-y-16"
+      className="grid grid-cols-6 items-start gap-x-[18px] gap-y-[109px]"
       role="list"
       aria-labelledby={labelledBy}
     >

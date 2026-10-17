@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const localCovers: Record<string, { src: string; width: number; height: number }> = {
   "tech-valley": { src: "/work/tech-valley.jpg", width: 1740, height: 1052 },
-  idea: { src: "/work/idea.png", width: 434, height: 455 },
+  idea: { src: "/work/idea-card.png", width: 434, height: 455 },
 };
 
 type ProjectImageProps = {

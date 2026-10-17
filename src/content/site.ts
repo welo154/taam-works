@@ -8,8 +8,7 @@ export const siteMeta = {
   name: "TAAM Works",
   studioLabel: "taamworks",
   copyrightYear: 2026,
-  fontNote:
-    "Figma specifies Acumin Pro. Source Sans 3 stands in until licensed Acumin files are added.",
+  fontNote: "Acumin Pro, loaded from the licensed desktop files.",
 } as const;
 
 export const contact = {

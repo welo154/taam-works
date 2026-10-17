@@ -1,4 +1,5 @@
-import { AnimatedHero } from "@/components/hero/AnimatedHero";
+import Image from "next/image";
+import { HeroLabels } from "@/components/hero/HeroLabels";
 import { PortfolioStatus } from "@/components/projects/PortfolioStatus";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
 import { ConnectSection } from "@/components/site/ConnectSection";
@@ -14,10 +15,20 @@ export default async function HomePage() {
 
   return (
     <>
-      <AnimatedHero />
+      <section className="hero-frame" aria-label="Hero">
+        <Image
+          src="/brand/taam-wordmark.png"
+          alt="TAAM"
+          width={641}
+          height={280}
+          priority
+          className="hero-taam"
+        />
+        <HeroLabels />
+      </section>
       <StudioIntro />
       <section
-        className="site-shell pb-[var(--space-section)]"
+        className="selected-work site-shell"
         aria-labelledby="selected-work-heading"
       >
         <h2 id="selected-work-heading" className="sr-only">
@@ -36,7 +47,7 @@ export default async function HomePage() {
       </section>
       <ServiceGroups />
       <LetTaamWork />
-      <ConnectSection />
+      <ConnectSection pinToPage />
     </>
   );
 }

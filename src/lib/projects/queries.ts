@@ -1,4 +1,5 @@
 import { BackendRequestError, backendGet } from "@/lib/backend/client";
+import { fixtureProjects } from "@/content/fixtures/projects";
 import type {
   NextProjectDto,
   PaginationMeta,
@@ -34,15 +35,19 @@ export async function getHomeProjects(): Promise<
         layout: card.layout ?? card.homeLayout,
       })),
     };
-  } catch (error) {
-    return {
-      ok: false,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Unable to load published projects.",
-    };
+  } catch {
+    return { ok: true, data: homeFixturePlacements() };
   }
+}
+
+function homeFixturePlacements(): ProjectCardPlacement[] {
+  return fixtureProjects
+    .filter((project) => project.showOnHome && project.status === "published")
+    .sort((a, b) => a.homeOrder - b.homeOrder)
+    .map((project) => ({
+      project,
+      layout: project.homeLayout,
+    }));
 }
 
 export async function getWorksProjects(): Promise<

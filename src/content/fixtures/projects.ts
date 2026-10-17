@@ -84,7 +84,7 @@ export const fixtureProjects: Project[] = [
     cardMeta: "AMM",
     homeLabels: ["IDEA", "AMM"],
     status: "published",
-    cover: figmaCover("cover-idea", "idea.png", 434, 455, "IDEA project cover"),
+    cover: figmaCover("cover-idea", "idea-card.png", 434, 455, "IDEA project cover"),
     media: [
       {
         id: "idea-m1",

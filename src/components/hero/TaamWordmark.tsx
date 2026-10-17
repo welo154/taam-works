@@ -1,16 +1,8 @@
 import Image from "next/image";
-import { heroWordmarkBox } from "@/content/hero-states";
 
 export function TaamWordmark() {
   return (
-    <div
-      className="pointer-events-none absolute"
-      style={{
-        left: `${heroWordmarkBox.left}%`,
-        top: `${heroWordmarkBox.top}%`,
-        width: `${heroWordmarkBox.width}%`,
-      }}
-    >
+    <div className="taam-wordmark">
       <Image
         src="/brand/taam-wordmark.png"
         alt="TAAM"

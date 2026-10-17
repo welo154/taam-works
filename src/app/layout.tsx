@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Source_Sans_3 } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-/**
- * Figma specifies Acumin Pro. Source Sans 3 is the licensed stand-in
- * until Acumin files are supplied.
- */
-const acuminStandIn = Source_Sans_3({
+const acuminPro = localFont({
+  src: [
+    { path: "../fonts/Acumin-RPro.otf", weight: "400", style: "normal" },
+    { path: "../fonts/Acumin-ItPro.otf", weight: "400", style: "italic" },
+    { path: "../fonts/Acumin-BdPro.otf", weight: "700", style: "normal" },
+    { path: "../fonts/Acumin-BdItPro.otf", weight: "700", style: "italic" },
+  ],
   variable: "--font-acumin",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
+  display: "swap",
+  fallback: ["Segoe UI", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${acuminStandIn.variable} h-full antialiased`}>
+    <html lang="en" className={`${acuminPro.variable} h-full antialiased`}>
       <body className="min-h-full bg-bg text-cream">{children}</body>
     </html>
   );

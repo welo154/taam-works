@@ -108,11 +108,11 @@ export function AnimatedHero() {
 
   return (
     <section
-      className="site-shell relative overflow-visible py-6 pb-16 md:py-8 md:pb-20"
+      className="site-shell overflow-visible py-6 pb-16 md:py-8 md:pb-20"
       aria-label="TAAM navigation hero"
     >
+      <TaamWordmark />
       <div className="relative mx-auto w-full max-w-[1076px] overflow-visible aspect-[1076/395]">
-        <TaamWordmark />
         {labelOrder.map((id) => {
           const item = heroNav.find((n) => n.id === id)!;
           const point = arrangement[id];

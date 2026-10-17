@@ -4,14 +4,15 @@ import { siteMeta } from "@/content/site";
 
 export function SiteHeader() {
   return (
-    <header className="site-shell flex items-center justify-between pt-8 pb-2 md:pt-9">
-      <Link href="/" className="inline-flex items-center gap-[7px]">
+    <header className="site-header">
+      <Link href="/" className="site-logo">
         <Image
           src="/brand/taamworks-logo.svg"
           alt={`${siteMeta.name} home`}
           width={126}
           height={22}
           priority
+          className="site-logo-mark"
         />
         <Image
           src="/brand/logo-dot.svg"
@@ -19,12 +20,11 @@ export function SiteHeader() {
           width={7}
           height={7}
           priority
+          className="site-logo-dot"
         />
         <span className="sr-only">{siteMeta.name}</span>
       </Link>
-      <p className="text-[20px] font-light tracking-[-0.05em] text-cream">
-        ©{siteMeta.copyrightYear}
-      </p>
+      <p className="site-header-year">©{siteMeta.copyrightYear}</p>
     </header>
   );
 }
