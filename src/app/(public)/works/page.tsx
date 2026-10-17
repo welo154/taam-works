@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PortfolioStatus } from "@/components/projects/PortfolioStatus";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
 import { ConnectSection } from "@/components/site/ConnectSection";
 import { getWorksProjects } from "@/lib/projects/queries";
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
   description: "Selected projects from TAAM Works.",
 };
 
-export default function WorksPage() {
-  const placements = getWorksProjects();
+export const dynamic = "force-dynamic";
+
+export default async function WorksPage() {
+  const result = await getWorksProjects();
 
   return (
     <>
@@ -23,7 +26,18 @@ export default function WorksPage() {
         >
           Works
         </h1>
-        <ProjectGrid placements={placements} labelledBy="works-heading" />
+        {result.ok ? (
+          result.data.length > 0 ? (
+            <ProjectGrid
+              placements={result.data}
+              labelledBy="works-heading"
+            />
+          ) : (
+            <PortfolioStatus message="No published projects yet." />
+          )
+        ) : (
+          <PortfolioStatus message={result.message} />
+        )}
       </section>
       <ConnectSection />
     </>

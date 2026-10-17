@@ -1,4 +1,5 @@
 import { AnimatedHero } from "@/components/hero/AnimatedHero";
+import { PortfolioStatus } from "@/components/projects/PortfolioStatus";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
 import { ConnectSection } from "@/components/site/ConnectSection";
 import { LetTaamWork } from "@/components/site/LetTaamWork";
@@ -6,8 +7,10 @@ import { ServiceGroups } from "@/components/site/ServiceGroup";
 import { StudioIntro } from "@/components/site/StudioIntro";
 import { getHomeProjects } from "@/lib/projects/queries";
 
-export default function HomePage() {
-  const homeProjects = getHomeProjects();
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const homeProjects = await getHomeProjects();
 
   return (
     <>
@@ -20,10 +23,16 @@ export default function HomePage() {
         <h2 id="selected-work-heading" className="sr-only">
           Selected work
         </h2>
-        <ProjectGrid
-          placements={homeProjects}
-          labelledBy="selected-work-heading"
-        />
+        {homeProjects.ok ? (
+          homeProjects.data.length > 0 ? (
+            <ProjectGrid
+              placements={homeProjects.data}
+              labelledBy="selected-work-heading"
+            />
+          ) : null
+        ) : (
+          <PortfolioStatus message={homeProjects.message} />
+        )}
       </section>
       <ServiceGroups />
       <LetTaamWork />

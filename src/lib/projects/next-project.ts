@@ -1,19 +1,10 @@
-import { getPublishedProjects } from "@/lib/projects/queries";
-import type { Project } from "@/lib/projects/types";
+import type { NextProjectDto } from "@/lib/projects/api-types";
 
 export type NextProjectResult =
-  | { kind: "project"; project: Project }
+  | { kind: "project"; slug: string; title: string }
   | { kind: "all-work" };
 
-/**
- * Next eligible item from published Works order.
- * Never returns the current project. End of list → All work.
- */
-export function getNextProject(currentSlug: string): NextProjectResult {
-  const list = getPublishedProjects();
-  const index = list.findIndex((p) => p.slug === currentSlug);
-  if (index === -1) return { kind: "all-work" };
-  const next = list[index + 1];
+export function toNextProject(next: NextProjectDto): NextProjectResult {
   if (!next) return { kind: "all-work" };
-  return { kind: "project", project: next };
+  return { kind: "project", slug: next.slug, title: next.title };
 }

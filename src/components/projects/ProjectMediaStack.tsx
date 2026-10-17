@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ProjectImage } from "@/components/projects/ProjectImage";
 import type { ProjectMediaRow } from "@/lib/projects/types";
 
 type ProjectMediaStackProps = {
@@ -12,7 +12,7 @@ export function ProjectMediaStack({ media }: ProjectMediaStackProps) {
         if (row.layout === "pair") {
           return (
             <figure key={row.id} className="grid grid-cols-2 gap-3 md:gap-4">
-              <Image
+              <ProjectImage
                 src={row.primary.src}
                 alt={row.primary.alt}
                 width={row.primary.width}
@@ -20,7 +20,7 @@ export function ProjectMediaStack({ media }: ProjectMediaStackProps) {
                 className="h-auto w-full"
                 sizes="(max-width: 1024px) 50vw, 29vw"
               />
-              <Image
+              <ProjectImage
                 src={row.secondary.src}
                 alt={row.secondary.alt}
                 width={row.secondary.width}
@@ -65,7 +65,7 @@ export function ProjectMediaStack({ media }: ProjectMediaStackProps) {
 
         return (
           <figure key={row.id}>
-            <Image
+            <ProjectImage
               src={row.primary.src}
               alt={row.primary.alt}
               width={row.primary.width}

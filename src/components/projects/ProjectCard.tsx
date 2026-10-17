@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { ProjectImage } from "@/components/projects/ProjectImage";
 import type { Project, ProjectLayout } from "@/lib/projects/types";
 
 const spanClass: Record<ProjectLayout, string> = {
@@ -45,13 +45,13 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
           ))}
         </div>
         <div className="overflow-hidden bg-cream/5">
-          <Image
+          <ProjectImage
             src={cover.src}
             alt={cover.alt}
             width={cover.width}
             height={cover.height}
+            slug={project.slug}
             className="w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
-            style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
             sizes={
               layout === "full"
                 ? "100vw"

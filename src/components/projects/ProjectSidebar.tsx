@@ -1,8 +1,8 @@
 import type { Project } from "@/lib/projects/types";
 
-function formatYear(year: number) {
-  const short = String(year).slice(-2);
-  return `'${short}`;
+function formatYear(year: number | null) {
+  if (!year) return null;
+  return `'${String(year).slice(-2)}`;
 }
 
 type ProjectSidebarProps = {
@@ -28,12 +28,14 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
           className="min-w-0 flex-1 border-b border-dotted border-cream/40"
           aria-hidden
         />
-        <time
-          className="shrink-0 text-lg text-cream/80"
-          dateTime={String(project.projectYear)}
-        >
-          {formatYear(project.projectYear)}
-        </time>
+        {formatYear(project.projectYear) ? (
+          <time
+            className="shrink-0 text-lg text-cream/80"
+            dateTime={String(project.projectYear)}
+          >
+            {formatYear(project.projectYear)}
+          </time>
+        ) : null}
       </div>
 
       <div className="mt-8 space-y-4 text-cream/90">

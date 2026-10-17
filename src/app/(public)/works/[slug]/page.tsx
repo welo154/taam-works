@@ -4,40 +4,40 @@ import { NextProjectLink } from "@/components/projects/NextProjectLink";
 import { ProjectMediaStack } from "@/components/projects/ProjectMediaStack";
 import { ProjectSidebar } from "@/components/projects/ProjectSidebar";
 import { ConnectSection } from "@/components/site/ConnectSection";
-import { getNextProject } from "@/lib/projects/next-project";
-import {
-  getAllProjectSlugs,
-  getProjectBySlug,
-} from "@/lib/projects/queries";
+import { toNextProject } from "@/lib/projects/next-project";
+import { getProjectBySlug } from "@/lib/projects/queries";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return getAllProjectSlugs().map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
-  if (!project) return { title: "Project" };
-  return {
-    title: project.seoTitle ?? project.title,
-    description:
-      project.seoDescription ??
-      project.description.replace(/\s+/g, " ").slice(0, 160),
-  };
+  try {
+    const result = await getProjectBySlug(slug);
+    if (!result) return { title: "Project" };
+    return {
+      title: result.project.seoTitle ?? result.project.title,
+      description:
+        result.project.seoDescription ??
+        result.project.description.replace(/\s+/g, " ").slice(0, 160),
+    };
+  } catch {
+    return { title: "Project" };
+  }
 }
 
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
-  if (!project) notFound();
+  const result = await getProjectBySlug(slug);
+  if (!result) notFound();
 
-  const next = getNextProject(project.slug);
+  const { project } = result;
+  const next = toNextProject(result.next);
 
   return (
     <>

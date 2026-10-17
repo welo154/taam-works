@@ -24,13 +24,20 @@ export type NavItem = {
   label: string;
   color: "blue" | "red" | "pink" | "yellow" | "gray";
   href: string | null;
+  opensConsultation?: boolean;
 };
 
 export const heroNav: NavItem[] = [
   { id: "about", label: "ABOUT", color: "blue", href: "/#about" },
   { id: "works", label: "WORKS", color: "red", href: "/works" },
   { id: "services", label: "SERVICES", color: "pink", href: "/#services" },
-  { id: "contact", label: "CONTACT", color: "yellow", href: "/connect" },
+  {
+    id: "contact",
+    label: "CONTACT",
+    color: "yellow",
+    href: "/connect",
+    opensConsultation: true,
+  },
   // Initiatives has no confirmed destination — non-navigating label.
   { id: "initiatives", label: "INITIATIVES", color: "gray", href: null },
 ];
@@ -222,3 +229,14 @@ export const closingLine = {
 } as const;
 
 export const connectCta = "LET'S CONNECT" as const;
+
+export const consultation = {
+  title: "Book a free consultation",
+  lead: "Tell us a little about the work. This sends a request — it is not a confirmed appointment.",
+  submit: "Send request",
+  sending: "Sending request…",
+  success:
+    "Thank you. We have received your request and will be in touch shortly.",
+  close: "Close",
+  emailFallback: "Or email us directly",
+} as const;

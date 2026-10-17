@@ -30,14 +30,14 @@ export type ProjectMediaRow =
 export type ProjectStatus = "draft" | "published" | "archived";
 
 /**
- * Stable public project shape. Fixtures today; Supabase reads later
- * should map into this type without rebuilding UI components.
+ * Stable public project shape. Published records come from the
+ * admin-backed API; UI components should keep using this type.
  */
 export type Project = {
   id: string;
   slug: string;
   title: string;
-  projectYear: number;
+  projectYear: number | null;
   description: string;
   tags: string[];
   cardMeta?: string;

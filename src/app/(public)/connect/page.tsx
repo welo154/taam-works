@@ -1,31 +1,28 @@
 import type { Metadata } from "next";
-import { connectCta, contact } from "@/content/site";
+import { ConsultationForm } from "@/components/consultation/ConsultationForm";
+import { connectCta, consultation } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Connect",
-  description: "Get in touch with TAAM Works.",
+  description:
+    "Book a free consultation with TAAM Works. Submitting this form is a request, not a confirmed appointment.",
 };
 
-/**
- * Placeholder connect page for Stages 1–4.
- * Full consultation/booking flow arrives in Prompt 7.
- */
 export default function ConnectPage() {
   return (
     <section className="site-shell py-[var(--space-section)]">
       <h1 className="text-3xl tracking-tight text-cream md:text-5xl">
         {connectCta}
       </h1>
-      <p className="mt-6 max-w-xl text-[length:var(--type-lead)] text-cream/85">
-        Consultation booking is not configured yet. Reach out by email while the
-        contact flow is finalized.
+      <h2 className="mt-6 text-2xl tracking-tight text-cream md:text-3xl">
+        {consultation.title}
+      </h2>
+      <p className="mt-4 max-w-xl text-[length:var(--type-lead)] text-cream/80">
+        {consultation.lead}
       </p>
-      <a
-        href={`mailto:${contact.email}`}
-        className="mt-10 inline-flex h-[61px] min-w-[303px] items-center justify-center rounded-[var(--radius-cta)] bg-yellow px-8 text-[40px] leading-none tracking-[-0.08em] text-black"
-      >
-        {contact.email.toUpperCase()}
-      </a>
+      <div className="mt-10 max-w-xl">
+        <ConsultationForm sourcePage="/connect" idPrefix="page-consult" />
+      </div>
     </section>
   );
 }

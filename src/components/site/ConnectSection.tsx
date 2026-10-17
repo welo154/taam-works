@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import { useConsultation } from "@/components/consultation/ConsultationContext";
 import { connectCta } from "@/content/site";
 
 type ConnectSectionProps = {
@@ -6,17 +8,20 @@ type ConnectSectionProps = {
 };
 
 export function ConnectSection({ className = "" }: ConnectSectionProps) {
+  const { open } = useConsultation();
+
   return (
     <section
       className={`site-shell flex justify-center py-10 md:py-14 ${className}`}
       aria-label="Connect"
     >
-      <Link
-        href="/connect"
+      <button
+        type="button"
+        onClick={open}
         className="inline-flex h-[61px] w-[303px] items-center justify-center rounded-[var(--radius-cta)] bg-yellow text-[40px] leading-none tracking-[-0.08em] text-black transition-transform hover:scale-[1.02]"
       >
         {connectCta}
-      </Link>
+      </button>
     </section>
   );
 }

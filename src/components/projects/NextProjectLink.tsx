@@ -6,8 +6,8 @@ type NextProjectLinkProps = {
 };
 
 export function NextProjectLink({ next }: NextProjectLinkProps) {
-  const href = next.kind === "project" ? `/works/${next.project.slug}` : "/works";
-  const label = next.kind === "project" ? next.project.title : "All work";
+  const href = next.kind === "project" ? `/works/${next.slug}` : "/works";
+  const label = next.kind === "project" ? next.title : "All work";
 
   return (
     <section className="site-shell border-t border-cream/15 py-12 md:py-16">

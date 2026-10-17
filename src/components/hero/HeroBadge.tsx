@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { useConsultation } from "@/components/consultation/ConsultationContext";
 import type { NavItem } from "@/content/site";
 
 const colorClass: Record<NavItem["color"], string> = {
@@ -31,6 +34,22 @@ export function HeroBadge({
     onPointerEnter: onInteractStart,
     onPointerLeave: onInteractEnd,
   };
+
+  const consultation = useConsultation();
+
+  if (item.opensConsultation) {
+    return (
+      <button
+        type="button"
+        className={className}
+        style={style}
+        onClick={consultation.open}
+        {...interaction}
+      >
+        {item.label}
+      </button>
+    );
+  }
 
   if (!item.href) {
     return (
