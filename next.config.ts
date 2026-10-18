@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "200mb",
+    },
+  },
   images: {
     // Temporary brand/placeholder assets are SVG until Figma exports land.
     dangerouslyAllowSVG: true,

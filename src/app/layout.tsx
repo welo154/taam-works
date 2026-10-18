@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+const koSans = localFont({
+  src: [
+    { path: "../fonts/KOSans-Regular.otf", weight: "300", style: "normal" },
+    { path: "../fonts/KOSans-Regular.otf", weight: "400", style: "normal" },
+  ],
+  variable: "--font-ko",
+  display: "swap",
+  fallback: ["Segoe UI", "sans-serif"],
+});
+
 const acuminPro = localFont({
   src: [
     { path: "../fonts/Acumin-RPro.otf", weight: "400", style: "normal" },
@@ -29,7 +39,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${acuminPro.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${acuminPro.variable} ${koSans.variable} h-full antialiased`}
+    >
       <body className="min-h-full bg-bg text-cream">{children}</body>
     </html>
   );

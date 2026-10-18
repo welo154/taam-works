@@ -5,7 +5,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="min-h-full bg-neutral-950 text-neutral-100">
-      <div className="mx-auto max-w-3xl px-6 py-10">{children}</div>
+      <div className="mx-auto max-w-5xl px-6 py-10">{children}</div>
     </div>
   );
 }

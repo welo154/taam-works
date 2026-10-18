@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextProjectLink } from "@/components/projects/NextProjectLink";
+import { ProjectCase } from "@/components/projects/ProjectCase";
 import { ProjectMediaStack } from "@/components/projects/ProjectMediaStack";
 import { ProjectSidebar } from "@/components/projects/ProjectSidebar";
 import { ConnectSection } from "@/components/site/ConnectSection";
 import { toNextProject } from "@/lib/projects/next-project";
 import { getProjectBySlug } from "@/lib/projects/queries";
+import {
+  getStudioProject,
+  nextProjectAfter,
+} from "@/lib/projects/studio-store";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -17,6 +22,13 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const studio = await getStudioProject(slug);
+  if (studio) {
+    return {
+      title: studio.titleEn,
+      description: studio.descriptionEn.replace(/\s+/g, " ").slice(0, 160),
+    };
+  }
   try {
     const result = await getProjectBySlug(slug);
     if (!result) return { title: "Project" };
@@ -33,6 +45,11 @@ export async function generateMetadata({
 
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
+  const studio = await getStudioProject(slug);
+  if (studio) {
+    const next = await nextProjectAfter(slug);
+    return <ProjectCase project={studio} nextSlug={next?.slug ?? null} />;
+  }
   const result = await getProjectBySlug(slug);
   if (!result) notFound();
 
