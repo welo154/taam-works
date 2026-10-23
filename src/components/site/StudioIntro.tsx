@@ -57,7 +57,10 @@ export function StudioIntro() {
           {studioIntro.label}
         </h2>
       </div>
-      <p className="studio-intro-copy">{studioIntro.paragraph}</p>
+      <div className="studio-intro-copy">
+        <p className="studio-intro-lead">{studioIntro.lead}</p>
+        <p className="studio-intro-body">{studioIntro.body}</p>
+      </div>
     </section>
   );
 }

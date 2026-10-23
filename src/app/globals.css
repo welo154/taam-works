@@ -16,7 +16,8 @@
   --space-section: clamp(4rem, 10vw, 8rem);
   --space-gutter: clamp(1.25rem, 3.5vw, 3.125rem);
   --header-offset: 4.5rem;
-  --content-max: 90rem;
+  --page-width: 1440px;
+  --content-max: var(--page-width);
   --radius-cta: 10px;
   --hero-stage-w: 951;
   --hero-stage-h: 349;
@@ -47,6 +48,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -61,6 +63,8 @@ body {
   font-family: var(--font-acumin), "Segoe UI", sans-serif;
   font-size: var(--type-body);
   line-height: 1.55;
+  container-type: inline-size;
+  container-name: page;
 }
 
 ::selection {
@@ -80,76 +84,11 @@ button:focus-visible {
   padding-inline: var(--space-gutter);
 }
 
-/* Works page intro — Figma frame 70:872 */
-.works-page {
-  width: min(100%, 1440px);
+.site-frame {
+  width: 100%;
+  max-width: var(--page-width);
   margin-inline: auto;
-  padding-inline: 50px;
-}
-
-.works-intro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 152px;
-  padding-bottom: 148px;
-  text-align: center;
-}
-
-.works-intro-title {
-  width: max-content;
-  max-width: 100%;
-  margin: 0;
-  color: #fbf5d5;
-  font-size: clamp(2.25rem, 4.45vw, 64px);
-  font-weight: 700;
-  line-height: 1.02;
-  text-transform: uppercase;
-}
-
-.works-intro-line {
-  display: block;
-  white-space: nowrap;
-}
-
-.works-intro-mark {
-  display: inline-block;
-  height: 0.84em;
-  margin-left: 0.12em;
-  padding: 0 0.14em;
-  background: #f5e600;
-  color: #000;
-  line-height: 0.84em;
-  vertical-align: 0.02em;
-}
-
-.works-intro-lead {
-  width: min(783px, 100%);
-  margin: 97px 0 0;
-  color: #fbf5d5;
-  font-size: clamp(1.05rem, 2.22vw, 32px);
-  font-weight: 400;
-  line-height: normal;
-  text-transform: uppercase;
-}
-
-@media (max-width: 767px) {
-  .works-page {
-    padding-inline: var(--space-gutter);
-  }
-
-  .works-intro {
-    padding-top: 72px;
-    padding-bottom: 72px;
-  }
-
-  .works-intro-lead {
-    margin-top: 40px;
-  }
-
-  .works-intro-line {
-    white-space: normal;
-  }
+  min-height: 100%;
 }
 
 .site-header {
@@ -164,7 +103,7 @@ button:focus-visible {
 .site-logo {
   position: absolute;
   top: 33px;
-  left: max(50px, calc((100% - 1440px) / 2 + 50px));
+  left: max(50px, calc((100% - var(--page-width)) / 2 + 50px));
   display: flex;
   align-items: flex-start;
   gap: 0.47px;
@@ -184,7 +123,7 @@ button:focus-visible {
 .hero-frame {
   position: absolute;
   top: 214px;
-  left: max(281px, calc((100% - 1440px) / 2 + 281px));
+  left: max(281px, calc((100% - var(--page-width)) / 2 + 281px));
   width: 1076px;
   height: 395px;
   background: transparent;
@@ -209,7 +148,7 @@ button:focus-visible {
   width: auto;
   height: 59px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 30px;
   padding: 7px 36px 0;
   display: flex;
   justify-content: center;
@@ -390,7 +329,7 @@ button:focus-visible {
   gap: 33px;
   width: 100%;
   margin-top: calc(1024px - 74px);
-  padding-left: max(346px, calc((100% - 1440px) / 2 + 346px));
+  padding-left: max(346px, calc((100% - var(--page-width)) / 2 + 346px));
   box-sizing: border-box;
 }
 
@@ -413,21 +352,231 @@ button:focus-visible {
 .studio-intro-copy {
   flex: none;
   width: 553px;
+}
+
+.studio-intro-lead,
+.studio-intro-body {
+  width: 553px;
   margin: 0;
   color: #fbf5d5;
-  font-family: var(--font-acumin), "Segoe UI", sans-serif;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
   font-size: 28px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 
+.studio-intro-lead {
+  text-transform: uppercase;
+  white-space: pre-line;
+}
+
+.studio-intro-body {
+  margin-top: 1em;
+}
+
+.works-banner {
+  height: 0.5px;
+  margin: 0;
+  background: #fbf5d5;
+  opacity: 0.4;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.works-page {
+  padding-bottom: 0;
+}
+
+.works-lead {
+  width: 477px;
+  max-width: calc(100% - 2 * var(--space-gutter));
+  height: 131px;
+  margin: 152px auto 0;
+  color: #fbf5d5;
+  text-align: center;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.works-lead-mark {
+  color: #000;
+  background-color: transparent;
+  background-image: linear-gradient(var(--yellow), var(--yellow));
+  background-repeat: no-repeat;
+  background-position: left top;
+  /* Uppercase Acumin sits 17px above the em-box bottom. Keep 5px of yellow under the letters. */
+  background-size: 100% calc(100% - 12px);
+}
+
+.works-intro {
+  width: 783px;
+  max-width: calc(100% - 2 * var(--space-gutter));
+  margin: 97px auto 0;
+  color: #fbf5d5;
+  text-align: center;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.works-page .site-shell {
+  width: min(1340px, calc(100cqw - 50px));
+  max-width: none;
+  margin-top: 152px;
+  /* 50px from the page's left edge, outside the centered 1440 frame. */
+  margin-left: calc(50px - max(0px, (100cqw - var(--page-width)) / 2));
+  margin-right: 0;
+  padding-inline: 0;
+}
+
 .selected-work {
   margin-top: 290px;
 }
 
+.works-view-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 236px;
+  height: 63.836px;
+  margin-top: 95px;
+  margin-inline: auto;
+  border-radius: 50px;
+  background: #fbf5d5;
+  color: #000;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -1.6px;
+  text-decoration: none;
+}
+
+.works-view-all-label {
+  display: block;
+  line-height: 1;
+  transform: translateY(3.5px);
+}
+
 .services-section {
-  margin-top: 340px;
+  margin-top: 181px;
+  padding-bottom: var(--space-section);
+}
+
+.service-group {
+  display: grid;
+  grid-template-columns: 236px 718px;
+  column-gap: 67px;
+  align-items: start;
+  margin-left: max(204px, calc((100% - var(--page-width)) / 2 + 204px));
+}
+
+.service-group + .service-group {
+  margin-top: 250px;
+}
+
+.service-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 236px;
+  height: 55px;
+  margin: 0;
+  background: #ff7dff;
+  color: #000;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -3.84px;
+  text-align: center;
+}
+
+.service-badge-label {
+  display: block;
+  line-height: 1;
+  white-space: pre;
+  transform: translateY(6px);
+}
+
+.service-badge-stack {
+  height: auto;
+  flex-direction: column;
+  padding-top: 12px;
+}
+
+.service-badge-stack .service-badge-label {
+  transform: none;
+}
+
+.service-copy {
+  position: relative;
+  width: 718px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.service-intro,
+.service-feature-body {
+  width: 718px;
+  margin: 0;
+  color: #fbf5d5;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.service-features {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-feature {
+  margin-top: 40px;
+}
+
+.service-feature-title {
+  margin: 0;
+  color: #fbf5d5;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 35.613px;
+}
+
+.service-feature-body {
+  margin-top: 8px;
+}
+
+@media (max-width: 767px) {
+  .service-group {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+    margin-left: var(--space-gutter);
+    margin-right: var(--space-gutter);
+  }
+
+  .service-copy,
+  .service-intro,
+  .service-feature-body {
+    width: 100%;
+  }
 }
 
 .project-card-label {
@@ -435,17 +584,33 @@ button:focus-visible {
   justify-content: space-between;
   gap: 0 1rem;
   color: #fbf5d5;
-  font-family: var(--font-acumin), "Segoe UI", sans-serif;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 
+.project-card-label-italic {
+  font-style: italic;
+}
+
+@media (min-width: 1024px) {
+  .project-card-tight {
+    width: 435px;
+    justify-self: start;
+  }
+
+  .project-card-sized {
+    width: var(--card-width);
+    justify-self: var(--card-align, start);
+  }
+}
+
 .taam-wordmark {
   position: absolute;
   top: 340px;
-  left: max(399px, calc((100% - 1440px) / 2 + 399px));
+  left: max(399px, calc((100% - var(--page-width)) / 2 + 399px));
   width: 640px;
   max-width: calc(100% - 2 * var(--space-gutter));
   z-index: 1;
@@ -455,7 +620,7 @@ button:focus-visible {
 .site-header-year {
   position: absolute;
   top: 35px;
-  right: max(50px, calc((100% - 1440px) / 2 + 50px));
+  right: max(50px, calc((100% - var(--page-width)) / 2 + 50px));
   margin: 0;
   color: #fbf5d5;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -468,19 +633,20 @@ button:focus-visible {
 
 .let-taam-section {
   padding-top: var(--space-section);
+  container-type: inline-size;
 }
 
 .let-taam-line {
-  width: min(1348px, calc(100% - 2 * var(--space-gutter)));
-  height: 143px;
-  margin-inline: auto;
+  width: 100%;
+  height: calc(100cqi * 143 / 1340);
+  margin: 0;
   color: #fbf5d5;
   font-family: var(--font-acumin), "Segoe UI", sans-serif;
-  font-size: 171px;
+  font-size: calc(100cqi * 171 / 1340);
   font-style: normal;
   font-weight: 400;
-  line-height: 143px;
-  letter-spacing: -6.84px;
+  line-height: calc(100cqi * 143 / 1340);
+  letter-spacing: -0.04em;
   text-align: center;
   white-space: nowrap;
 }
@@ -533,7 +699,7 @@ button:focus-visible {
 
 .site-footer-cluster {
   position: absolute;
-  left: max(50px, calc((100% - 1440px) / 2 + 50px));
+  left: max(50px, calc((100% - var(--page-width)) / 2 + 50px));
   bottom: 34px;
   display: flex;
   align-items: flex-start;
@@ -542,7 +708,7 @@ button:focus-visible {
 
 .site-footer-copy {
   position: absolute;
-  right: max(50px, calc((100% - 1440px) / 2 + 50px));
+  right: max(50px, calc((100% - var(--page-width)) / 2 + 50px));
   bottom: 63px;
   margin: 0;
   text-transform: uppercase;
@@ -562,6 +728,11 @@ button:focus-visible {
   .site-footer-copy {
     position: static;
   }
+}
+
+.works-connect {
+  padding-top: 130px;
+  padding-bottom: 3.5rem;
 }
 
 .connect-button {
@@ -593,7 +764,8 @@ button:focus-visible {
 .connect-pin {
   position: absolute;
   z-index: 2;
-  left: calc((100% - 1440px) / 2 + 565px);
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 174px;
 }
 

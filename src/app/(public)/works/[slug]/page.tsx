@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { NextProjectLink } from "@/components/projects/NextProjectLink";
-import { ProjectCase } from "@/components/projects/ProjectCase";
-import { ProjectMediaStack } from "@/components/projects/ProjectMediaStack";
-import { ProjectSidebar } from "@/components/projects/ProjectSidebar";
+import { caseFromProject, ProjectCase } from "@/components/projects/ProjectCase";
 import { toNextProject } from "@/lib/projects/next-project";
 import { getProjectBySlug } from "@/lib/projects/queries";
 import {
@@ -133,21 +130,10 @@ export default async function ProjectPage({ params }: PageProps) {
         year={project.projectYear}
         tags={project.tags}
       />
-      <section
-        className="site-shell py-10 md:py-14"
-        aria-labelledby="project-title"
-      >
-        {/*
-          Desktop: ~42% sticky description / ~58% media.
-          Sticky is scoped to this section so it releases before Next Project.
-          Mobile: normal stacked flow (no sticky).
-        */}
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,42%)_minmax(0,58%)] lg:items-start lg:gap-12">
-          <ProjectSidebar project={project} />
-          <ProjectMediaStack media={project.media} />
-        </div>
-      </section>
-      <NextProjectLink next={next} />
+      <ProjectCase
+        project={caseFromProject(project)}
+        nextSlug={next.kind === "project" ? next.slug : null}
+      />
     </>
   );
 }

@@ -44,8 +44,8 @@ export const heroNav: NavItem[] = [
 export const studioIntro = {
   id: "about",
   label: "taamworks",
-  paragraph:
-    "an interdisciplinary studio based in London, working across design, technology, experiences, and spaces. We bring together diverse disciplines to create purposeful identities, products, environments, and experiences that bring ideas to life across physical and digital experiences.",
+  lead: "an interdisciplinary studio\nbased in London.",
+  body: "Working across design, technology, experiences, and spaces. We bring together diverse disciplines to create purposeful identities, products, environments, and experiences that bring ideas to life across physical and digital experiences.",
 } as const;
 
 export type ServiceItem = {
@@ -56,6 +56,8 @@ export type ServiceItem = {
 export type ServiceGroup = {
   number: string;
   title: string;
+  /** Exact badge lines. Spaces are intentional and differ per service. */
+  badgeLines: readonly string[];
   titleLines?: readonly string[];
   intro: string;
   items: readonly ServiceItem[];
@@ -65,6 +67,7 @@ export const serviceGroups: readonly ServiceGroup[] = [
   {
     number: "01",
     title: "DESIGN",
+    badgeLines: ["01   DESIGN"],
     intro:
       "We build identities and communication systems that help brands, organizations, and ideas establish a distinctive and consistent presence.",
     items: [
@@ -108,6 +111,7 @@ export const serviceGroups: readonly ServiceGroup[] = [
   {
     number: "02",
     title: "TECH",
+    badgeLines: ["02       TECH"],
     intro:
       "We design and develop digital products and systems where technology, functionality, and user experience work together.",
     items: [
@@ -151,6 +155,7 @@ export const serviceGroups: readonly ServiceGroup[] = [
   {
     number: "03",
     title: "EVENTS",
+    badgeLines: ["03 EVENTS"],
     intro:
       "We create physical and cultural experiences from concept to execution, combining strategy, storytelling, design, curation, and production.",
     items: [
@@ -184,6 +189,7 @@ export const serviceGroups: readonly ServiceGroup[] = [
   {
     number: "04",
     title: "SPACE & OBJECTS",
+    badgeLines: ["04    SPACE", "&OBJECTS"],
     titleLines: ["SPACE", "&OBJECTS"],
     intro:
       "We translate ideas and identities into physical environments and objects, connecting spatial thinking with design, function, and experience.",

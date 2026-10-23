@@ -5,7 +5,7 @@ import { connectCta } from "@/content/site";
 
 type ConnectSectionProps = {
   className?: string;
-  /** Homepage placement: 565px from the 1440px page’s left, 174px above the page bottom. */
+  /** Homepage placement: centered on the page, 174px above the page bottom. */
   pinToPage?: boolean;
 };
 
@@ -31,7 +31,7 @@ export function ConnectSection({
 
   return (
     <section
-      className={`site-shell flex justify-center py-10 md:py-14 ${className}`}
+      className={`works-connect site-shell flex justify-center ${className}`}
       aria-label="Connect"
     >
       {button}

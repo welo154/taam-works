@@ -22,7 +22,7 @@ export default function PublicLayout({
         alternateName: ["TAAM", "taamworks", "TAAM Works"],
         url: siteUrl,
         logo: `${siteUrl}/brand/taam-wordmark.png`,
-        description: `${siteMeta.name} is ${studioIntro.paragraph}`,
+        description: `${siteMeta.name} is ${studioIntro.lead.replace(/\n/g, " ")} ${studioIntro.body}`,
         email: contact.email,
         telephone: contact.phone,
         address: {

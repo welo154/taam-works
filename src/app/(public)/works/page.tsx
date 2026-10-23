@@ -16,29 +16,29 @@ export default async function WorksPage() {
 
   return (
     <>
+      <div className="works-banner" />
       <section className="works-page" aria-labelledby="works-heading">
-        <div className="works-intro">
-          <h1 id="works-heading" className="works-intro-title">
-            <span className="works-intro-line">{worksIntro.lineOne}</span>
-            <span className="works-intro-line">
-              {worksIntro.lineTwoLead}{" "}
-              <span className="works-intro-mark">{worksIntro.mark}</span>
-            </span>
-          </h1>
-          <p className="works-intro-lead">{worksIntro.lead}</p>
-        </div>
-        {result.ok ? (
-          result.data.length > 0 ? (
-            <ProjectGrid
-              placements={result.data}
-              labelledBy="works-heading"
-            />
+        <h1 id="works-heading" className="works-lead">
+          <span className="works-lead-line">
+            {worksIntro.lineOne} {worksIntro.lineTwoLead}{" "}
+          </span>
+          <span className="works-lead-mark">{worksIntro.mark}</span>
+        </h1>
+        <p className="works-intro">{worksIntro.lead}</p>
+        <div className="site-shell">
+          {result.ok ? (
+            result.data.length > 0 ? (
+              <ProjectGrid
+                placements={result.data}
+                labelledBy="works-heading"
+              />
+            ) : (
+              <PortfolioStatus message="No published projects yet." />
+            )
           ) : (
-            <PortfolioStatus message="No published projects yet." />
-          )
-        ) : (
-          <PortfolioStatus message={result.message} />
-        )}
+            <PortfolioStatus message={result.message} />
+          )}
+        </div>
       </section>
     </>
   );

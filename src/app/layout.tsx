@@ -70,7 +70,7 @@ export default function RootLayout({
     >
       {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) inject attributes on <body>. */}
       <body className="min-h-full bg-bg text-cream" suppressHydrationWarning>
-        {children}
+        <div className="site-frame">{children}</div>
       </body>
     </html>
   );

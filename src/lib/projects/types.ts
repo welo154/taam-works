@@ -1,4 +1,4 @@
-export type ProjectLayout = "third" | "half" | "full";
+export type ProjectLayout = "third" | "half" | "wide" | "full";
 
 export type MediaKind = "image" | "video";
 
@@ -43,6 +43,12 @@ export type Project = {
   cardMeta?: string;
   /** Caption chips above a home/works card, matching Figma metadata rows. */
   homeLabels?: string[];
+  /** Use the italic Acumin Pro cut for the caption row. */
+  captionItalic?: boolean;
+  /** Sit this card 1px after the previous one instead of the 18px grid gap. */
+  tightGap?: boolean;
+  /** Pin the card to the cover width at the start or end of its grid cell. */
+  cardAlign?: "start" | "end";
   status: ProjectStatus;
   cover: MediaAsset;
   media: ProjectMediaRow[];

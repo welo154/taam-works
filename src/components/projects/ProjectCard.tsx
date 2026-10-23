@@ -5,6 +5,7 @@ import type { Project, ProjectLayout } from "@/lib/projects/types";
 const spanClass: Record<ProjectLayout, string> = {
   third: "col-span-6 sm:col-span-3 lg:col-span-2",
   half: "col-span-6 sm:col-span-3 lg:col-span-3",
+  wide: "col-span-6 lg:col-span-4",
   full: "col-span-6",
 };
 
@@ -21,14 +22,26 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
   ];
 
   return (
-    <article className={`${spanClass[layout]} self-start`}>
+    <article
+      className={`${spanClass[layout]} self-start${project.tightGap ? " project-card-tight" : ""}${project.cardAlign ? " project-card-sized" : ""}`}
+      style={
+        project.cardAlign
+          ? ({
+              "--card-width": `${cover.width}px`,
+              "--card-align": project.cardAlign,
+            } as React.CSSProperties)
+          : undefined
+      }
+    >
       <Link
         href={`/works/${project.slug}`}
         className="group block focus-visible:outline-offset-4"
       >
-        <div className="project-card-label">
-          {labels.map((label) => (
-            <span key={label}>{label}</span>
+        <div
+          className={`project-card-label${project.captionItalic ? " project-card-label-italic" : ""}`}
+        >
+          {labels.map((label, index) => (
+            <span key={`${label}-${index}`}>{label}</span>
           ))}
         </div>
         <div className="overflow-hidden bg-cream/5">
@@ -42,9 +55,11 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
             sizes={
               layout === "full"
                 ? "100vw"
-                : layout === "half"
-                  ? "(max-width: 1024px) 50vw, 50vw"
-                  : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                : layout === "wide"
+                  ? "(max-width: 1024px) 100vw, 887px"
+                  : layout === "half"
+                    ? "(max-width: 1024px) 50vw, 50vw"
+                    : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             }
           />
         </div>

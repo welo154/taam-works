@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { HeroLabels } from "@/components/hero/HeroLabels";
 import { PortfolioStatus } from "@/components/projects/PortfolioStatus";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
@@ -58,10 +59,15 @@ export default async function HomePage() {
         </h2>
         {homeProjects.ok ? (
           homeProjects.data.length > 0 ? (
-            <ProjectGrid
-              placements={homeProjects.data}
-              labelledBy="selected-work-heading"
-            />
+            <>
+              <ProjectGrid
+                placements={homeProjects.data}
+                labelledBy="selected-work-heading"
+              />
+            <Link href="/works" className="works-view-all">
+              <span className="works-view-all-label">VIEW ALL</span>
+            </Link>
+            </>
           ) : null
         ) : (
           <PortfolioStatus message={homeProjects.message} />
