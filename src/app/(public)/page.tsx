@@ -7,8 +7,23 @@ import { ServiceGroups } from "@/components/site/ServiceGroup";
 import { StudioIntro } from "@/components/site/StudioIntro";
 import { getHomeProjects } from "@/lib/projects/queries";
 
+const homeTitle =
+  "TAAM Works · Design, Tech, Events & Spaces Studio, London";
+const homeDescription =
+  "TAAM Works (taamworks.com) is a London studio for design, technology, events, and spaces. TAAM builds identities, exhibitions, and experiences.";
+
 export const metadata: Metadata = {
-  title: { absolute: "TAAM Works · Design, Tech, Events & Spaces Studio, London" },
+  title: { absolute: homeTitle },
+  description: homeDescription,
+  openGraph: {
+    title: homeTitle,
+    description: homeDescription,
+    url: "/",
+  },
+  twitter: {
+    title: homeTitle,
+    description: homeDescription,
+  },
 };
 
 export const dynamic = "force-dynamic";

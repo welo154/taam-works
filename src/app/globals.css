@@ -597,22 +597,20 @@ button:focus-visible {
   bottom: 174px;
 }
 
-/* 723px content band under the header, then the space down to the footer. */
+/* Media column is in normal page flow so every IDEA video can be scrolled to. */
 .idea-content {
   position: relative;
-  height: 723px;
+  height: auto;
+  min-height: 723px;
 }
 
 .idea-media {
-  position: absolute;
+  position: relative;
   top: 0;
   left: calc(50px + 556px + 65px);
   width: 719px;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  height: auto;
+  overflow: visible;
 }
 
 .idea-media::-webkit-scrollbar {
@@ -831,14 +829,13 @@ button:focus-visible {
 }
 
 .idea-stage {
-  /* 175px between the content rule and the rule above Let's Connect. */
-  height: calc(175px + 174px + 61px + 55px - 92px + 0.6px);
+  height: 80px;
 }
 
 .idea-next {
-  position: absolute;
+  position: relative;
   z-index: 3;
-  top: calc(74px + 723px + 0.3px + 87.5px);
+  top: auto;
   left: 455px;
   display: flex;
   align-items: center;
@@ -883,7 +880,39 @@ button:focus-visible {
 }
 
 .idea-rule-content {
-  top: calc(74px + 723px);
+  display: none;
+}
+
+@media (max-width: 1390px) {
+  .idea-media {
+    left: auto;
+    width: min(719px, calc(100% - 2 * var(--space-gutter)));
+    margin-inline: auto;
+  }
+
+  .idea-copy {
+    position: relative;
+    top: auto;
+    left: auto;
+    padding: 32px var(--space-gutter) 0;
+  }
+
+  .idea-next {
+    left: var(--space-gutter);
+    margin-top: 32px;
+  }
+
+  .idea-media-photo,
+  .idea-media-video,
+  .idea-media-logo,
+  .idea-media-shirts,
+  .idea-media-main,
+  .idea-media-posters,
+  .idea-media-pair,
+  .idea-media-end {
+    width: 100%;
+    height: auto;
+  }
 }
 
 .idea-rule-connect {

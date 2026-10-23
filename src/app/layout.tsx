@@ -26,7 +26,7 @@ const acuminPro = localFont({
 });
 
 const description =
-  "TAAM Works is an interdisciplinary studio based in London, working across design, technology, experiences, and spaces.";
+  "TAAM Works (taamworks) is an interdisciplinary studio based in London, working across design, technology, events, experiences, and spaces.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),

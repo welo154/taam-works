@@ -13,23 +13,38 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   const siteUrl = getSiteUrl();
-  const organization = {
+  const structuredData = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteMeta.name,
-    url: siteUrl,
-    logo: `${siteUrl}/brand/taam-wordmark.png`,
-    description: `${siteMeta.name} is ${studioIntro.paragraph}`,
-    email: contact.email,
-    telephone: contact.phone,
-    address: { "@type": "PostalAddress", addressLocality: "London" },
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: siteMeta.name,
+        alternateName: ["TAAM", "taamworks", "TAAM Works"],
+        url: siteUrl,
+        logo: `${siteUrl}/brand/taam-wordmark.png`,
+        description: `${siteMeta.name} is ${studioIntro.paragraph}`,
+        email: contact.email,
+        telephone: contact.phone,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "London",
+          addressCountry: "GB",
+        },
+      },
+      {
+        "@type": "WebSite",
+        name: siteMeta.name,
+        alternateName: ["TAAM", "taamworks"],
+        url: siteUrl,
+      },
+    ],
   };
 
   return (
     <ConsultationProvider>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <div className="relative flex min-h-full flex-col">
         <SiteHeader />

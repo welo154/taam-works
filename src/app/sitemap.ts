@@ -17,6 +17,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${siteUrl}/works/idea`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${siteUrl}/connect`,
       lastModified: now,
       changeFrequency: "yearly",
@@ -27,6 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const works = await getWorksProjects();
   if (works.ok) {
     for (const { project } of works.data) {
+      if (project.slug === "idea") continue;
       const cover = project.cover.src;
       entries.push({
         url: `${siteUrl}/works/${project.slug}`,
