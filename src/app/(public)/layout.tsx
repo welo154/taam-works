@@ -49,11 +49,11 @@ export default function PublicLayout({
       <div className="relative flex min-h-full flex-col">
         <SiteHeader />
         <main className="flex-1">{children}</main>
-        <SiteFooter />
         <div className="page-close">
           <LetTaamWork />
           <ConnectSection />
         </div>
+        <SiteFooter />
       </div>
       <ConsultationModal />
     </ConsultationProvider>

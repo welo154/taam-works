@@ -84,7 +84,8 @@ function AssetView({
     width: `${asset.width}px`,
     height: `${asset.height}px`,
     aspectRatio: `${asset.width} / ${asset.height}`,
-  };
+    "--asset-w": asset.width,
+  } as React.CSSProperties;
   if (asset.kind === "video") {
     return (
       <video

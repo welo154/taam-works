@@ -8,7 +8,9 @@ type ServiceCopyProps = {
   items: readonly ServiceItem[];
 };
 
-const visibleFeatures = 2;
+const desktopFeatures = 2;
+const mobileFeatures = 3;
+const mobileQuery = "(max-width: 767px)";
 
 export function ServiceCopy({ intro, items }: ServiceCopyProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -18,8 +20,11 @@ export function ServiceCopy({ intro, items }: ServiceCopyProps) {
     if (!el) return;
 
     const fit = () => {
+      const count = window.matchMedia(mobileQuery).matches
+        ? mobileFeatures
+        : desktopFeatures;
       const features = el.querySelectorAll<HTMLElement>(".service-feature");
-      const last = features[Math.min(visibleFeatures, features.length) - 1];
+      const last = features[Math.min(count, features.length) - 1];
       if (!last) {
         el.style.height = "auto";
         return;
@@ -31,10 +36,13 @@ export function ServiceCopy({ intro, items }: ServiceCopyProps) {
     fit();
     const observer = new ResizeObserver(fit);
     observer.observe(el);
+    const media = window.matchMedia(mobileQuery);
+    media.addEventListener("change", fit);
     document.fonts.ready.then(fit).catch(() => {});
     window.addEventListener("resize", fit);
     return () => {
       observer.disconnect();
+      media.removeEventListener("change", fit);
       window.removeEventListener("resize", fit);
     };
   }, [intro, items]);

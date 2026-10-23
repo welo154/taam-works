@@ -96,10 +96,6 @@ button:focus-visible {
   height: 74px;
 }
 
-.relative:has(.idea-content) .site-logo {
-  left: 50px;
-}
-
 .site-logo {
   position: absolute;
   top: 33px;
@@ -525,7 +521,7 @@ button:focus-visible {
   position: relative;
   width: 718px;
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
 }
 
 .service-intro,
@@ -1100,4 +1096,617 @@ button:focus-visible {
   display: none;
   width: 0;
   height: 0;
+}
+
+/* Mobile homepage — Figma Frame 16 (437×7191). */
+@media (max-width: 767px) {
+  :root {
+    --m: calc(100vw / 437);
+  }
+
+  .site-header {
+    height: calc(var(--m) * 160);
+  }
+
+  .relative:has(.works-page) .site-header,
+  .relative:has(.idea-content) .site-header {
+    height: 108px;
+  }
+
+  .idea-rule-header {
+    top: 108px;
+  }
+
+  .works-lead {
+    width: 270px;
+    max-width: 270px;
+    height: 71px;
+    margin: 85.5px auto 0;
+    color: #fbf5d5;
+    text-align: center;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+  }
+
+  .works-lead-mark {
+    position: relative;
+    z-index: 0;
+    color: #000;
+    background-color: transparent;
+    background-image: none;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+  }
+
+  .works-lead-mark::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    top: -2px;
+    width: 148px;
+    height: 29px;
+    transform: translateX(-50%);
+    background: #f5e600;
+    pointer-events: none;
+  }
+
+  .works-intro {
+    width: 342px;
+    max-width: 342px;
+    margin: 44px auto 0;
+    color: #fbf5d5;
+    text-align: center;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+  }
+
+  .site-logo {
+    top: calc(var(--m) * 57);
+    left: calc(var(--m) * 24);
+  }
+
+  .site-logo-mark {
+    width: calc(var(--m) * 118);
+    height: auto;
+  }
+
+  .site-logo-dot {
+    width: calc(var(--m) * 7);
+    height: calc(var(--m) * 7);
+  }
+
+  .site-header-year {
+    top: calc(var(--m) * 56);
+    right: calc(var(--m) * 24);
+    font-size: calc(var(--m) * 20);
+    letter-spacing: calc(var(--m) * -1);
+  }
+
+  .hero-frame {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: calc(var(--m) * 625);
+    overflow: visible;
+  }
+
+  .hero-taam {
+    /* Visual top-left is 219px from the page top and 123px from the left. */
+    top: calc(219px - var(--m) * 160);
+    left: calc(123px + var(--m) * 245);
+    width: calc(var(--m) * 563);
+    height: calc(var(--m) * 245);
+    max-width: none;
+    max-height: none;
+    aspect-ratio: auto;
+    opacity: 1;
+    pointer-events: none;
+    transform-origin: top left;
+    transform: rotate(90deg);
+    animation: none;
+  }
+
+  .hero-label {
+    width: calc(var(--m) * 177);
+    height: calc(var(--m) * 49);
+    padding: 9px 0 0;
+    border-radius: calc(var(--m) * 30);
+    align-items: flex-start;
+    justify-content: center;
+    color: #000;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -1.6px;
+    text-align: center;
+    opacity: 1;
+    animation: none;
+  }
+
+  .hero-label-services {
+    top: calc(var(--m) * 121);
+    left: calc(var(--m) * 75);
+  }
+
+  .hero-label-works {
+    top: calc(var(--m) * 219);
+    left: calc(var(--m) * 191);
+  }
+
+  .hero-label-about {
+    top: calc(var(--m) * 317);
+    left: calc(var(--m) * 75);
+  }
+
+  .hero-label-contact {
+    top: calc(var(--m) * 415);
+    left: calc(var(--m) * 191);
+  }
+
+  .hero-label-initiatives {
+    top: calc(var(--m) * 493);
+    left: calc(var(--m) * 75);
+  }
+
+  .studio-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(var(--m) * 28);
+    width: auto;
+    margin-top: calc(var(--m) * 240);
+    margin-inline: calc(var(--m) * 57);
+    padding-left: 0;
+  }
+
+  .studio-intro-mark {
+    width: calc(var(--m) * 175);
+    height: calc(var(--m) * 41);
+  }
+
+  .studio-intro-mark svg {
+    width: calc(var(--m) * 167);
+    height: auto;
+  }
+
+  .studio-intro-copy,
+  .studio-intro-lead,
+  .studio-intro-body {
+    width: 100%;
+    font-size: calc(var(--m) * 20);
+  }
+
+  .selected-work {
+    margin-top: calc(var(--m) * 280);
+    padding-inline: calc(var(--m) * 24);
+  }
+
+  .selected-work > .grid,
+  .works-page .site-shell > .grid {
+    grid-template-columns: 1fr;
+    gap: calc(var(--m) * 70);
+  }
+
+  .selected-work article,
+  .works-page article {
+    grid-column: 1 / -1;
+    width: auto;
+  }
+
+  .project-card-label {
+    margin-bottom: calc(var(--m) * 9);
+    font-size: calc(var(--m) * 16);
+  }
+
+  .selected-work .overflow-hidden,
+  .works-page .overflow-hidden {
+    position: relative;
+    aspect-ratio: 1 / 1;
+  }
+
+  .selected-work .overflow-hidden img,
+  .works-page .overflow-hidden img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: auto !important;
+  }
+
+  .works-page .site-shell {
+    width: auto;
+    max-width: none;
+    margin-top: 86px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-inline: calc(var(--m) * 24);
+  }
+
+  .works-page .site-shell > .grid > :nth-child(n + 4) {
+    display: none;
+  }
+
+  .relative:has(.works-page) .page-close .let-taam-section {
+    padding-top: 271px;
+  }
+
+  .works-view-all {
+    width: calc(var(--m) * 146);
+    height: calc(var(--m) * 39.5);
+    margin-top: calc(var(--m) * 77);
+    font-size: calc(var(--m) * 18);
+    letter-spacing: calc(var(--m) * -0.9);
+  }
+
+  .works-view-all-label {
+    transform: translateY(calc(var(--m) * 1));
+  }
+
+  .services-section {
+    margin-top: calc(var(--m) * 152);
+    padding-bottom: calc(var(--m) * 48);
+  }
+
+  .service-group {
+    grid-template-columns: 1fr;
+    row-gap: 57px;
+    margin-left: calc(var(--m) * 40);
+    margin-right: calc(var(--m) * 24);
+  }
+
+  .service-group + .service-group {
+    margin-top: calc(var(--m) * 140);
+  }
+
+  .service-badge {
+    width: calc(var(--m) * 175);
+    height: calc(var(--m) * 41);
+    padding-top: 0;
+    font-size: calc(var(--m) * 36);
+    letter-spacing: calc(var(--m) * -2.88);
+  }
+
+  .service-badge-label {
+    transform: translateY(calc(var(--m) * 3));
+  }
+
+  .service-badge-stack {
+    height: calc(var(--m) * 78);
+    padding-top: calc(var(--m) * 8);
+  }
+
+  .service-badge-stack .service-badge-label {
+    transform: none;
+    line-height: 0.92;
+  }
+
+  .service-copy,
+  .service-intro,
+  .service-feature-body {
+    width: 100%;
+  }
+
+  .service-intro,
+  .service-feature-body {
+    color: #fbf5d5;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .service-feature {
+    margin-top: 43px;
+  }
+
+  .service-feature-title {
+    color: #fbf5d5;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 98.925%;
+    text-transform: uppercase;
+  }
+
+  .service-feature-body {
+    margin-top: 9px;
+  }
+
+  .page-close {
+    order: 1;
+    padding-bottom: 0;
+  }
+
+  .site-footer {
+    order: 2;
+  }
+
+  .page-close .let-taam-section {
+    padding-top: calc(var(--m) * 72);
+    padding-bottom: 0;
+  }
+
+  .let-taam-line {
+    width: 389px;
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+    color: #fbf5d5;
+    text-align: center;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -1.92px;
+  }
+
+  .let-taam-line .font-bold {
+    font-weight: 700;
+    letter-spacing: -1.92px;
+  }
+
+  .page-close section[aria-label="Connect"] {
+    padding-top: 26px;
+    padding-bottom: 0;
+  }
+
+  .connect-button {
+    width: 327px;
+    max-width: none;
+    height: 76px;
+    padding: 17px 0 0;
+    align-items: flex-start;
+    justify-content: center;
+    border-radius: 50px;
+    background: #f5e600;
+    color: #000;
+    text-align: center;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -3.2px;
+  }
+
+  .connect-button-label {
+    line-height: normal;
+    letter-spacing: inherit;
+    transform: none;
+  }
+
+  .site-footer {
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: calc(var(--m) * 16);
+    row-gap: calc(var(--m) * 52);
+    align-items: start;
+    padding: calc(var(--m) * 65) calc(var(--m) * 24) calc(var(--m) * 48);
+    font-size: calc(var(--m) * 16);
+  }
+
+  .site-footer-cluster,
+  .site-footer-copy {
+    position: static;
+  }
+
+  .site-footer-cluster {
+    display: contents;
+  }
+
+  .site-footer-social {
+    text-align: right;
+  }
+
+  .site-footer-copy {
+    grid-column: 1 / -1;
+    font-size: calc(var(--m) * 16);
+  }
+
+  .idea-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .idea-copy {
+    order: -1;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    padding: 74px calc(var(--m) * 24) 0;
+  }
+
+  .idea-title {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    column-gap: 0.75em;
+    width: 100%;
+  }
+
+  .idea-leader {
+    display: block;
+    position: static;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: #fbf5d5;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    white-space: nowrap;
+  }
+
+  .idea-year {
+    position: static;
+    margin-left: 0;
+    flex: none;
+  }
+
+  .idea-copy-en,
+  .idea-copy-ar {
+    width: auto;
+    max-width: 100%;
+    font-size: calc(var(--m) * 20);
+  }
+
+  .idea-copy-en {
+    margin-top: 23px;
+  }
+
+  .idea-tags {
+    margin-top: 50px;
+    color: #fbf5d5;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.7;
+  }
+
+  .idea-media {
+    left: auto;
+    width: 392px;
+    max-width: 100%;
+    height: 755px;
+    margin: 50px auto 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .idea-media > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .idea-media-video {
+    aspect-ratio: 718 / 928;
+  }
+
+  .idea-media-photo,
+  .idea-media-lead {
+    margin-top: 0;
+  }
+
+  .idea-media-pair,
+  .idea-media-end,
+  .idea-media-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .idea-media-pair > *,
+  .idea-media-end > *,
+  .idea-media-row > * {
+    flex: var(--asset-w, 1) 0 0;
+    width: 0 !important;
+    min-width: 0;
+    max-width: none !important;
+    height: auto !important;
+  }
+
+  .idea-media-pair-left {
+    flex-grow: 359;
+    aspect-ratio: 359 / 479;
+  }
+
+  .idea-media-pair-right {
+    flex-grow: 360;
+    aspect-ratio: 360 / 479;
+  }
+
+  .idea-media-badge {
+    flex-grow: 364.93;
+    aspect-ratio: 364.93 / 456;
+  }
+
+  .idea-media-loop {
+    flex-grow: 353.058;
+    aspect-ratio: 353.058 / 456;
+  }
+
+  .idea-stage {
+    height: 0;
+  }
+
+  .idea-next {
+    position: relative;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    height: 94px;
+    margin-top: 76px;
+    color: #fbf5d5;
+    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    transform: none;
+  }
+
+  .idea-next::before,
+  .idea-next::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 100vw;
+    height: 0.3px;
+    background: #fbf5d5;
+    opacity: 0.4;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .idea-next::before {
+    top: 0;
+  }
+
+  .idea-next::after {
+    top: 94px;
+  }
+
+  .idea-next-arrow {
+    width: 45px;
+    height: 47px;
+    transform: rotate(-180deg);
+  }
+
+  .relative:has(.idea-content) .page-close .let-taam-section {
+    padding-top: 110.3px;
+  }
 }
