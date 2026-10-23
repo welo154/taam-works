@@ -80,7 +80,10 @@ async function saveAsset(
     throw new Error("Each file must be 80MB or smaller.");
   }
   const filename = `${randomUUID()}.${extension}`;
-  await writeFile(path.join(directory, filename), Buffer.from(await file.arrayBuffer()));
+  await writeFile(
+    path.join(/*turbopackIgnore: true*/ directory, filename),
+    Buffer.from(await file.arrayBuffer()),
+  );
   return {
     kind,
     src: `${publicDirectory}/${filename}`,

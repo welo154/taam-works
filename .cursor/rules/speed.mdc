@@ -1,0 +1,14 @@
+---
+description: Speed is the user's top priority for all work in this repo
+alwaysApply: true
+---
+
+# Speed first
+
+Treat speed as the highest priority: site performance, agent turn time, and getting to a working result.
+
+- Do the smallest change that solves the request. No extra files, refactors, or docs unless asked.
+- Batch reads and edits. Skip recaps, preambles, and optional questions when the next step is clear.
+- Prefer the existing stack and patterns. Do not add libraries or abstraction for cleanliness.
+- For the public site, keep pages fast: no extra client JS, no heavy images without compression, no blocking work on the critical path.
+- Verify only what changed. Stop when it works.

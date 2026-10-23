@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { IdeaMediaScroll } from "@/components/projects/IdeaMediaScroll";
-import { ConnectSection } from "@/components/site/ConnectSection";
 import type { StudioAsset, StudioProject } from "@/lib/projects/studio-store";
 
 const LEADER = "-----------------------------------------------------------";
@@ -127,8 +126,6 @@ export function ProjectCase({ project, nextSlug }: ProjectCaseProps) {
       </Link>
       <div className="idea-rule idea-rule-header" aria-hidden="true" />
       <div className="idea-rule idea-rule-content" aria-hidden="true" />
-      <div className="idea-rule idea-rule-connect" aria-hidden="true" />
-      <ConnectSection pinToPage />
     </>
   );
 }

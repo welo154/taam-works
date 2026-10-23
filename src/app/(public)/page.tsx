@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { HeroLabels } from "@/components/hero/HeroLabels";
 import { PortfolioStatus } from "@/components/projects/PortfolioStatus";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
-import { ConnectSection } from "@/components/site/ConnectSection";
-import { LetTaamWork } from "@/components/site/LetTaamWork";
 import { ServiceGroups } from "@/components/site/ServiceGroup";
 import { StudioIntro } from "@/components/site/StudioIntro";
 import { getHomeProjects } from "@/lib/projects/queries";
+
+export const metadata: Metadata = {
+  title: { absolute: "TAAM Works · Design, Tech, Events & Spaces Studio, London" },
+};
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +19,10 @@ export default async function HomePage() {
   return (
     <>
       <section className="hero-frame" aria-label="Hero">
+        <h1 className="sr-only">
+          TAAM Works — interdisciplinary studio for design, technology,
+          events, and spaces in London
+        </h1>
         <Image
           src="/brand/taam-wordmark.png"
           alt="TAAM"
@@ -46,8 +53,6 @@ export default async function HomePage() {
         )}
       </section>
       <ServiceGroups />
-      <LetTaamWork />
-      <ConnectSection pinToPage />
     </>
   );
 }

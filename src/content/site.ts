@@ -229,6 +229,13 @@ export const closingLine = {
 
 export const connectCta = "LET'S CONNECT" as const;
 
+export const worksIntro = {
+  lineOne: "See what",
+  lineTwoLead: "we’ve",
+  mark: "taam’d.",
+  lead: "A closer look at what we do, how we think, and what we bring to life. A selection of identities, ideas, and experiences shaped through our work.",
+} as const;
+
 export const consultation = {
   title: "Book a free consultation",
   lead: "Tell us a little about the work. This sends a request — it is not a confirmed appointment.",

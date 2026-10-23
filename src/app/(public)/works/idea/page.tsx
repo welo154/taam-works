@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { IdeaMediaScroll } from "@/components/projects/IdeaMediaScroll";
-import { ConnectSection } from "@/components/site/ConnectSection";
+const description =
+  "IDEA (2024) — branding and exhibition work by TAAM Works, an interdisciplinary studio based in London.";
 
 export const metadata: Metadata = {
-  title: "IDEA",
+  title: "IDEA — Branding & Exhibition",
+  description,
+  alternates: { canonical: "/works/idea" },
+  openGraph: {
+    type: "article",
+    title: "IDEA — Branding & Exhibition · TAAM Works",
+    description,
+    images: [{ url: "/work/idea-card.png", width: 434, height: 455 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IDEA — Branding & Exhibition · TAAM Works",
+    description,
+    images: ["/work/idea-card.png"],
+  },
 };
 
 export default function IdeaProjectPage() {
@@ -39,7 +54,8 @@ export default function IdeaProjectPage() {
               alt="IDEA workshops"
               width={359}
               height={479}
-              fetchPriority="high"
+              loading="lazy"
+              decoding="async"
             />
             <img
               className="idea-media-pair-right"
@@ -47,7 +63,8 @@ export default function IdeaProjectPage() {
               alt="IDEA poster"
               width={360}
               height={479}
-              fetchPriority="high"
+              loading="lazy"
+              decoding="async"
             />
           </div>
           <img
@@ -56,7 +73,8 @@ export default function IdeaProjectPage() {
             alt="IDEA"
             width={719}
             height={465}
-            fetchPriority="high"
+            loading="lazy"
+            decoding="async"
           />
           <img
             className="idea-media-shirts"
@@ -64,7 +82,8 @@ export default function IdeaProjectPage() {
             alt="IDEA shirts"
             width={719}
             height={405}
-            fetchPriority="high"
+            loading="lazy"
+            decoding="async"
           />
           <video
             className="idea-media-main"
@@ -84,7 +103,8 @@ export default function IdeaProjectPage() {
             alt="IDEA posters"
             width={719}
             height={463}
-            fetchPriority="high"
+            loading="lazy"
+            decoding="async"
           />
           <div className="idea-media-end">
             <img
@@ -93,7 +113,8 @@ export default function IdeaProjectPage() {
               alt="IDEA media badge"
               width={365}
               height={456}
-              fetchPriority="high"
+              loading="lazy"
+              decoding="async"
             />
             <video
               className="idea-media-loop"
@@ -162,8 +183,6 @@ export default function IdeaProjectPage() {
       </Link>
       <div className="idea-rule idea-rule-header" aria-hidden="true" />
       <div className="idea-rule idea-rule-content" aria-hidden="true" />
-      <div className="idea-rule idea-rule-connect" aria-hidden="true" />
-      <ConnectSection pinToPage />
     </>
   );
 }

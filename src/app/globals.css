@@ -80,6 +80,78 @@ button:focus-visible {
   padding-inline: var(--space-gutter);
 }
 
+/* Works page intro — Figma frame 70:872 */
+.works-page {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+  padding-inline: 50px;
+}
+
+.works-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 152px;
+  padding-bottom: 148px;
+  text-align: center;
+}
+
+.works-intro-title {
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  color: #fbf5d5;
+  font-size: clamp(2.25rem, 4.45vw, 64px);
+  font-weight: 700;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.works-intro-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.works-intro-mark {
+  display: inline-block;
+  height: 0.84em;
+  margin-left: 0.12em;
+  padding: 0 0.14em;
+  background: #f5e600;
+  color: #000;
+  line-height: 0.84em;
+  vertical-align: 0.02em;
+}
+
+.works-intro-lead {
+  width: min(783px, 100%);
+  margin: 97px 0 0;
+  color: #fbf5d5;
+  font-size: clamp(1.05rem, 2.22vw, 32px);
+  font-weight: 400;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+  .works-page {
+    padding-inline: var(--space-gutter);
+  }
+
+  .works-intro {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+
+  .works-intro-lead {
+    margin-top: 40px;
+  }
+
+  .works-intro-line {
+    white-space: normal;
+  }
+}
+
 .site-header {
   position: relative;
   height: 74px;
@@ -422,11 +494,19 @@ button:focus-visible {
   }
 }
 
-@media (min-width: 768px) {
-  /* Footer band is 92px. This keeps the line bottom 316px above the page end. */
-  .let-taam-section {
-    margin-bottom: 224px;
-  }
+.page-close {
+  margin-top: auto;
+  padding-bottom: 3.5rem;
+}
+
+.page-close .let-taam-section {
+  margin-bottom: 0;
+  padding-top: 3.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.page-close section[aria-label="Connect"] {
+  padding-top: 0;
 }
 
 .site-footer {

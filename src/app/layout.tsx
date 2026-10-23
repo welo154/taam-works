@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const koSans = localFont({
@@ -24,13 +25,37 @@ const acuminPro = localFont({
   fallback: ["Segoe UI", "sans-serif"],
 });
 
+const description =
+  "TAAM Works is an interdisciplinary studio based in London, working across design, technology, experiences, and spaces.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "TAAM Works",
     template: "%s · TAAM Works",
   },
-  description:
-    "An interdisciplinary studio based in London, working across design, technology, experiences, and spaces.",
+  description,
+  applicationName: "TAAM Works",
+  alternates: { canonical: "./" },
+  openGraph: {
+    type: "website",
+    siteName: "TAAM Works",
+    locale: "en_GB",
+    title: "TAAM Works",
+    description,
+    images: [{ url: "/brand/taam-wordmark.png", width: 641, height: 280 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TAAM Works",
+    description,
+    images: ["/brand/taam-wordmark.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 export default function RootLayout({
@@ -43,7 +68,10 @@ export default function RootLayout({
       lang="en"
       className={`${acuminPro.variable} ${koSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-bg text-cream">{children}</body>
+      {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) inject attributes on <body>. */}
+      <body className="min-h-full bg-bg text-cream" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }
