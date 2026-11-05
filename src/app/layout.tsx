@@ -31,11 +31,11 @@ const description =
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "TAAM Works",
-    template: "%s · TAAM Works",
+    default: "TaamWorks",
+    template: "%s · TaamWorks",
   },
   description,
-  applicationName: "TAAM Works",
+  applicationName: "TaamWorks",
   icons: {
     icon: [{ url: "/brand/logo-dot.svg", type: "image/svg+xml" }],
     shortcut: "/brand/logo-dot.svg",
@@ -43,15 +43,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "./" },
   openGraph: {
     type: "website",
-    siteName: "TAAM Works",
+    siteName: "TaamWorks",
     locale: "en_GB",
-    title: "TAAM Works",
+    title: "TaamWorks",
     description,
     images: [{ url: "/brand/taam-wordmark.png", width: 641, height: 280 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TAAM Works",
+    title: "TaamWorks",
     description,
     images: ["/brand/taam-wordmark.png"],
   },

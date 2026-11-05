@@ -10,8 +10,7 @@ import { StudioIntro } from "@/components/site/StudioIntro";
 import { getHomeProjects } from "@/lib/projects/queries";
 import { isComingSoon } from "@/lib/coming-soon";
 
-const homeTitle =
-  "TAAM Works · Design, Tech, Events & Spaces Studio, London";
+const homeTitle = "TaamWorks";
 const homeDescription =
   "TAAM Works (taamworks.com) is a London studio for design, technology, events, and spaces. TAAM builds identities, exhibitions, and experiences.";
 
