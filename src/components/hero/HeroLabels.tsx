@@ -16,6 +16,18 @@ type HeroLabelsProps = {
   locked?: boolean;
 };
 
+function showComingSoon() {
+  const target = document.getElementById("coming-soon");
+  if (!target) return;
+  target.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth",
+    block: "center",
+  });
+  target.dispatchEvent(new Event("coming-soon:reveal"));
+}
+
 export function HeroLabels({ locked = false }: HeroLabelsProps) {
   const { open } = useConsultation();
 
@@ -24,16 +36,26 @@ export function HeroLabels({ locked = false }: HeroLabelsProps) {
       {heroNav.map((item) => {
         const className = `hero-label ${placement[item.id]}`;
 
-        if (locked || !item.href) {
+        if (locked) {
+          return (
+            <button
+              key={item.id}
+              type="button"
+              className={className}
+              onClick={showComingSoon}
+              aria-label={`${item.label} — Coming soon`}
+            >
+              {item.label}
+            </button>
+          );
+        }
+
+        if (!item.href) {
           return (
             <span
               key={item.id}
               className={className}
-              aria-label={
-                locked
-                  ? `${item.label} (coming soon)`
-                  : `${item.label} (destination forthcoming)`
-              }
+              aria-label={`${item.label} (destination forthcoming)`}
             >
               {item.label}
             </span>

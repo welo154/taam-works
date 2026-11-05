@@ -10,26 +10,34 @@ export function ComingSoon() {
     const el = ref.current;
     if (!el) return;
 
+    const reveal = () => setVisible(true);
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(true);
+      reveal();
       return;
     }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting) setVisible(true);
+        if (entry?.isIntersecting) reveal();
       },
       { threshold: 0.35 },
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    el.addEventListener("coming-soon:reveal", reveal);
+    return () => {
+      observer.disconnect();
+      el.removeEventListener("coming-soon:reveal", reveal);
+    };
   }, []);
 
   return (
     <section
       ref={ref}
+      id="coming-soon"
       className={`coming-soon${visible ? " is-visible" : ""}`}
       aria-label="Coming soon"
+      tabIndex={-1}
     >
       <p className="coming-soon-kicker">TAAM WORKS</p>
       <h2 className="coming-soon-title">Coming soon</h2>
