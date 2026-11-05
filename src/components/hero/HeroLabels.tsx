@@ -11,13 +11,34 @@ const placement: Record<NavItem["id"], string> = {
   about: "hero-label-about",
 };
 
-export function HeroLabels() {
+type HeroLabelsProps = {
+  /** Coming-soon gate: keep the pills visual, remove destinations. */
+  locked?: boolean;
+};
+
+export function HeroLabels({ locked = false }: HeroLabelsProps) {
   const { open } = useConsultation();
 
   return (
     <>
       {heroNav.map((item) => {
         const className = `hero-label ${placement[item.id]}`;
+
+        if (locked || !item.href) {
+          return (
+            <span
+              key={item.id}
+              className={className}
+              aria-label={
+                locked
+                  ? `${item.label} (coming soon)`
+                  : `${item.label} (destination forthcoming)`
+              }
+            >
+              {item.label}
+            </span>
+          );
+        }
 
         if (item.opensConsultation) {
           return (
@@ -29,18 +50,6 @@ export function HeroLabels() {
             >
               {item.label}
             </button>
-          );
-        }
-
-        if (!item.href) {
-          return (
-            <span
-              key={item.id}
-              className={className}
-              aria-label={`${item.label} (destination forthcoming)`}
-            >
-              {item.label}
-            </span>
           );
         }
 

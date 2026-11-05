@@ -5,6 +5,7 @@ import { LetTaamWork } from "@/components/site/LetTaamWork";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { contact, siteMeta, studioIntro } from "@/content/site";
+import { isComingSoon } from "@/lib/coming-soon";
 import { getSiteUrl } from "@/lib/site-url";
 
 export default function PublicLayout({
@@ -12,6 +13,7 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const comingSoon = isComingSoon();
   const siteUrl = getSiteUrl();
   const structuredData = {
     "@context": "https://schema.org",
@@ -49,13 +51,17 @@ export default function PublicLayout({
       <div className="relative flex min-h-full flex-col">
         <SiteHeader />
         <main className="flex-1">{children}</main>
-        <div className="page-close">
-          <LetTaamWork />
-          <ConnectSection />
-        </div>
-        <SiteFooter />
+        {comingSoon ? null : (
+          <>
+            <div className="page-close">
+              <LetTaamWork />
+              <ConnectSection />
+            </div>
+            <SiteFooter />
+          </>
+        )}
       </div>
-      <ConsultationModal />
+      {comingSoon ? null : <ConsultationModal />}
     </ConsultationProvider>
   );
 }

@@ -4,9 +4,11 @@ import Link from "next/link";
 import { HeroLabels } from "@/components/hero/HeroLabels";
 import { PortfolioStatus } from "@/components/projects/PortfolioStatus";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
+import { ComingSoon } from "@/components/site/ComingSoon";
 import { ServiceGroups } from "@/components/site/ServiceGroup";
 import { StudioIntro } from "@/components/site/StudioIntro";
 import { getHomeProjects } from "@/lib/projects/queries";
+import { isComingSoon } from "@/lib/coming-soon";
 
 const homeTitle =
   "TAAM Works · Design, Tech, Events & Spaces Studio, London";
@@ -30,6 +32,30 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
+  if (isComingSoon()) {
+    return (
+      <div className="coming-soon-home">
+        <section className="hero-frame" aria-label="Hero">
+          <h1 className="sr-only">
+            TAAM Works — interdisciplinary studio for design, technology,
+            events, and spaces in London
+          </h1>
+          <Image
+            src="/brand/taam-wordmark.png"
+            alt="TAAM"
+            width={641}
+            height={280}
+            priority
+            className="hero-taam"
+          />
+          <HeroLabels locked />
+        </section>
+        <div className="coming-soon-spacer" aria-hidden="true" />
+        <ComingSoon />
+      </div>
+    );
+  }
+
   const homeProjects = await getHomeProjects();
 
   return (
@@ -64,9 +90,9 @@ export default async function HomePage() {
                 placements={homeProjects.data}
                 labelledBy="selected-work-heading"
               />
-            <Link href="/works" className="works-view-all">
-              <span className="works-view-all-label">VIEW ALL</span>
-            </Link>
+              <Link href="/works" className="works-view-all">
+                <span className="works-view-all-label">VIEW ALL</span>
+              </Link>
             </>
           ) : null
         ) : (
