@@ -36,6 +36,10 @@ export const metadata: Metadata = {
   },
   description,
   applicationName: "TAAM Works",
+  icons: {
+    icon: [{ url: "/brand/logo-dot.svg", type: "image/svg+xml" }],
+    shortcut: "/brand/logo-dot.svg",
+  },
   alternates: { canonical: "./" },
   openGraph: {
     type: "website",
