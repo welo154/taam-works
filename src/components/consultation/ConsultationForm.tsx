@@ -11,6 +11,7 @@ type FormState = {
   brief: string;
   budget: string;
   timeline: string;
+  website: string;
 };
 
 const empty: FormState = {
@@ -21,6 +22,7 @@ const empty: FormState = {
   brief: "",
   budget: "",
   timeline: "",
+  website: "",
 };
 
 type ConsultationFormProps = {
@@ -92,6 +94,7 @@ export function ConsultationForm({
       budget: values.budget.trim() || undefined,
       timeline: values.timeline.trim() || undefined,
       sourcePage,
+      website: values.website,
     };
 
     setPending(true);
@@ -137,7 +140,7 @@ export function ConsultationForm({
   const fid = (name: string) => `${idPrefix}-${name}`;
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-5">
+    <form onSubmit={onSubmit} noValidate className="relative space-y-5">
       {generalError ? (
         <p role="alert" className="text-sm text-red">
           {generalError}
@@ -260,6 +263,19 @@ export function ConsultationForm({
             {fieldErrors.brief}
           </span>
         ) : null}
+      </p>
+
+      <p aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+        <label htmlFor={fid("website")}>Website</label>
+        <input
+          id={fid("website")}
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={values.website}
+          onChange={(e) => setField("website", e.target.value)}
+        />
       </p>
 
       <div className="grid gap-5 sm:grid-cols-2">

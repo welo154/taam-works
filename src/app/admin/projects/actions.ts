@@ -3,7 +3,9 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { isAdminAuthorized } from "@/lib/admin-auth";
 import {
   fixtureSlugs,
   nextOrders,
@@ -29,7 +31,8 @@ const VIDEO_TYPES = new Map([
   ["video/quicktime", "mov"],
 ]);
 
-const MAX_FILE_BYTES = 80 * 1024 * 1024;
+// Keep in step with experimental.serverActions.bodySizeLimit in next.config.ts.
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -77,7 +80,7 @@ async function saveAsset(
     );
   }
   if (file.size > MAX_FILE_BYTES) {
-    throw new Error("Each file must be 80MB or smaller.");
+    throw new Error("Each file must be 20MB or smaller.");
   }
   const filename = `${randomUUID()}.${extension}`;
   await writeFile(
@@ -102,6 +105,13 @@ export async function createStudioProject(
   _previous: CreateProjectState,
   formData: FormData,
 ): Promise<CreateProjectState> {
+  // Server Actions are reachable by direct POST from any route, so the
+  // proxy check on /admin is not enough on its own.
+  const requestHeaders = await headers();
+  if (!isAdminAuthorized(requestHeaders.get("authorization"))) {
+    return { error: "You are not signed in to the dashboard." };
+  }
+
   const titleEn = text(formData, "titleEn");
   const titleAr = text(formData, "titleAr");
   const descriptionEn = text(formData, "descriptionEn");
