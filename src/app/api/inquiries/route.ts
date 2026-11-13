@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BackendRequestError, backendPost } from "@/lib/backend/client";
+import { rpc, SupabaseError } from "@/lib/supabase/rest";
 import { contact } from "@/content/site";
 
 export const dynamic = "force-dynamic";
@@ -69,30 +69,62 @@ export async function POST(request: Request) {
     return fail(429, "rate_limited", "Too many requests. Please wait before submitting again.");
   }
 
-  try {
-    const result = await backendPost("/api/v1/inquiries", JSON.stringify(inquiry), {
-      "x-forwarded-for": ip,
-      "x-real-ip": ip,
-    });
-    return NextResponse.json({ data: result.data }, { status: result.status });
-  } catch (error) {
-    if (error instanceof BackendRequestError) {
-      if (error.code === "backend_unreachable") {
-        return fail(
-          503,
-          "backend_unreachable",
-          `Our form is offline right now. Please email ${contact.email} and we will reply directly.`,
-        );
-      }
-      return NextResponse.json(
-        {
-          error: {
-            code: error.code ?? "inquiry_failed",
-            message: error.message,
-            ...(error.fieldErrors ? { fieldErrors: error.fieldErrors } : {}),
-          },
+  const field = (key: string, max: number) => {
+    const value = inquiry[key];
+    return typeof value === "string" ? value.trim().slice(0, max) : "";
+  };
+  const name = field("name", 200);
+  const email = field("email", 320);
+  const serviceInterest = field("serviceInterest", 200);
+  const brief = field("brief", 5000);
+  const fieldErrors: Record<string, string[]> = {};
+  if (!name) fieldErrors.name = ["Please add your name."];
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    fieldErrors.email = ["Please add a valid email."];
+  }
+  if (!serviceInterest) fieldErrors.serviceInterest = ["Please choose a service."];
+  if (brief.length < 10) fieldErrors.brief = ["Please add a short brief."];
+  if (Object.keys(fieldErrors).length > 0) {
+    return NextResponse.json(
+      {
+        error: {
+          code: "invalid_inquiry",
+          message: "Please check the highlighted fields.",
+          fieldErrors,
         },
-        { status: error.status },
+      },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const result = await rpc<{ id: string; duplicate: boolean }>("submit_inquiry", {
+      p_name: name,
+      p_email: email,
+      p_company: field("company", 200) || null,
+      p_service_interest: serviceInterest,
+      p_brief: brief,
+      p_budget: field("budget", 200) || null,
+      p_timeline: field("timeline", 200) || null,
+      p_source_page: field("sourcePage", 200) || null,
+      p_rate_key: ip,
+      p_limit: MAX_PER_WINDOW,
+      p_window_seconds: WINDOW_MS / 1000,
+    });
+    return NextResponse.json({ data: { id: result.id } }, { status: 201 });
+  } catch (error) {
+    if (error instanceof SupabaseError) {
+      if (/rate|too many/i.test(error.message)) {
+        return fail(429, "rate_limited", "Too many requests. Please wait before submitting again.");
+      }
+      if (error.code === "23514") {
+        return fail(400, "invalid_inquiry", "Please check your details and try again.");
+      }
+      console.error("[inquiries] could not store inquiry.", error);
+      return fail(
+        503,
+        "backend_unreachable",
+        `Our form is offline right now. Please email ${contact.email} and we will reply directly.`,
       );
     }
     return fail(502, "inquiry_failed", "Unable to send the consultation request.");

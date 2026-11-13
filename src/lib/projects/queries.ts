@@ -1,154 +1,68 @@
-import { BackendRequestError, backendGet } from "@/lib/backend/client";
 import { fixtureProjects } from "@/content/fixtures/projects";
-import type {
-  NextProjectDto,
-  PaginationMeta,
-  PublicProjectCardDto,
-  PublicProjectDetailDto,
-} from "@/lib/projects/api-types";
-import { mapCardToProject, mapDetailToProject } from "@/lib/projects/map-api";
-import { readStudioProjects } from "@/lib/projects/studio-store";
-import type { StudioProject } from "@/lib/projects/studio-store";
+import type { NextProjectDto } from "@/lib/projects/next-project";
+import { getPublishedBySlug, listPublished } from "@/lib/projects/db";
 import type { Project, ProjectCardPlacement } from "@/lib/projects/types";
 
 export type ProjectLoadResult<T> =
   | { ok: true; data: T }
   | { ok: false; message: string };
 
-async function listPublished(
-  placement: "home" | "works",
-  pageSize = 24,
-): Promise<PublicProjectCardDto[]> {
-  const result = await backendGet<PublicProjectCardDto[], PaginationMeta>(
-    `/api/v1/projects?placement=${placement}&page=1&pageSize=${pageSize}`,
-  );
-  return result.data ?? [];
-}
-
-export async function getHomeProjects(): Promise<
-  ProjectLoadResult<ProjectCardPlacement[]>
-> {
-  try {
-    const cards = await listPublished("home");
-    return {
-      ok: true,
-      data: await withStudioProjects(
-        cards.map((card) => ({
-          project: mapCardToProject(card),
-          layout: card.layout ?? card.homeLayout,
-        })),
-        "home",
-      ),
-    };
-  } catch {
-    return { ok: true, data: await withStudioProjects(homeFixturePlacements(), "home") };
-  }
-}
+/**
+ * Published projects come from Supabase. The built-in sample projects are
+ * shown only while the database has nothing published (or is unreachable),
+ * so the site is never empty.
+ */
 
 function homeFixturePlacements(): ProjectCardPlacement[] {
   return fixtureProjects
     .filter((project) => project.showOnHome && project.status === "published")
     .sort((a, b) => a.homeOrder - b.homeOrder)
-    .map((project) => ({
-      project,
-      layout: project.homeLayout,
-    }));
+    .map((project) => ({ project, layout: project.homeLayout }));
 }
 
 function worksFixturePlacements(): ProjectCardPlacement[] {
   return fixtureProjects
     .filter((project) => project.status === "published")
     .sort((a, b) => a.worksOrder - b.worksOrder)
-    .map((project) => ({
-      project,
-      layout: project.worksLayout,
-    }));
+    .map((project) => ({ project, layout: project.worksLayout }));
 }
 
-function studioPlacement(
-  project: StudioProject,
-  placement: "home" | "works",
-): ProjectCardPlacement | null {
-  if (placement === "home" && !project.showOnHome) return null;
+async function publishedOrNull(placement: "home" | "works") {
+  try {
+    // "Nothing published" is judged on the whole catalogue, not the homepage
+    // subset, so an empty homepage selection does not bring the samples back.
+    const works = await listPublished("works");
+    if (works.length === 0) return null;
+    if (placement === "works") return works;
+    return works
+      .filter((project) => project.showOnHome)
+      .sort((a, b) => a.homeOrder - b.homeOrder);
+  } catch (error) {
+    console.error("[projects] database read failed; using samples.", error);
+    return null;
+  }
+}
+
+export async function getHomeProjects(): Promise<
+  ProjectLoadResult<ProjectCardPlacement[]>
+> {
+  const projects = await publishedOrNull("home");
+  if (!projects) return { ok: true, data: homeFixturePlacements() };
   return {
-    layout: "third",
-    project: {
-      id: project.id,
-      slug: project.slug,
-      title: project.titleEn,
-      projectYear: project.year,
-      description: project.descriptionEn,
-      tags: project.tags,
-      cardMeta: String(project.year),
-      homeLabels: [project.titleEn.toUpperCase(), String(project.year)],
-      status: "published",
-      cover: {
-        id: `${project.id}-cover`,
-        kind: "image",
-        src: project.cover.src,
-        alt: project.cover.alt,
-        width: Math.round(project.cover.width),
-        height: Math.round(project.cover.height),
-      },
-      media: [],
-      worksOrder: project.worksOrder,
-      worksLayout: "third",
-      showOnHome: project.showOnHome,
-      homeOrder: project.homeOrder,
-      homeLayout: "third",
-    },
+    ok: true,
+    data: projects.map((project) => ({ project, layout: project.homeLayout })),
   };
-}
-
-async function withStudioProjects(
-  placements: ProjectCardPlacement[],
-  placement: "home" | "works",
-) {
-  const studio = await readStudioProjects();
-  const seen = new Set(placements.map((item) => item.project.slug));
-  const extra = studio.flatMap((project) => {
-    const item = studioPlacement(project, placement);
-    if (!item || seen.has(item.project.slug)) return [];
-    return [item];
-  });
-  const order = (item: ProjectCardPlacement) =>
-    placement === "home" ? item.project.homeOrder : item.project.worksOrder;
-  return [...placements, ...extra].sort((a, b) => order(a) - order(b));
 }
 
 export async function getWorksProjects(): Promise<
   ProjectLoadResult<ProjectCardPlacement[]>
 > {
-  try {
-    const cards = await listPublished("works");
-    return {
-      ok: true,
-      data: await withStudioProjects(
-        cards.map((card) => ({
-          project: mapCardToProject(card),
-          layout: card.layout ?? card.worksLayout,
-        })),
-        "works",
-      ),
-    };
-  } catch (error) {
-    if (
-      error instanceof BackendRequestError &&
-      error.code === "backend_unreachable"
-    ) {
-      return {
-        ok: true,
-        data: await withStudioProjects(worksFixturePlacements(), "works"),
-      };
-    }
-    return {
-      ok: false,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Unable to load published projects.",
-    };
-  }
+  const projects = await publishedOrNull("works");
+  if (!projects) return { ok: true, data: worksFixturePlacements() };
+  return {
+    ok: true,
+    data: projects.map((project) => ({ project, layout: project.worksLayout })),
+  };
 }
 
 function fixtureProjectBySlug(slug: string): {
@@ -163,9 +77,7 @@ function fixtureProjectBySlug(slug: string): {
   const following = published[index + 1];
   return {
     project: published[index],
-    next: following
-      ? { slug: following.slug, title: following.title }
-      : null,
+    next: following ? { slug: following.slug, title: following.title } : null,
   };
 }
 
@@ -174,25 +86,10 @@ export async function getProjectBySlug(slug: string): Promise<{
   next: NextProjectDto;
 } | null> {
   try {
-    const result = await backendGet<
-      PublicProjectDetailDto,
-      { nextProject: NextProjectDto }
-    >(`/api/v1/projects/${encodeURIComponent(slug)}`);
-    if (!result.data) return null;
-    return {
-      project: mapDetailToProject(result.data),
-      next: result.meta?.nextProject ?? null,
-    };
+    const found = await getPublishedBySlug(slug);
+    if (found) return found;
   } catch (error) {
-    if (error instanceof BackendRequestError && error.status === 404) {
-      return null;
-    }
-    if (
-      error instanceof BackendRequestError &&
-      error.code === "backend_unreachable"
-    ) {
-      return fixtureProjectBySlug(slug);
-    }
-    throw error;
+    console.error("[projects] database read failed; using samples.", error);
   }
+  return fixtureProjectBySlug(slug);
 }

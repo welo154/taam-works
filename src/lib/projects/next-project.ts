@@ -1,4 +1,4 @@
-import type { NextProjectDto } from "@/lib/projects/api-types";
+export type NextProjectDto = { slug: string; title: string } | null;
 
 export type NextProjectResult =
   | { kind: "project"; slug: string; title: string }

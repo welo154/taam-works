@@ -22,6 +22,7 @@ function fittedAsset(asset: MediaAsset, slot: number): StudioAsset {
     alt: asset.alt,
     width,
     height,
+    posterSrc: playable ? asset.posterSrc : undefined,
   };
 }
 
@@ -47,10 +48,10 @@ export function caseFromProject(project: Project): StudioProject {
     id: project.id,
     slug: project.slug,
     titleEn: project.title,
-    titleAr: "",
+    titleAr: project.titleAr ?? "",
     year: project.projectYear ?? 0,
     descriptionEn: project.description,
-    descriptionAr: "",
+    descriptionAr: project.descriptionAr ?? "",
     tags: project.tags,
     cover: fittedAsset(project.cover, 719),
     rows:
@@ -92,6 +93,7 @@ function AssetView({
         className={className}
         style={style}
         src={asset.src}
+        poster={asset.posterSrc}
         width={Math.round(asset.width)}
         height={Math.round(asset.height)}
         loop

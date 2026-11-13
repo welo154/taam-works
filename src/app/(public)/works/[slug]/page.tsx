@@ -3,10 +3,6 @@ import { notFound } from "next/navigation";
 import { caseFromProject, ProjectCase } from "@/components/projects/ProjectCase";
 import { toNextProject } from "@/lib/projects/next-project";
 import { getProjectBySlug } from "@/lib/projects/queries";
-import {
-  getStudioProject,
-  nextProjectAfter,
-} from "@/lib/projects/studio-store";
 import { getSiteUrl } from "@/lib/site-url";
 
 type PageProps = {
@@ -19,15 +15,6 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const studio = await getStudioProject(slug);
-  if (studio) {
-    return projectMetadata(
-      studio.titleEn,
-      studio.descriptionEn,
-      studio.cover.src,
-      slug,
-    );
-  }
   try {
     const result = await getProjectBySlug(slug);
     if (!result) return { title: "Project" };
@@ -97,23 +84,6 @@ function ProjectJsonLd({
 
 export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params;
-  const studio = await getStudioProject(slug);
-  if (studio) {
-    const next = await nextProjectAfter(slug);
-    return (
-      <>
-        <ProjectJsonLd
-          title={studio.titleEn}
-          description={studio.descriptionEn}
-          slug={slug}
-          image={studio.cover.src}
-          year={studio.year}
-          tags={studio.tags}
-        />
-        <ProjectCase project={studio} nextSlug={next?.slug ?? null} />
-      </>
-    );
-  }
   const result = await getProjectBySlug(slug);
   if (!result) notFound();
 

@@ -37,6 +37,9 @@ export type Project = {
   id: string;
   slug: string;
   title: string;
+  /** Arabic title and paragraph for the project page, when supplied. */
+  titleAr?: string;
+  descriptionAr?: string;
   projectYear: number | null;
   description: string;
   tags: string[];

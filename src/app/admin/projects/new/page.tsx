@@ -1,26 +1,41 @@
+import { randomUUID } from "node:crypto";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { NewProjectForm } from "@/app/admin/projects/new/NewProjectForm";
+import { ProjectEditor } from "@/app/admin/projects/ProjectEditor";
+import { migrationApplied } from "@/lib/projects/db";
 
-export const metadata: Metadata = {
-  title: "Add project",
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = { title: "Add project" };
+export const dynamic = "force-dynamic";
 
-export default function NewProjectPage() {
+export default async function NewProjectPage() {
+  const migrated = await migrationApplied();
   return (
     <div>
-      <p className="text-sm">
-        <Link href="/admin/projects" className="text-neutral-400 underline-offset-4 hover:underline">
-          Projects
-        </Link>
-      </p>
-      <h1 className="mt-4 text-2xl font-semibold">Add project</h1>
-      <p className="mt-3 max-w-2xl text-sm text-neutral-400">
-        The public page keeps the IDEA structure: title, year, English and
-        Arabic paragraphs, tags, then the photo and video rows in order.
-      </p>
-      <NewProjectForm />
+      <Link href="/admin/projects" className="text-sm text-neutral-400 hover:text-neutral-100">
+        ← Projects
+      </Link>
+      <h1 className="mb-8 mt-3 text-2xl font-semibold">Add project</h1>
+      <ProjectEditor
+        migrated={migrated}
+        initial={{
+          id: randomUUID(),
+          isNew: true,
+          slug: "",
+          titleEn: "",
+          titleAr: "",
+          year: new Date().getFullYear(),
+          descriptionEn: "",
+          descriptionAr: "",
+          tags: [],
+          cardMeta: "",
+          status: "draft",
+          cover: null,
+          rows: [],
+          showOnHome: false,
+          homeLayout: "third",
+          worksLayout: "third",
+        }}
+      />
     </div>
   );
 }

@@ -1,53 +1,61 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { mkdir, rm, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { fixtureProjects } from "@/content/fixtures/projects";
 import { isAdminAuthorized } from "@/lib/admin-auth";
 import {
-  fixtureSlugs,
-  nextOrders,
-  readStudioProjects,
-  writeStudioProjects,
-  type StudioAsset,
-  type StudioProject,
-  type StudioRow,
-} from "@/lib/projects/studio-store";
+  loadProjects,
+  migrationApplied,
+  type AssetRow,
+  type ProjectRow,
+} from "@/lib/projects/db";
+import {
+  IMAGE_TYPES,
+  MAX_UPLOAD_BYTES,
+  VIDEO_TYPES,
+  type EditorMedia,
+  type EditorProject,
+  type SaveResult,
+  type UploadTicket,
+} from "@/lib/projects/editor-types";
+import type { ProjectLayout } from "@/lib/projects/types";
+import {
+  createSignedUpload,
+  db,
+  dbDelete,
+  dbInsert,
+  dbUpdate,
+  MEDIA_BUCKET,
+  removeStorageObjects,
+} from "@/lib/supabase/rest";
 
-export type CreateProjectState = { error?: string } | null;
+const UUID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const LAYOUTS: ProjectLayout[] = ["third", "half", "wide", "full"];
+const RESERVED_SLUGS = new Set(["idea", "new"]);
+const SIGNED_OUT = "You are not signed in to the dashboard.";
 
-const IMAGE_TYPES = new Map([
-  ["image/jpeg", "jpg"],
-  ["image/png", "png"],
-  ["image/webp", "webp"],
-  ["image/gif", "gif"],
-]);
-
-const VIDEO_TYPES = new Map([
-  ["video/mp4", "mp4"],
-  ["video/webm", "webm"],
-  ["video/quicktime", "mov"],
-]);
-
-// Keep in step with experimental.serverActions.bodySizeLimit in next.config.ts.
-const MAX_FILE_BYTES = 20 * 1024 * 1024;
-
-function text(formData: FormData, key: string) {
-  return String(formData.get(key) ?? "").trim();
+// Server Actions are reachable by direct POST from any route, so every one
+// re-checks the dashboard login instead of trusting the /admin proxy check.
+async function isAdmin() {
+  const requestHeaders = await headers();
+  return isAdminAuthorized(requestHeaders.get("authorization"));
 }
 
-function displaySize(formData: FormData, key: string) {
-  const value = Number(text(formData, key));
-  if (!Number.isFinite(value) || value <= 0 || value > 8000) return null;
-  return Math.round(value * 1000) / 1000;
+async function requireAdmin() {
+  if (!(await isAdmin())) throw new Error(SIGNED_OUT);
+}
+
+function message(error: unknown) {
+  return error instanceof Error ? error.message : "Something went wrong.";
 }
 
 function slugify(title: string) {
   const base = title
     .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
@@ -55,287 +63,294 @@ function slugify(title: string) {
   return base || "project";
 }
 
-function fileOf(formData: FormData, key: string) {
-  const value = formData.get(key);
-  if (!(value instanceof File) || value.size === 0) return null;
-  return value;
-}
-
-async function saveAsset(
-  file: File,
-  directory: string,
-  publicDirectory: string,
-  kind: "image" | "video",
-  alt: string,
-  width: number,
-  height: number,
-): Promise<StudioAsset> {
-  const types = kind === "image" ? IMAGE_TYPES : VIDEO_TYPES;
-  const extension = types.get(file.type);
+/** Step 1 of an upload: the browser asks for a one-time Storage URL. */
+export async function createUpload(input: {
+  projectId: string;
+  mime: string;
+  size: number;
+}): Promise<UploadTicket> {
+  if (!(await isAdmin())) return { ok: false, error: SIGNED_OUT };
+  if (!UUID.test(input.projectId)) return { ok: false, error: "Unknown project." };
+  const extension = IMAGE_TYPES[input.mime] ?? VIDEO_TYPES[input.mime];
   if (!extension) {
-    throw new Error(
-      kind === "image"
-        ? "Photos must be JPG, PNG, WEBP, or GIF."
-        : "Videos must be MP4, WEBM, or MOV.",
-    );
+    return {
+      ok: false,
+      error: "Use JPG, PNG, WEBP or GIF photos, and MP4, WEBM or MOV videos.",
+    };
   }
-  if (file.size > MAX_FILE_BYTES) {
-    throw new Error("Each file must be 20MB or smaller.");
+  if (
+    !Number.isFinite(input.size) ||
+    input.size <= 0 ||
+    input.size > MAX_UPLOAD_BYTES
+  ) {
+    return { ok: false, error: "Each file must be 50 MB or smaller." };
   }
-  const filename = `${randomUUID()}.${extension}`;
-  await writeFile(
-    path.join(/*turbopackIgnore: true*/ directory, filename),
-    Buffer.from(await file.arrayBuffer()),
-  );
-  return {
-    kind,
-    src: `${publicDirectory}/${filename}`,
-    alt,
-    width,
-    height,
-  };
+  const path = `projects/${input.projectId}/${randomUUID()}.${extension}`;
+  try {
+    return { ok: true, uploadUrl: await createSignedUpload(path), path };
+  } catch (error) {
+    return { ok: false, error: message(error) };
+  }
 }
 
-function kindOf(value: string): "image" | "video" | null {
-  if (value === "image" || value === "video") return value;
+function checkMedia(media: EditorMedia, projectId: string): string | null {
+  if (!media.assetId && !media.path.startsWith(`projects/${projectId}/`)) {
+    return "A file does not belong to this project.";
+  }
+  if (!IMAGE_TYPES[media.mime] && !VIDEO_TYPES[media.mime]) {
+    return "A file has an unsupported type.";
+  }
+  if (!(media.width > 0) || !(media.height > 0)) {
+    return "A file is missing its size. Remove it and upload it again.";
+  }
   return null;
 }
 
-export async function createStudioProject(
-  _previous: CreateProjectState,
-  formData: FormData,
-): Promise<CreateProjectState> {
-  // Server Actions are reachable by direct POST from any route, so the
-  // proxy check on /admin is not enough on its own.
-  const requestHeaders = await headers();
-  if (!isAdminAuthorized(requestHeaders.get("authorization"))) {
-    return { error: "You are not signed in to the dashboard." };
+export async function saveProject(input: EditorProject): Promise<SaveResult> {
+  if (!(await isAdmin())) return { ok: false, error: SIGNED_OUT };
+  try {
+    return await saveProjectUnsafe(input);
+  } catch (error) {
+    return { ok: false, error: message(error) };
   }
+}
 
-  const titleEn = text(formData, "titleEn");
-  const titleAr = text(formData, "titleAr");
-  const descriptionEn = text(formData, "descriptionEn");
-  const descriptionAr = text(formData, "descriptionAr");
-  const year = Number(text(formData, "year"));
-  const tags = text(formData, "tags")
-    .split(",")
+async function saveProjectUnsafe(input: EditorProject): Promise<SaveResult> {
+  const id = input.id;
+  if (!UUID.test(id)) return { ok: false, error: "Unknown project." };
+
+  const titleEn = input.titleEn.trim();
+  const year = input.year;
+  const tags = input.tags
     .map((tag) => tag.trim())
-    .filter(Boolean);
-  const showOnHome = formData.get("showOnHome") === "on";
-  const rowIds = text(formData, "rowOrder")
-    .split(",")
-    .map((id) => id.trim())
-    .filter(Boolean);
-
-  if (!titleEn) return { error: "Enter the English title." };
-  if (!titleAr) return { error: "Enter the Arabic title." };
-  if (!Number.isInteger(year) || year < 1990 || year > 2100) {
-    return { error: "Enter a project year between 1990 and 2100." };
+    .filter(Boolean)
+    .slice(0, 12);
+  if (!titleEn) return { ok: false, error: "Enter the English title." };
+  if (year !== null && (!Number.isInteger(year) || year < 1990 || year > 2100)) {
+    return { ok: false, error: "Enter a project year between 1990 and 2100." };
   }
-  if (!descriptionEn) return { error: "Enter the English paragraph." };
-  if (!descriptionAr) return { error: "Enter the Arabic paragraph." };
-  if (tags.length === 0) return { error: "Enter at least one tag." };
-  if (rowIds.length === 0) return { error: "Add at least one photo or video row." };
-
-  const coverFile = fileOf(formData, "cover-file");
-  const coverWidth = displaySize(formData, "cover-width");
-  const coverHeight = displaySize(formData, "cover-height");
-  if (!coverFile || !coverWidth || !coverHeight) {
-    return { error: "Add a Works card image with its display width and height." };
+  if (!["draft", "published", "archived"].includes(input.status)) {
+    return { ok: false, error: "Unknown status." };
   }
-  if (!IMAGE_TYPES.has(coverFile.type)) {
-    return { error: "The Works card must be a JPG, PNG, WEBP, or GIF." };
+  if (input.status === "published" && !input.cover) {
+    return { ok: false, error: "Add a cover before publishing." };
+  }
+  if (!LAYOUTS.includes(input.homeLayout) || !LAYOUTS.includes(input.worksLayout)) {
+    return { ok: false, error: "Unknown card size." };
   }
 
-  const existing = await readStudioProjects();
-  const taken = new Set([
-    ...fixtureSlugs(),
-    ...existing.map((project) => project.slug),
-  ]);
-  let slug = slugify(titleEn);
-  if (slug === "idea") slug = "idea-project";
-  let suffix = 2;
-  const base = slug;
-  while (taken.has(slug)) {
-    slug = `${base}-${suffix}`;
-    suffix += 1;
-  }
-
-  type Planned =
-    | {
-        id: string;
-        layout: "single";
-        kind: "image" | "video";
-        file: File;
-        alt: string;
-        width: number;
-        height: number;
-      }
-    | {
-        id: string;
-        layout: "pair";
-        left: {
-          kind: "image" | "video";
-          file: File;
-          alt: string;
-          width: number;
-          height: number;
-        };
-        right: {
-          kind: "image" | "video";
-          file: File;
-          alt: string;
-          width: number;
-          height: number;
-        };
-      };
-
-  const planned: Planned[] = [];
-  for (const id of rowIds) {
-    const layout = text(formData, `row-${id}-layout`);
-    if (layout === "single") {
-      const kind = kindOf(text(formData, `row-${id}-kind`));
-      const width = displaySize(formData, `row-${id}-width`);
-      const height = displaySize(formData, `row-${id}-height`);
-      const file = fileOf(formData, `row-${id}-file`);
-      if (!kind || !width || !height || !file) {
-        return { error: "Each media row needs a file, a width, and a height." };
-      }
-      planned.push({
-        id,
-        layout: "single",
-        kind,
-        file,
-        alt: text(formData, `row-${id}-alt`) || titleEn,
-        width,
-        height,
-      });
-      continue;
+  const everyMedia: EditorMedia[] = [];
+  if (input.cover) everyMedia.push(input.cover);
+  for (const row of input.rows) {
+    if (row.items.length < 1 || row.items.length > 2) {
+      return { ok: false, error: "A row holds one or two files." };
     }
-    if (layout !== "pair") return { error: "A media row is missing its layout." };
-    const leftKind = kindOf(text(formData, `row-${id}-left-kind`));
-    const rightKind = kindOf(text(formData, `row-${id}-right-kind`));
-    const leftWidth = displaySize(formData, `row-${id}-left-width`);
-    const leftHeight = displaySize(formData, `row-${id}-left-height`);
-    const rightWidth = displaySize(formData, `row-${id}-right-width`);
-    const rightHeight = displaySize(formData, `row-${id}-right-height`);
-    const leftFile = fileOf(formData, `row-${id}-left-file`);
-    const rightFile = fileOf(formData, `row-${id}-right-file`);
-    if (
-      !leftKind ||
-      !rightKind ||
-      !leftWidth ||
-      !leftHeight ||
-      !rightWidth ||
-      !rightHeight ||
-      !leftFile ||
-      !rightFile
-    ) {
-      return { error: "A side-by-side row needs both files and both sizes." };
-    }
-    planned.push({
+    everyMedia.push(...row.items);
+  }
+  for (const media of everyMedia) {
+    const problem =
+      checkMedia(media, id) ?? (media.poster ? checkMedia(media.poster, id) : null);
+    if (problem) return { ok: false, error: problem };
+  }
+
+  const migrated = await migrationApplied();
+  const layout = (value: ProjectLayout): ProjectLayout =>
+    value === "wide" && !migrated ? "half" : value;
+
+  const [existing] = await loadProjects(`id=eq.${id}`);
+  const fields: Record<string, unknown> = {
+    title: titleEn,
+    project_year: year,
+    description: input.descriptionEn.trim(),
+    tags,
+    card_meta: input.cardMeta.trim() || null,
+    show_on_home: input.showOnHome,
+    home_layout: layout(input.homeLayout),
+    works_layout: layout(input.worksLayout),
+  };
+  if (migrated) {
+    fields.title_ar = input.titleAr.trim();
+    fields.description_ar = input.descriptionAr.trim();
+  }
+
+  let slug: string;
+  if (existing) {
+    slug = existing.row.slug;
+    await dbUpdate(`projects?id=eq.${id}`, fields);
+  } else {
+    const others = await db<
+      Pick<ProjectRow, "slug" | "works_order" | "home_order">[]
+    >("projects?select=slug,works_order,home_order");
+    const taken = new Set([
+      ...RESERVED_SLUGS,
+      ...fixtureProjects.map((project) => project.slug),
+      ...others.map((project) => project.slug),
+    ]);
+    const base = slugify(titleEn);
+    slug = base;
+    for (let suffix = 2; taken.has(slug); suffix += 1) slug = `${base}-${suffix}`;
+    await dbInsert("projects", {
       id,
-      layout: "pair",
-      left: {
-        kind: leftKind,
-        file: leftFile,
-        alt: text(formData, `row-${id}-left-alt`) || titleEn,
-        width: leftWidth,
-        height: leftHeight,
-      },
-      right: {
-        kind: rightKind,
-        file: rightFile,
-        alt: text(formData, `row-${id}-right-alt`) || titleEn,
-        width: rightWidth,
-        height: rightHeight,
-      },
+      slug,
+      status: "draft",
+      works_order: Math.max(0, ...others.map((p) => p.works_order)) + 1,
+      home_order: Math.max(0, ...others.map((p) => p.home_order)) + 1,
+      ...fields,
     });
   }
 
-  const directory = path.join(process.cwd(), "public", "uploads", "projects", slug);
-  const publicDirectory = `/uploads/projects/${slug}`;
-  await mkdir(directory, { recursive: true });
+  // Record new files; keep the ones already recorded.
+  const known = existing?.assets ?? new Map<string, AssetRow>();
+  const used = new Set<string>();
 
-  try {
-    const cover = await saveAsset(
-      coverFile,
-      directory,
-      publicDirectory,
-      "image",
-      `${titleEn} cover`,
-      coverWidth,
-      coverHeight,
-    );
-    const rows: StudioRow[] = [];
-    for (const item of planned) {
-      if (item.layout === "single") {
-        rows.push({
-          id: item.id,
-          layout: "single",
-          asset: await saveAsset(
-            item.file,
-            directory,
-            publicDirectory,
-            item.kind,
-            item.alt,
-            item.width,
-            item.height,
-          ),
+  async function ensureAsset(media: EditorMedia, posterId: string | null) {
+    if (media.assetId && known.has(media.assetId)) {
+      const current = known.get(media.assetId)!;
+      if (current.alt_text !== media.alt || current.poster_asset_id !== posterId) {
+        await dbUpdate(`media_assets?id=eq.${media.assetId}`, {
+          alt_text: media.alt,
+          poster_asset_id: posterId,
         });
-        continue;
       }
-      rows.push({
-        id: item.id,
-        layout: "pair",
-        left: await saveAsset(
-          item.left.file,
-          directory,
-          publicDirectory,
-          item.left.kind,
-          item.left.alt,
-          item.left.width,
-          item.left.height,
-        ),
-        right: await saveAsset(
-          item.right.file,
-          directory,
-          publicDirectory,
-          item.right.kind,
-          item.right.alt,
-          item.right.width,
-          item.right.height,
-        ),
-      });
+      used.add(media.assetId);
+      return media.assetId;
     }
-
-    const orders = await nextOrders();
-    const project: StudioProject = {
-      id: randomUUID(),
-      slug,
-      titleEn,
-      titleAr,
-      year,
-      descriptionEn,
-      descriptionAr,
-      tags,
-      cover,
-      rows,
-      showOnHome,
-      worksOrder: orders.worksOrder,
-      homeOrder: showOnHome ? orders.homeOrder : 0,
-      createdAt: new Date().toISOString(),
-    };
-    await writeStudioProjects([...existing, project]);
-  } catch (error) {
-    await rm(directory, { recursive: true, force: true });
-    return {
-      error:
-        error instanceof Error
-          ? error.message
-          : "The project could not be saved.",
-    };
+    const [created] = await dbInsert<AssetRow>("media_assets", {
+      project_id: id,
+      bucket: MEDIA_BUCKET,
+      object_path: media.path,
+      kind: IMAGE_TYPES[media.mime] ? "image" : "video",
+      mime_type: media.mime,
+      byte_size: Math.round(media.size),
+      width: Math.round(media.width),
+      height: Math.round(media.height),
+      alt_text: media.alt,
+      poster_asset_id: posterId,
+      upload_state: "ready",
+      delivery_ready: true,
+    });
+    used.add(created.id);
+    return created.id;
   }
 
-  redirect(`/works/${slug}`);
+  async function ensureWithPoster(media: EditorMedia) {
+    const posterId = media.poster ? await ensureAsset(media.poster, null) : null;
+    return ensureAsset(media, posterId);
+  }
+
+  const coverId = input.cover ? await ensureWithPoster(input.cover) : null;
+  const stack: object[] = [];
+  for (const [position, row] of input.rows.entries()) {
+    const primary = await ensureWithPoster(row.items[0]);
+    const secondary = row.items[1] ? await ensureWithPoster(row.items[1]) : null;
+    stack.push({
+      project_id: id,
+      position,
+      layout: secondary ? "pair" : "single",
+      primary_asset_id: primary,
+      secondary_asset_id: secondary,
+    });
+  }
+
+  await dbDelete(`project_media?project_id=eq.${id}`);
+  if (stack.length > 0) await dbInsert("project_media", stack);
+  await dbUpdate(`projects?id=eq.${id}`, {
+    cover_asset_id: coverId,
+    status: input.status,
+  });
+
+  // Drop files that are no longer on the page.
+  const orphans = [...known.values()].filter((asset) => !used.has(asset.id));
+  if (orphans.length > 0) {
+    const orphanIds = `in.(${orphans.map((asset) => `"${asset.id}"`).join(",")})`;
+    // The database refuses to delete a file that is still some video's poster.
+    await dbUpdate(`media_assets?id=${orphanIds}`, { poster_asset_id: null });
+    await dbDelete(
+      `media_assets?id=${orphanIds}`,
+    );
+    await removeStorageObjects(orphans.map((asset) => asset.object_path)).catch(
+      () => undefined,
+    );
+  }
+
+  revalidatePath("/admin/projects");
+  return { ok: true, id, slug };
+}
+
+function formId(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  if (!UUID.test(id)) throw new Error("Unknown project.");
+  return id;
+}
+
+export async function updatePlacement(formData: FormData) {
+  await requireAdmin();
+  const id = formId(formData);
+  const migrated = await migrationApplied();
+  const pick = (key: string): ProjectLayout => {
+    const value = String(formData.get(key) ?? "third") as ProjectLayout;
+    if (!LAYOUTS.includes(value)) return "third";
+    return value === "wide" && !migrated ? "half" : value;
+  };
+  await dbUpdate(`projects?id=eq.${id}`, {
+    show_on_home: formData.get("showOnHome") === "on",
+    home_layout: pick("homeLayout"),
+    works_layout: pick("worksLayout"),
+  });
+  revalidatePath("/admin/projects");
+}
+
+export async function moveProject(formData: FormData) {
+  await requireAdmin();
+  const id = formId(formData);
+  const list = formData.get("list") === "home" ? "home" : "works";
+  const step = formData.get("direction") === "up" ? -1 : 1;
+  const column = list === "home" ? "home_order" : "works_order";
+  const filter = list === "home" ? "&show_on_home=eq.true" : "";
+  const ordered = await db<{ id: string }[]>(
+    `projects?select=id&status=neq.archived${filter}&order=${column}.asc,created_at.asc`,
+  );
+  const from = ordered.findIndex((project) => project.id === id);
+  const to = from + step;
+  if (from === -1 || to < 0 || to >= ordered.length) return;
+  [ordered[from], ordered[to]] = [ordered[to], ordered[from]];
+  await Promise.all(
+    ordered.map((project, index) =>
+      dbUpdate(`projects?id=eq.${project.id}`, { [column]: index + 1 }),
+    ),
+  );
+  revalidatePath("/admin/projects");
+}
+
+export async function setStatus(formData: FormData) {
+  await requireAdmin();
+  const id = formId(formData);
+  const status = String(formData.get("status") ?? "");
+  if (!["draft", "published", "archived"].includes(status)) return;
+  if (status === "published") {
+    const [project] = await db<Pick<ProjectRow, "cover_asset_id">[]>(
+      `projects?select=cover_asset_id&id=eq.${id}`,
+    );
+    if (!project?.cover_asset_id) return;
+  }
+  await dbUpdate(`projects?id=eq.${id}`, { status });
+  revalidatePath("/admin/projects");
+}
+
+export async function deleteProject(formData: FormData) {
+  await requireAdmin();
+  const id = formId(formData);
+  const assets = await db<Pick<AssetRow, "object_path">[]>(
+    `media_assets?select=object_path&project_id=eq.${id}`,
+  );
+  await dbUpdate(`projects?id=eq.${id}`, { cover_asset_id: null });
+  await dbDelete(`project_media?project_id=eq.${id}`);
+  // The database refuses to delete a file that is still some video's poster.
+  await dbUpdate(`media_assets?project_id=eq.${id}`, { poster_asset_id: null });
+  await dbDelete(`media_assets?project_id=eq.${id}`);
+  await dbDelete(`projects?id=eq.${id}`);
+  await removeStorageObjects(assets.map((asset) => asset.object_path)).catch(
+    () => undefined,
+  );
+  revalidatePath("/admin/projects");
 }
