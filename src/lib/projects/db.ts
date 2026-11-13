@@ -185,14 +185,23 @@ export async function listPublished(placement: "home" | "works") {
     placement === "home"
       ? "status=eq.published&show_on_home=eq.true&order=home_order.asc,created_at.asc"
       : "status=eq.published&order=works_order.asc,created_at.asc";
-  return (await loadProjects(filter)).map(toProject);
+  return (await loadProjects(filter)).filter(isReal).map(toProject);
+}
+
+/**
+ * The original database seed left sample rows pointing at seed/ files
+ * that were never uploaded. They stay in the dashboard but not on the site.
+ */
+function isReal({ row, assets }: LoadedProject) {
+  const cover = row.cover_asset_id ? assets.get(row.cover_asset_id) : null;
+  return !cover?.object_path.startsWith("seed/");
 }
 
 export async function getPublishedBySlug(slug: string) {
   const [loaded] = await loadProjects(
     `status=eq.published&slug=eq.${encodeURIComponent(slug)}&limit=1`,
   );
-  if (!loaded) return null;
+  if (!loaded || !isReal(loaded)) return null;
   const sequence = await db<{ slug: string; title: string }[]>(
     "projects?select=slug,title&status=eq.published&order=works_order.asc,created_at.asc",
   );

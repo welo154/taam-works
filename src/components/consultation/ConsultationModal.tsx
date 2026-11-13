@@ -2,9 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { ConsultationForm } from "@/components/consultation/ConsultationForm";
+import { BookingForm } from "@/components/consultation/BookingForm";
 import { useConsultation } from "@/components/consultation/ConsultationContext";
-import { consultation } from "@/content/site";
 
 export function ConsultationModal() {
   const { isOpen, close } = useConsultation();
@@ -17,10 +16,7 @@ export function ConsultationModal() {
 
     const previous = document.activeElement as HTMLElement | null;
     const root = dialogRef.current;
-    const firstField = root?.querySelector<HTMLElement>(
-      "input, select, textarea, button",
-    );
-    firstField?.focus();
+    closeRef.current?.focus();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -59,10 +55,10 @@ export function ConsultationModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+    <div className="booking-overlay">
       <button
         type="button"
-        className="absolute inset-0 bg-black/70"
+        className="booking-backdrop"
         aria-label="Dismiss consultation form"
         onClick={close}
       />
@@ -71,31 +67,22 @@ export function ConsultationModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="consultation-title"
-        className="relative z-10 max-h-[min(40rem,calc(100vh-4rem))] w-full max-w-[32rem] overflow-y-auto rounded-[var(--radius-cta)] border border-cream/15 bg-bg px-6 py-7 shadow-[0_24px_80px_rgba(0,0,0,0.45)] md:px-8 md:py-8"
+        className="booking-panel"
       >
         <button
           ref={closeRef}
           type="button"
           onClick={close}
-          className="absolute right-4 top-4 text-sm text-cream/55 transition-opacity hover:text-cream"
+          className="booking-close"
+          aria-label="Close"
         >
-          {consultation.close}
+          ×
         </button>
-        <h2
-          id="consultation-title"
-          className="pr-16 text-2xl tracking-tight text-cream md:text-3xl"
-        >
-          {consultation.title}
+        <h2 id="consultation-title" className="booking-title">
+          LET’S <span className="booking-title-mark">TAAM IT</span>
         </h2>
-        <p className="mt-3 text-[length:var(--type-body)] text-cream/70">
-          {consultation.lead}
-        </p>
-        <div className="mt-7">
-          <ConsultationForm
-            sourcePage={pathname || "/"}
-            idPrefix="modal-consult"
-          />
-        </div>
+        <p className="booking-subtitle">Book your consultation</p>
+        <BookingForm sourcePage={pathname || "/"} />
       </div>
     </div>
   );

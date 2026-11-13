@@ -465,116 +465,6 @@ button:focus-visible {
   transform: translateY(3.5px);
 }
 
-.services-section {
-  margin-top: 181px;
-  padding-bottom: var(--space-section);
-}
-
-.service-group {
-  display: grid;
-  grid-template-columns: 236px 718px;
-  column-gap: 67px;
-  align-items: start;
-  margin-left: max(204px, calc((100% - var(--page-width)) / 2 + 204px));
-}
-
-.service-group + .service-group {
-  margin-top: 250px;
-}
-
-.service-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 236px;
-  height: 55px;
-  margin: 0;
-  background: #ff7dff;
-  color: #000;
-  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-  font-size: 48px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -3.84px;
-  text-align: center;
-}
-
-.service-badge-label {
-  display: block;
-  line-height: 1;
-  white-space: pre;
-  transform: translateY(6px);
-}
-
-.service-badge-stack {
-  height: auto;
-  flex-direction: column;
-  padding-top: 12px;
-}
-
-.service-badge-stack .service-badge-label {
-  transform: none;
-}
-
-.service-copy {
-  position: relative;
-  width: 718px;
-  overflow-y: auto;
-  overscroll-behavior: auto;
-}
-
-.service-intro,
-.service-feature-body {
-  width: 718px;
-  margin: 0;
-  color: #fbf5d5;
-  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-  font-size: 28px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
-.service-features {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.service-feature {
-  margin-top: 40px;
-}
-
-.service-feature-title {
-  margin: 0;
-  color: #fbf5d5;
-  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-  font-size: 36px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 35.613px;
-}
-
-.service-feature-body {
-  margin-top: 8px;
-}
-
-@media (max-width: 767px) {
-  .service-group {
-    grid-template-columns: 1fr;
-    row-gap: 24px;
-    margin-left: var(--space-gutter);
-    margin-right: var(--space-gutter);
-  }
-
-  .service-copy,
-  .service-intro,
-  .service-feature-body {
-    width: 100%;
-  }
-}
-
 .project-card-label {
   display: flex;
   justify-content: space-between;
@@ -1159,11 +1049,6 @@ button:focus-visible {
   bottom: calc(174px + 61px + 55px);
 }
 
-.service-scroll {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
 .service-scroll::-webkit-scrollbar {
   display: none;
   width: 0;
@@ -1428,78 +1313,6 @@ button:focus-visible {
 
   .works-view-all-label {
     transform: translateY(calc(var(--m) * 1));
-  }
-
-  .services-section {
-    margin-top: calc(var(--m) * 152);
-    padding-bottom: calc(var(--m) * 48);
-  }
-
-  .service-group {
-    grid-template-columns: 1fr;
-    row-gap: 57px;
-    margin-left: calc(var(--m) * 40);
-    margin-right: calc(var(--m) * 24);
-  }
-
-  .service-group + .service-group {
-    margin-top: calc(var(--m) * 140);
-  }
-
-  .service-badge {
-    width: calc(var(--m) * 175);
-    height: calc(var(--m) * 41);
-    padding-top: 0;
-    font-size: calc(var(--m) * 36);
-    letter-spacing: calc(var(--m) * -2.88);
-  }
-
-  .service-badge-label {
-    transform: translateY(calc(var(--m) * 3));
-  }
-
-  .service-badge-stack {
-    height: calc(var(--m) * 78);
-    padding-top: calc(var(--m) * 8);
-  }
-
-  .service-badge-stack .service-badge-label {
-    transform: none;
-    line-height: 0.92;
-  }
-
-  .service-copy,
-  .service-intro,
-  .service-feature-body {
-    width: 100%;
-  }
-
-  .service-intro,
-  .service-feature-body {
-    color: #fbf5d5;
-    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
-
-  .service-feature {
-    margin-top: 43px;
-  }
-
-  .service-feature-title {
-    color: #fbf5d5;
-    font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 98.925%;
-    text-transform: uppercase;
-  }
-
-  .service-feature-body {
-    margin-top: 9px;
   }
 
   .page-close {
@@ -1780,5 +1593,590 @@ button:focus-visible {
 
   .relative:has(.idea-content) .page-close .let-taam-section {
     padding-top: 110.3px;
+  }
+}
+
+/* ── Services: centered header and a card strip that runs off the right ── */
+
+.services-section {
+  margin-top: 181px;
+  padding-bottom: var(--space-section);
+}
+
+.services-heading {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 72px;
+}
+
+.services-heading-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 236px;
+  height: 55px;
+  padding-top: 12px;
+  background: var(--pink);
+  color: #000;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -3.84px;
+}
+
+.services-track {
+  /* One design pixel. Cards are drawn at 485x564 and scale down on phones. */
+  --u: min(1px, 82vw / 485);
+  --services-inset: max(
+    var(--space-gutter),
+    calc((100% - 1440px) / 2 + 56px)
+  );
+  display: flex;
+  column-gap: calc(30 * var(--u));
+  overflow-x: auto;
+  padding-inline: var(--services-inset);
+  scroll-padding-inline: var(--services-inset);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.services-track::-webkit-scrollbar {
+  display: none;
+}
+
+.service-card {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: calc(485 * var(--u));
+  height: calc(564 * var(--u));
+  padding: calc(37 * var(--u)) calc(45 * var(--u)) calc(38 * var(--u));
+  border-radius: calc(50 * var(--u));
+  background: var(--pink);
+  color: #000;
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  scroll-snap-align: start;
+}
+
+.service-card-title {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: calc(85 * var(--u));
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: calc(-8.5 * var(--u));
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.service-card-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: calc(20 * var(--u));
+  font-weight: 400;
+  line-height: 1.191;
+  text-transform: uppercase;
+}
+
+.service-card-list li {
+  display: grid;
+  grid-template-columns: calc(32 * var(--u)) 1fr;
+  column-gap: calc(12 * var(--u));
+}
+
+.services-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 28px var(--space-gutter) 0;
+}
+
+.services-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--cream);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cream);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.services-arrow:hover:not(:disabled) {
+  border-color: var(--yellow);
+  background: var(--yellow);
+  color: #000;
+}
+
+.services-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 767px) {
+  .services-section {
+    margin-top: 96px;
+  }
+
+  .services-heading {
+    margin-bottom: 40px;
+  }
+
+  .services-heading-label {
+    width: 175px;
+    height: 41px;
+    padding-top: 8px;
+    font-size: 36px;
+    letter-spacing: -2.88px;
+  }
+
+  .services-arrow {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ── Book your consultation dialog (Figma 580:782, drawn at 855x607) ── */
+
+.booking-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.booking-backdrop {
+  position: fixed;
+  inset: 0;
+  border: 0;
+  background: rgb(0 0 0 / 0.72);
+  cursor: default;
+}
+
+.booking-panel {
+  --u: min(1px, (100vw - 32px) / 855);
+  position: relative;
+  z-index: 1;
+  width: calc(855 * var(--u));
+  min-height: calc(607 * var(--u));
+  margin: auto;
+  padding: calc(60 * var(--u)) calc(92 * var(--u)) calc(56 * var(--u));
+  border: 1px solid var(--yellow);
+  border-radius: calc(50 * var(--u));
+  background: #000;
+  color: var(--cream);
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  text-align: center;
+}
+
+.booking-close {
+  position: absolute;
+  top: calc(22 * var(--u));
+  right: calc(34 * var(--u));
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--cream);
+  font-size: 32px;
+  line-height: 1;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.booking-close:hover {
+  opacity: 1;
+}
+
+.booking-title {
+  margin: 0;
+  font-size: calc(64 * var(--u));
+  font-weight: 700;
+  line-height: calc(54 * var(--u));
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* The Figma title sits 21px left of centre. */
+  padding-right: calc(42 * var(--u));
+}
+
+.booking-title-mark {
+  display: inline-block;
+  height: calc(54 * var(--u));
+  padding: calc(9 * var(--u)) calc(9 * var(--u)) 0;
+  background: var(--yellow);
+  color: #000;
+  line-height: calc(54 * var(--u));
+  vertical-align: top;
+}
+
+.booking-subtitle {
+  margin: calc(16 * var(--u)) 0 0;
+  font-size: calc(28 * var(--u));
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.booking-form {
+  margin-top: calc(58 * var(--u));
+}
+
+.booking-row {
+  display: grid;
+  column-gap: calc(25 * var(--u));
+}
+
+.booking-row-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.booking-row-2 {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: calc(52 * var(--u));
+}
+
+.booking-field {
+  position: relative;
+  display: block;
+  height: calc(30 * var(--u));
+  border-bottom: 1px solid var(--cream);
+  text-align: left;
+}
+
+.booking-field.is-invalid {
+  border-bottom-color: #ff5a5a;
+}
+
+.booking-field input,
+.booking-field select {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0 calc(28 * var(--u)) 0 0;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  color: var(--cream);
+  font: inherit;
+  font-size: calc(20 * var(--u));
+  line-height: calc(24 * var(--u));
+  text-transform: uppercase;
+  appearance: none;
+  color-scheme: dark;
+}
+
+.booking-field input::placeholder {
+  color: var(--cream);
+  opacity: 1;
+}
+
+.booking-field:focus-within {
+  border-bottom-color: var(--yellow);
+}
+
+.booking-field select option {
+  background: #000;
+  color: var(--cream);
+}
+
+.booking-field input[type="date"].is-empty {
+  color: transparent;
+}
+
+/* The whole date field opens the picker; the native icon is hidden. */
+.booking-field input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.booking-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: calc(20 * var(--u));
+  line-height: calc(30 * var(--u));
+  pointer-events: none;
+}
+
+.booking-chevron {
+  position: absolute;
+  top: 50%;
+  right: calc(9 * var(--u));
+  width: calc(11 * var(--u));
+  height: calc(20 * var(--u));
+  transform: translateY(-50%) rotate(-90deg);
+  pointer-events: none;
+}
+
+.booking-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.booking-error {
+  margin: calc(18 * var(--u)) 0 0;
+  color: #ff8a8a;
+  font-size: max(13px, calc(16 * var(--u)));
+}
+
+.booking-error a {
+  text-decoration: underline;
+}
+
+.booking-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(450 * var(--u));
+  height: calc(91 * var(--u));
+  margin: calc(52 * var(--u)) auto 0;
+  border: 0;
+  border-radius: calc(50 * var(--u));
+  background: var(--yellow);
+  color: #000;
+  font: inherit;
+  font-size: calc(50 * var(--u));
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: calc(-4 * var(--u));
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.booking-error + .booking-submit {
+  margin-top: calc(20 * var(--u));
+}
+
+.booking-submit > span {
+  transform: translateY(calc(5 * var(--u)));
+}
+
+.booking-submit:hover:not(:disabled) {
+  transform: scale(1.02);
+}
+
+.booking-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.booking-note {
+  width: calc(407 * var(--u));
+  max-width: 100%;
+  margin: calc(32 * var(--u)) auto 0;
+  font-size: calc(16 * var(--u));
+  line-height: normal;
+  opacity: 0.6;
+}
+
+.booking-done {
+  margin: calc(90 * var(--u)) auto 0;
+  max-width: calc(520 * var(--u));
+  font-size: calc(28 * var(--u));
+  line-height: 1.25;
+}
+
+/* Phones: same pieces, stacked, at readable sizes. */
+@media (max-width: 720px) {
+  .booking-panel {
+    --u: 1px;
+    width: min(100%, 420px);
+    min-height: 0;
+    padding: 56px 24px 36px;
+    border-radius: 36px;
+  }
+
+  .booking-close {
+    top: 12px;
+    right: 14px;
+  }
+
+  .booking-title {
+    padding-right: 0;
+    font-size: 40px;
+    line-height: 36px;
+  }
+
+  .booking-title-mark {
+    height: 36px;
+    padding: 6px 6px 0;
+    line-height: 36px;
+  }
+
+  .booking-subtitle {
+    font-size: 22px;
+  }
+
+  .booking-form {
+    margin-top: 36px;
+  }
+
+  .booking-row-3,
+  .booking-row-2 {
+    grid-template-columns: 1fr;
+    row-gap: 26px;
+    margin-top: 0;
+  }
+
+  .booking-row-2 {
+    margin-top: 26px;
+  }
+
+  .booking-field {
+    height: 34px;
+  }
+
+  .booking-field input,
+  .booking-field select,
+  .booking-placeholder {
+    font-size: 18px;
+  }
+
+  .booking-submit {
+    width: 100%;
+    height: 64px;
+    margin-top: 36px;
+    font-size: 32px;
+    letter-spacing: -2px;
+  }
+
+  .booking-submit > span {
+    transform: translateY(3px);
+  }
+
+  .booking-note {
+    width: auto;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+
+  .booking-done {
+    margin: 32px auto 12px;
+    font-size: 20px;
+  }
+}
+
+/* ── First-visit "book your free consultation" notice ── */
+
+.consult-nudge {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 40;
+  width: min(330px, calc(100vw - 40px));
+  padding: 22px 24px;
+  border: 1px solid var(--yellow);
+  border-radius: 30px;
+  background: #000;
+  color: var(--cream);
+  font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
+  box-shadow: 0 18px 60px rgb(0 0 0 / 0.55);
+  animation: consult-nudge-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes consult-nudge-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+.consult-nudge-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--cream);
+  font-size: 24px;
+  line-height: 1;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.consult-nudge-close:hover {
+  opacity: 1;
+}
+
+.consult-nudge-title {
+  margin: 0;
+  padding-right: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.consult-nudge-mark {
+  display: inline-block;
+  padding: 3px 4px 0;
+  background: var(--yellow);
+  color: #000;
+  line-height: 0.95;
+}
+
+.consult-nudge-text {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.3;
+  opacity: 0.7;
+}
+
+.consult-nudge-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 46px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 50px;
+  background: var(--yellow);
+  color: #000;
+  font: inherit;
+  font-size: 22px;
+  letter-spacing: -1.4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.consult-nudge-button > span {
+  transform: translateY(2px);
+}
+
+.consult-nudge-button:hover {
+  transform: scale(1.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .consult-nudge {
+    animation: none;
   }
 }

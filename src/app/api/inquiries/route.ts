@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { rpc, SupabaseError } from "@/lib/supabase/rest";
+import { dbInsert, rpc, SupabaseError } from "@/lib/supabase/rest";
 import { contact } from "@/content/site";
 
 export const dynamic = "force-dynamic";
@@ -75,11 +75,34 @@ export async function POST(request: Request) {
   };
   const name = field("name", 200);
   const email = field("email", 320);
+  const phone = field("phone", 40);
   const serviceInterest = field("serviceInterest", 200);
-  const brief = field("brief", 5000);
+  const preferredDate = field("preferredDate", 10);
+  const preferredTime = field("preferredTime", 5);
+  // The consultation dialog collects a phone number and a slot, not an email.
+  const isBooking = !email && Boolean(phone);
+  const brief = isBooking
+    ? [
+        "Consultation booking.",
+        `Phone: ${phone}`,
+        `Preferred date: ${preferredDate || "not given"}`,
+        `Preferred time: ${preferredTime || "not given"}`,
+      ].join("\n")
+    : field("brief", 5000);
+
   const fieldErrors: Record<string, string[]> = {};
   if (!name) fieldErrors.name = ["Please add your name."];
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (isBooking) {
+    if (!/^[+\d][\d\s().-]{6,}$/.test(phone)) {
+      fieldErrors.phone = ["Please add a valid phone number."];
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(preferredDate)) {
+      fieldErrors.preferredDate = ["Please choose a date."];
+    }
+    if (!/^\d{2}:\d{2}$/.test(preferredTime)) {
+      fieldErrors.preferredTime = ["Please choose a time."];
+    }
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     fieldErrors.email = ["Please add a valid email."];
   }
   if (!serviceInterest) fieldErrors.serviceInterest = ["Please choose a service."];
@@ -97,10 +120,39 @@ export async function POST(request: Request) {
     );
   }
 
+  if (isBooking) {
+    try {
+      // Needs the phone / preferred_date / preferred_time columns and an
+      // optional email (supabase/migrations/20261113000001_bilingual_wide.sql).
+      const [row] = await dbInsert<{ id: string }>("inquiries", {
+        name,
+        email: null,
+        phone,
+        preferred_date: preferredDate,
+        preferred_time: preferredTime,
+        service_interest: serviceInterest,
+        brief,
+        source_page: field("sourcePage", 200) || null,
+      });
+      return NextResponse.json({ data: { id: row.id } }, { status: 201 });
+    } catch (error) {
+      // Before that update runs the table still demands an email. Fall through
+      // and store the booking with a marker address; the phone is in the brief.
+      if (!(error instanceof SupabaseError) || error.status >= 500) {
+        console.error("[inquiries] could not store booking.", error);
+        return fail(
+          503,
+          "backend_unreachable",
+          `Our form is offline right now. Please email ${contact.email} and we will reply directly.`,
+        );
+      }
+    }
+  }
+
   try {
     const result = await rpc<{ id: string; duplicate: boolean }>("submit_inquiry", {
       p_name: name,
-      p_email: email,
+      p_email: email || "phone-booking@taamworks.com",
       p_company: field("company", 200) || null,
       p_service_interest: serviceInterest,
       p_brief: brief,

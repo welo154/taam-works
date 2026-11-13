@@ -8,3 +8,12 @@ alter table public.projects
 
 -- The 'wide' card size used by the homepage and Works grids.
 alter type public.placement_layout add value if not exists 'wide';
+
+-- Consultation bookings collect a phone number and a preferred slot, not an
+-- email. (The email format check already allows an empty value once the
+-- column is optional.)
+alter table public.inquiries
+  add column if not exists phone text,
+  add column if not exists preferred_date date,
+  add column if not exists preferred_time text;
+alter table public.inquiries alter column email drop not null;
