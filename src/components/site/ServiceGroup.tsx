@@ -15,6 +15,7 @@ export function ServiceGroups() {
       className="services-section scroll-mt-[var(--header-offset)]"
       aria-labelledby="services-heading"
     >
+      <div className="services-sticky">
       <h2 id="services-heading" className="services-heading">
         <span className="services-heading-label" data-reveal="wipe">SERVICES</span>
       </h2>
@@ -46,6 +47,7 @@ export function ServiceGroups() {
           );
         })}
       </ServicesCarousel>
+      </div>
     </section>
   );
 }

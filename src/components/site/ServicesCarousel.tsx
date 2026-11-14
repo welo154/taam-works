@@ -23,7 +23,17 @@ function Arrow({ flip = false }: { flip?: boolean }) {
   );
 }
 
-/** Horizontal strip of service cards that runs off the right edge. */
+const clamp = (value: number) => Math.min(1, Math.max(0, value));
+
+/**
+ * Horizontal strip of service cards that runs off the right edge.
+ *
+ * On phones, with motion on, the whole services section pins to the screen
+ * while the page is scrolled: scrolling down slides the cards sideways, and the page
+ * moves on only after the last card. The section is made taller by exactly
+ * the distance the cards travel, so one pixel of scroll moves them one pixel.
+ * Wider screens and reduced-motion visitors keep the plain swipeable strip.
+ */
 export function ServicesCarousel({ children }: { children: React.ReactNode }) {
   const track = useRef<HTMLDivElement>(null);
   const [atStart, setAtStart] = useState(true);
@@ -46,12 +56,60 @@ export function ServicesCarousel({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  useEffect(() => {
+    const el = track.current;
+    const section = el?.closest<HTMLElement>(".services-section");
+    if (!el || !section) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // Phones only: on wider screens the strip stays a normal carousel.
+    const phone = window.matchMedia("(max-width: 767px)");
+    let travel = 0;
+    let frame = 0;
+    const place = () => {
+      frame = 0;
+      if (travel <= 0) return;
+      const rect = section.getBoundingClientRect();
+      el.scrollLeft = clamp(-rect.top / travel) * travel;
+    };
+    const measure = () => {
+      section.classList.toggle("is-pinned", phone.matches);
+      travel = phone.matches ? Math.max(0, el.scrollWidth - el.clientWidth) : 0;
+      if (travel <= 0) {
+        section.classList.remove("is-pinned");
+        section.style.height = "";
+        return;
+      }
+      section.style.height = `calc(100svh + ${travel}px)`;
+      place();
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(place);
+    };
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", measure);
+      if (frame) window.cancelAnimationFrame(frame);
+      section.classList.remove("is-pinned");
+      section.style.height = "";
+    };
+  }, []);
+
   function step(direction: 1 | -1) {
     const el = track.current;
     const card = el?.querySelector<HTMLElement>(".service-card");
     if (!el || !card) return;
     const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
-    el.scrollBy({ left: direction * (card.offsetWidth + gap), behavior: "smooth" });
+    const distance = direction * (card.offsetWidth + gap);
+    if (el.closest(".services-section.is-pinned")) {
+      // Pinned: the page scroll drives the cards, so move the page.
+      window.scrollBy({ top: distance, behavior: "smooth" });
+    } else {
+      el.scrollBy({ left: distance, behavior: "smooth" });
+    }
   }
 
   return (

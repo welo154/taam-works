@@ -3195,3 +3195,37 @@ html.motion.motion-failed .idea-media > * {
   animation: none;
   clip-path: none;
 }
+
+/* ── Services on phones: pinned while the page scroll slides the cards ──
+   .is-pinned is added by ServicesCarousel (phones only), which also sets the
+   section's height to one screen plus the distance the cards travel. */
+@media (max-width: 767px) {
+  .services-section.is-pinned {
+    padding-bottom: 0;
+  }
+
+  .services-section.is-pinned .services-sticky {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100svh;
+  }
+
+  .services-section.is-pinned .services-heading {
+    margin-bottom: min(calc(var(--m) * 57), 5svh);
+  }
+
+  .services-section.is-pinned .services-track {
+    /* Cards also shrink to fit short screens, so the pinned view never clips. */
+    --u: min(1px, 82vw / 485, (100svh - 210px) / 564);
+    overflow-x: hidden;
+    scroll-snap-type: none;
+    touch-action: pan-y;
+  }
+
+  .services-section.is-pinned .services-controls {
+    padding-top: min(28px, 2.5svh);
+  }
+}
