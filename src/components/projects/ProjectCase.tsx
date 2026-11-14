@@ -149,7 +149,7 @@ export function ProjectCase({ project, nextSlug }: ProjectCaseProps) {
           })}
         </IdeaMediaScroll>
         <div className="idea-copy">
-          <h1 className="idea-title">
+          <h1 className="idea-title load-rise">
             <span className="idea-title-en">{project.titleEn} </span>
             {titleAr ? (
               <span className="idea-title-ar" lang="ar">
@@ -161,17 +161,30 @@ export function ProjectCase({ project, nextSlug }: ProjectCaseProps) {
             </span>
             {year ? <span className="idea-year">{year}</span> : null}
           </h1>
-          <p className="idea-copy-en">{project.descriptionEn}</p>
+          <p className="idea-copy-en load-rise" style={{ "--load-i": 1 } as React.CSSProperties}>{project.descriptionEn}</p>
           {descriptionAr ? (
-            <p className="idea-copy-ar" lang="ar" dir="rtl">
+            <p
+              className="idea-copy-ar load-rise"
+              lang="ar"
+              dir="rtl"
+              style={{ "--load-i": 2 } as React.CSSProperties}
+            >
               {descriptionAr}
             </p>
           ) : null}
-          {tags ? <p className="idea-tags">{tags}</p> : null}
+          {tags ? (
+            <p className="idea-tags load-rise" style={{ "--load-i": 3 } as React.CSSProperties}>
+              {tags}
+            </p>
+          ) : null}
         </div>
       </div>
       <div className="idea-stage" />
-      <Link href={nextSlug ? `/works/${nextSlug}` : "/works"} className="idea-next">
+      <Link
+        href={nextSlug ? `/works/${nextSlug}` : "/works"}
+        className="idea-next"
+        data-reveal
+      >
         <span>NEXT PROJECT</span>
         <svg
           className="idea-next-arrow"

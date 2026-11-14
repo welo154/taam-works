@@ -131,7 +131,7 @@ export default function IdeaProjectPage() {
           </div>
         </IdeaMediaScroll>
         <div className="idea-copy">
-          <h1 className="idea-title">
+          <h1 className="idea-title load-rise">
             <span className="idea-title-en">IDEA </span>
             <span className="idea-title-ar" lang="ar">ايديـــا</span>
             <span className="idea-leader" aria-hidden="true">
@@ -139,24 +139,29 @@ export default function IdeaProjectPage() {
             </span>
             <span className="idea-year">{"\u201824"}</span>
           </h1>
-          <p className="idea-copy-en">
+          <p className="idea-copy-en load-rise" style={{ "--load-i": 1 } as React.CSSProperties}>
             an interdisciplinary studio based in London, working across
             design, technology, experiences, and spaces. We bring together
             diverse disciplines to create purposeful identities, products,
             environments, and experiences that bring ideas to life across
             physical and digital experiences.
           </p>
-          <p className="idea-copy-ar" lang="ar" dir="rtl">
+          <p
+            className="idea-copy-ar load-rise"
+            lang="ar"
+            dir="rtl"
+            style={{ "--load-i": 2 } as React.CSSProperties}
+          >
             استوديو متعدد التخصصات يتخذ من لندن مقراً له، ويعمل في مجالات
             التصميم والتكنولوجيا وتصميم التجارب والمساحات. نحن نجمع بين
             تخصصات متنوعة لابتكار هويات ومنتجات وبيئات وتجارب هادفة تضفي
             الحياة على الأفكار، سواء في العالم المادي أو الرقمي.
           </p>
-          <p className="idea-tags">BRANDING, EXHIBITION</p>
+          <p className="idea-tags load-rise" style={{ "--load-i": 3 } as React.CSSProperties}>BRANDING, EXHIBITION</p>
         </div>
       </div>
       <div className="idea-stage" />
-      <Link href="/works/events-program" className="idea-next">
+      <Link href="/works/events-program" className="idea-next" data-reveal>
         <span>NEXT PROJECT</span>
         <svg
           className="idea-next-arrow"

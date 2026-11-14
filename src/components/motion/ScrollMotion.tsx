@@ -70,7 +70,7 @@ export function ScrollMotion() {
       { threshold: 0.08 },
     );
     const targets = document.querySelectorAll<HTMLElement>(
-      "[data-reveal]:not(.is-in)",
+      "[data-reveal]:not(.is-in), .idea-media > :not(.is-in)",
     );
     targets.forEach((element) => {
       if (reduced) {
