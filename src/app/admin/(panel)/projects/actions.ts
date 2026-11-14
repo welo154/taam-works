@@ -1,10 +1,9 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { fixtureProjects } from "@/content/fixtures/projects";
-import { isAdminAuthorized } from "@/lib/admin-auth";
+import { isAdmin } from "@/lib/admin-session";
 import {
   loadProjects,
   migrationApplied,
@@ -36,13 +35,6 @@ const UUID =
 const LAYOUTS: ProjectLayout[] = ["third", "half", "wide", "full"];
 const RESERVED_SLUGS = new Set(["idea", "new"]);
 const SIGNED_OUT = "You are not signed in to the dashboard.";
-
-// Server Actions are reachable by direct POST from any route, so every one
-// re-checks the dashboard login instead of trusting the /admin proxy check.
-async function isAdmin() {
-  const requestHeaders = await headers();
-  return isAdminAuthorized(requestHeaders.get("authorization"));
-}
 
 async function requireAdmin() {
   if (!(await isAdmin())) throw new Error(SIGNED_OUT);

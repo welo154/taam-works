@@ -2721,3 +2721,44 @@ html.motion.motion-failed .idea-media > * {
     rotate: none;
   }
 }
+
+/* ── Dashboard ── */
+
+@keyframes admin-rise {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+
+@keyframes admin-shake {
+  20%,
+  60% {
+    translate: -6px 0;
+  }
+
+  40%,
+  80% {
+    translate: 6px 0;
+  }
+}
+
+.admin-rise {
+  animation: admin-rise 0.5s cubic-bezier(0.16, 0.8, 0.2, 1) both;
+}
+
+.admin-shake {
+  animation: admin-shake 0.4s ease both;
+}
+
+.admin-root ::selection {
+  background: var(--yellow);
+  color: #000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-rise,
+  .admin-shake {
+    animation: none;
+  }
+}

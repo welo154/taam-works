@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createUpload, saveProject } from "@/app/admin/projects/actions";
+import { createUpload, saveProject } from "@/app/admin/(panel)/projects/actions";
 import {
   IMAGE_TYPES,
   LAYOUT_LABELS,
@@ -11,6 +11,14 @@ import {
   type EditorMedia,
   type EditorProject,
 } from "@/lib/projects/editor-types";
+import {
+  btnGhost,
+  btnPrimary,
+  btnSmall as smallButton,
+  cardPad,
+  input,
+  label,
+} from "@/app/admin/ui";
 import type { ProjectLayout } from "@/lib/projects/types";
 
 type Slot = {
@@ -156,11 +164,7 @@ async function uploadFile(
   throw new Error("Use JPG, PNG, WEBP or GIF photos, and MP4, WEBM or MOV videos.");
 }
 
-const input =
-  "mt-2 w-full border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 outline-none focus:border-yellow";
-const label = "block text-sm text-neutral-300";
-const smallButton =
-  "border border-neutral-700 px-2 py-1 text-xs text-neutral-200 hover:border-neutral-400 disabled:opacity-30";
+const sectionTitle = "text-lg font-bold text-cream";
 
 function Preview({ slot, className }: { slot: Slot; className: string }) {
   if (!slot.preview) return <div className={`${className} bg-neutral-800`} />;
@@ -185,9 +189,17 @@ function Preview({ slot, className }: { slot: Slot; className: string }) {
 function SlotStatus({ slot }: { slot: Slot }) {
   if (slot.state === "uploading") {
     return (
-      <p className="mt-1 text-xs text-neutral-400">
-        Uploading {Math.round(slot.progress * 100)}%
-      </p>
+      <div className="mt-2">
+        <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-full rounded-full bg-yellow transition-[width] duration-200"
+            style={{ width: `${Math.round(slot.progress * 100)}%` }}
+          />
+        </div>
+        <p className="mt-1 text-xs text-neutral-400">
+          Uploading {Math.round(slot.progress * 100)}%
+        </p>
+      </div>
     );
   }
   if (slot.state === "error") {
@@ -371,16 +383,18 @@ export function ProjectEditor({
   );
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       {!migrated ? (
-        <p className="border border-yellow/50 bg-yellow/10 px-4 py-3 text-sm text-yellow">
+        <p className="rounded-2xl border border-yellow/40 bg-yellow/10 px-5 py-4 text-sm text-yellow">
           Arabic text and the Wide card size are switched off until the database
           update in <code>supabase/migrations/20261113000001_bilingual_wide.sql</code>{" "}
           is run in the Supabase SQL Editor.
         </p>
       ) : null}
 
-      <section className="grid gap-5 sm:grid-cols-2">
+      <section className={cardPad}>
+        <h2 className={sectionTitle}>Details</h2>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <label className={label}>
           Title (English)
           <input className={input} value={titleEn} onChange={(e) => setTitleEn(e.target.value)} />
@@ -436,10 +450,11 @@ export function ProjectEditor({
             onChange={(e) => setDescriptionAr(e.target.value)}
           />
         </label>
+        </div>
       </section>
 
-      <section>
-        <h2 className="text-lg font-semibold">Card</h2>
+      <section className={cardPad}>
+        <h2 className={sectionTitle}>Card</h2>
         <p className="mt-1 text-sm text-neutral-400">
           The photo or video shown for this project on the homepage and the Works page.
         </p>
@@ -447,11 +462,11 @@ export function ProjectEditor({
           <div className="w-48">
             {cover ? (
               <>
-                <Preview slot={cover} className="aspect-[4/5] w-48 object-cover" />
+                <Preview slot={cover} className="aspect-[4/5] w-48 rounded-xl object-cover" />
                 <SlotStatus slot={cover} />
               </>
             ) : (
-              <div className="flex aspect-[4/5] w-48 items-center justify-center border border-dashed border-neutral-700 text-xs text-neutral-500">
+              <div className="flex aspect-[4/5] w-48 items-center justify-center rounded-xl border border-dashed border-white/20 text-xs text-neutral-500">
                 No cover yet
               </div>
             )}
@@ -498,9 +513,10 @@ export function ProjectEditor({
                 ))}
               </select>
             </label>
-            <label className="flex items-center gap-3 text-sm text-neutral-300">
+            <label className="flex items-center gap-3 self-end rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-neutral-200">
               <input
                 type="checkbox"
+                className="accent-[#f5e600]"
                 checked={showOnHome}
                 onChange={(e) => setShowOnHome(e.target.checked)}
               />
@@ -525,8 +541,8 @@ export function ProjectEditor({
         </div>
       </section>
 
-      <section>
-        <h2 className="text-lg font-semibold">Project page</h2>
+      <section className={cardPad}>
+        <h2 className={sectionTitle}>Project page</h2>
         <p className="mt-1 text-sm text-neutral-400">
           Drop photos and MP4s here. Each file becomes a row, stacked top to
           bottom in this order. Sizes are read from the files automatically.
@@ -534,12 +550,17 @@ export function ProjectEditor({
 
         <ol className="mt-4 space-y-3">
           {rows.map((row, index) => (
-            <li key={row.key} className="flex gap-4 border border-neutral-800 p-3">
-              <span className="w-6 pt-1 text-sm text-neutral-500">{index + 1}</span>
+            <li
+              key={row.key}
+              className="flex gap-4 rounded-2xl border border-white/10 bg-black/30 p-4"
+            >
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-bold text-neutral-200">
+                {index + 1}
+              </span>
               <div className="flex flex-1 gap-3">
                 {row.slots.map((slot) => (
                   <div key={slot.key} className="min-w-0 flex-1">
-                    <Preview slot={slot} className="max-h-56 w-full object-contain" />
+                    <Preview slot={slot} className="max-h-56 w-full rounded-lg object-contain" />
                     <SlotStatus slot={slot} />
                     <p className="truncate text-xs text-neutral-600">{slot.name}</p>
                     <button
@@ -552,7 +573,7 @@ export function ProjectEditor({
                   </div>
                 ))}
               </div>
-              <div className="flex w-32 flex-col gap-1">
+              <div className="flex w-40 flex-col gap-1.5">
                 <button
                   type="button"
                   className={smallButton}
@@ -594,8 +615,10 @@ export function ProjectEditor({
         </ol>
 
         <div
-          className={`mt-4 flex flex-col items-center gap-2 border border-dashed px-6 py-10 text-sm ${
-            dragging ? "border-yellow text-yellow" : "border-neutral-700 text-neutral-400"
+          className={`mt-4 flex flex-col items-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 text-sm transition ${
+            dragging
+              ? "border-yellow bg-yellow/10 text-yellow"
+              : "border-white/15 text-neutral-400 hover:border-white/30"
           }`}
           onDragOver={(event) => {
             event.preventDefault();
@@ -608,10 +631,10 @@ export function ProjectEditor({
             addToStack(event.dataTransfer.files);
           }}
         >
-          <p>Drop photos and videos here</p>
+          <p className="text-base font-bold text-cream">Drop photos and videos here</p>
           <button
             type="button"
-            className="bg-neutral-100 px-4 py-2 text-sm font-medium text-black"
+            className={btnGhost}
             onClick={() => stackInput.current?.click()}
           >
             Choose files
@@ -634,16 +657,19 @@ export function ProjectEditor({
       </section>
 
       {error ? (
-        <p role="alert" className="text-sm text-red-400">
+        <p
+          role="alert"
+          className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+        >
           {error}
         </p>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-3 border-t border-neutral-800 pt-6">
+      <div className="sticky bottom-4 z-20 flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-[#141414]/95 px-5 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.6)] backdrop-blur">
         <button
           type="button"
           disabled={saving || uploading}
-          className="bg-yellow px-5 py-2.5 text-sm font-medium text-black disabled:opacity-50"
+          className={btnPrimary}
           onClick={() => save("published")}
         >
           {saving ? "Saving…" : initial.status === "published" ? "Save changes" : "Publish"}
@@ -651,7 +677,7 @@ export function ProjectEditor({
         <button
           type="button"
           disabled={saving || uploading}
-          className="border border-neutral-600 px-5 py-2.5 text-sm text-neutral-100 disabled:opacity-50"
+          className={btnGhost}
           onClick={() => save("draft")}
         >
           {initial.status === "published" ? "Unpublish and save as draft" : "Save draft"}

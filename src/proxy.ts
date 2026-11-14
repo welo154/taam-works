@@ -1,23 +1,30 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ADMIN_REALM, isAdminAuthorized } from "@/lib/admin-auth";
+import { isValidSession, SESSION_COOKIE } from "@/lib/admin-auth";
 import { isComingSoon } from "@/lib/coming-soon";
 
-function adminChallenge() {
-  return new NextResponse("Authentication required.", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": `Basic realm="${ADMIN_REALM}", charset="UTF-8"`,
-      "Cache-Control": "no-store",
-    },
-  });
-}
+const LOGIN_PATH = "/admin/login";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-    if (!isAdminAuthorized(request.headers.get("authorization"))) {
-      return adminChallenge();
+    const signedIn = isValidSession(request.cookies.get(SESSION_COOKIE)?.value);
+    const onLogin = pathname === LOGIN_PATH;
+
+    if (!signedIn && !onLogin) {
+      const url = request.nextUrl.clone();
+      url.pathname = LOGIN_PATH;
+      url.search = "";
+      if (request.method === "GET" && pathname !== "/admin") {
+        url.searchParams.set("next", pathname);
+      }
+      return NextResponse.redirect(url);
+    }
+    if (signedIn && onLogin && request.method === "GET") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin";
+      url.search = "";
+      return NextResponse.redirect(url);
     }
     const response = NextResponse.next();
     response.headers.set("Cache-Control", "no-store");
