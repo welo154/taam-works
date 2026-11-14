@@ -1067,22 +1067,22 @@ button:focus-visible {
 
   .relative:has(.works-page) .site-header,
   .relative:has(.idea-content) .site-header {
-    height: 108px;
+    height: calc(var(--m) * 108);
   }
 
   .idea-rule-header {
-    top: 108px;
+    top: calc(var(--m) * 108);
   }
 
   .works-lead {
-    width: 270px;
-    max-width: 270px;
-    height: 71px;
-    margin: 85.5px auto 0;
+    width: calc(var(--m) * 270);
+    max-width: calc(var(--m) * 270);
+    height: calc(var(--m) * 71);
+    margin: calc(var(--m) * 85.5) auto 0;
     color: #fbf5d5;
     text-align: center;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 36px;
+    font-size: calc(var(--m) * 36);
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -1096,7 +1096,7 @@ button:focus-visible {
     background-color: transparent;
     background-image: none;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 36px;
+    font-size: calc(var(--m) * 36);
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -1108,22 +1108,22 @@ button:focus-visible {
     position: absolute;
     z-index: -1;
     left: 50%;
-    top: -2px;
-    width: 148px;
-    height: 29px;
+    top: calc(var(--m) * -2);
+    width: calc(var(--m) * 148);
+    height: calc(var(--m) * 29);
     transform: translateX(-50%);
     background: #f5e600;
     pointer-events: none;
   }
 
   .works-intro {
-    width: 342px;
-    max-width: 342px;
-    margin: 44px auto 0;
+    width: calc(var(--m) * 342);
+    max-width: calc(var(--m) * 342);
+    margin: calc(var(--m) * 44) auto 0;
     color: #fbf5d5;
     text-align: center;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 18px;
+    font-size: calc(var(--m) * 18);
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -1162,9 +1162,9 @@ button:focus-visible {
   }
 
   .hero-taam {
-    /* Visual top-left is 219px from the page top and 123px from the left. */
-    top: calc(219px - var(--m) * 160);
-    left: calc(123px + var(--m) * 245);
+    /* Visual top-left is calc(var(--m) * 219) from the page top and calc(var(--m) * 123) from the left. */
+    top: calc(var(--m) * 59);
+    left: calc(var(--m) * 368);
     width: calc(var(--m) * 563);
     height: calc(var(--m) * 245);
     max-width: none;
@@ -1180,17 +1180,17 @@ button:focus-visible {
   .hero-label {
     width: calc(var(--m) * 177);
     height: calc(var(--m) * 49);
-    padding: 9px 0 0;
+    padding: calc(var(--m) * 9) 0 0;
     border-radius: calc(var(--m) * 30);
     align-items: flex-start;
     justify-content: center;
     color: #000;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 32px;
+    font-size: calc(var(--m) * 32);
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: -1.6px;
+    letter-spacing: calc(var(--m) * -1.6);
     text-align: center;
     opacity: 1;
     animation: none;
@@ -1217,7 +1217,7 @@ button:focus-visible {
   }
 
   .hero-label-initiatives {
-    top: calc(var(--m) * 493);
+    top: calc(var(--m) * 513);
     left: calc(var(--m) * 75);
   }
 
@@ -1226,7 +1226,7 @@ button:focus-visible {
     align-items: flex-start;
     gap: calc(var(--m) * 28);
     width: auto;
-    margin-top: calc(var(--m) * 240);
+    margin-top: calc(var(--m) * 239);
     margin-inline: calc(var(--m) * 57);
     padding-left: 0;
   }
@@ -1249,7 +1249,7 @@ button:focus-visible {
   }
 
   .selected-work {
-    margin-top: calc(var(--m) * 280);
+    margin-top: calc(var(--m) * 273);
     padding-inline: calc(var(--m) * 24);
   }
 
@@ -1289,7 +1289,7 @@ button:focus-visible {
   .works-page .site-shell {
     width: auto;
     max-width: none;
-    margin-top: 86px;
+    margin-top: calc(var(--m) * 84);
     margin-left: 0;
     margin-right: 0;
     padding-inline: calc(var(--m) * 24);
@@ -1300,7 +1300,7 @@ button:focus-visible {
   }
 
   .relative:has(.works-page) .page-close .let-taam-section {
-    padding-top: 271px;
+    padding-top: calc(var(--m) * 271);
   }
 
   .works-view-all {
@@ -1330,47 +1330,47 @@ button:focus-visible {
   }
 
   .let-taam-line {
-    width: 389px;
+    width: calc(var(--m) * 389);
     max-width: 100%;
     height: auto;
     margin-inline: auto;
     color: #fbf5d5;
     text-align: center;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 48px;
+    font-size: calc(var(--m) * 48);
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: -1.92px;
+    letter-spacing: calc(var(--m) * -1.92);
   }
 
   .let-taam-line .font-bold {
     font-weight: 700;
-    letter-spacing: -1.92px;
+    letter-spacing: calc(var(--m) * -1.92);
   }
 
   .page-close section[aria-label="Connect"] {
-    padding-top: 26px;
+    padding-top: calc(var(--m) * 26);
     padding-bottom: 0;
   }
 
   .connect-button {
-    width: 327px;
+    width: calc(var(--m) * 327);
     max-width: none;
-    height: 76px;
-    padding: 17px 0 0;
+    height: calc(var(--m) * 76);
+    padding: calc(var(--m) * 17) 0 0;
     align-items: flex-start;
     justify-content: center;
-    border-radius: 50px;
+    border-radius: calc(var(--m) * 50);
     background: #f5e600;
     color: #000;
     text-align: center;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 40px;
+    font-size: calc(var(--m) * 40);
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: -3.2px;
+    letter-spacing: calc(var(--m) * -3.2);
   }
 
   .connect-button-label {
@@ -1420,7 +1420,7 @@ button:focus-visible {
     top: auto;
     left: auto;
     width: auto;
-    padding: 74px calc(var(--m) * 24) 0;
+    padding: calc(var(--m) * 74) calc(var(--m) * 24) 0;
   }
 
   .idea-title {
@@ -1439,7 +1439,7 @@ button:focus-visible {
     overflow: hidden;
     color: #fbf5d5;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 15px;
+    font-size: calc(var(--m) * 15);
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -1450,6 +1450,15 @@ button:focus-visible {
     position: static;
     margin-left: 0;
     flex: none;
+    font-size: calc(var(--m) * 24);
+  }
+
+  .idea-title-en {
+    font-size: calc(var(--m) * 32);
+  }
+
+  .idea-title-ar {
+    font-size: calc(var(--m) * 24);
   }
 
   .idea-copy-en,
@@ -1460,14 +1469,20 @@ button:focus-visible {
   }
 
   .idea-copy-en {
-    margin-top: 23px;
+    margin-top: calc(var(--m) * 20.6);
+  }
+
+  .idea-copy-ar {
+    margin-top: calc(var(--m) * 28);
+    font-size: calc(var(--m) * 18);
+    line-height: calc(var(--m) * 24);
   }
 
   .idea-tags {
-    margin-top: 50px;
+    margin-top: calc(var(--m) * 50);
     color: #fbf5d5;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 16px;
+    font-size: calc(var(--m) * 16);
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -1476,10 +1491,10 @@ button:focus-visible {
 
   .idea-media {
     left: auto;
-    width: 392px;
+    width: calc(var(--m) * 392);
     max-width: 100%;
-    height: 755px;
-    margin: 50px auto 0;
+    height: calc(var(--m) * 755);
+    margin: calc(var(--m) * 50) auto 0;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: none;
@@ -1551,13 +1566,13 @@ button:focus-visible {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: calc(var(--m) * 15);
     width: 100%;
-    height: 94px;
-    margin-top: 76px;
+    height: calc(var(--m) * 94);
+    margin-top: calc(var(--m) * 76.5);
     color: #fbf5d5;
     font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-    font-size: 36px;
+    font-size: calc(var(--m) * 36);
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -1582,17 +1597,17 @@ button:focus-visible {
   }
 
   .idea-next::after {
-    top: 94px;
+    top: calc(var(--m) * 94);
   }
 
   .idea-next-arrow {
-    width: 45px;
-    height: 47px;
+    width: calc(var(--m) * 45);
+    height: calc(var(--m) * 47);
     transform: rotate(-180deg);
   }
 
   .relative:has(.idea-content) .page-close .let-taam-section {
-    padding-top: 110.3px;
+    padding-top: calc(var(--m) * 110.3);
   }
 }
 
@@ -1730,19 +1745,19 @@ button:focus-visible {
 
 @media (max-width: 767px) {
   .services-section {
-    margin-top: 96px;
+    margin-top: calc(var(--m) * 152);
   }
 
   .services-heading {
-    margin-bottom: 40px;
+    margin-bottom: calc(var(--m) * 57);
   }
 
   .services-heading-label {
-    width: 175px;
-    height: 41px;
-    padding-top: 8px;
-    font-size: 36px;
-    letter-spacing: -2.88px;
+    width: calc(var(--m) * 175);
+    height: calc(var(--m) * 41);
+    padding-top: calc(var(--m) * 8);
+    font-size: calc(var(--m) * 36);
+    letter-spacing: calc(var(--m) * -2.88);
   }
 
   .services-arrow {
