@@ -2019,50 +2019,59 @@ button:focus-visible {
   line-height: 1.25;
 }
 
-/* Phones: same pieces, stacked, at readable sizes. */
+/* Phones: same pieces, stacked, at readable sizes. The title is sized from
+   the screen width so "LET'S TAAM IT" always fits on one line. */
 @media (max-width: 720px) {
+  .booking-overlay {
+    padding: 12px;
+  }
+
   .booking-panel {
     --u: 1px;
+    --title: min(40px, (100vw - 72px) / 8.6);
     width: min(100%, 420px);
+    min-width: 0;
     min-height: 0;
-    padding: 56px 24px 36px;
-    border-radius: 36px;
+    padding: 48px 24px 28px;
+    border-radius: 32px;
   }
 
   .booking-close {
-    top: 12px;
-    right: 14px;
+    top: 8px;
+    right: 12px;
   }
 
   .booking-title {
     padding-right: 0;
-    font-size: 40px;
-    line-height: 36px;
+    font-size: var(--title);
+    line-height: 0.9;
   }
 
   .booking-title-mark {
-    height: 36px;
-    padding: 6px 6px 0;
-    line-height: 36px;
+    height: 0.9em;
+    padding: 0.15em 0.15em 0;
+    line-height: 0.9;
   }
 
   .booking-subtitle {
-    font-size: 22px;
+    margin-top: 12px;
+    font-size: 20px;
+    white-space: nowrap;
   }
 
   .booking-form {
-    margin-top: 36px;
+    margin-top: 26px;
   }
 
   .booking-row-3,
   .booking-row-2 {
-    grid-template-columns: 1fr;
-    row-gap: 26px;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 20px;
     margin-top: 0;
   }
 
   .booking-row-2 {
-    margin-top: 26px;
+    margin-top: 20px;
   }
 
   .booking-field {
@@ -2075,11 +2084,15 @@ button:focus-visible {
     font-size: 18px;
   }
 
+  .booking-chevron {
+    right: 6px;
+  }
+
   .booking-submit {
     width: 100%;
-    height: 64px;
-    margin-top: 36px;
-    font-size: 32px;
+    height: 60px;
+    margin-top: 28px;
+    font-size: 30px;
     letter-spacing: -2px;
   }
 
@@ -2089,7 +2102,7 @@ button:focus-visible {
 
   .booking-note {
     width: auto;
-    margin-top: 20px;
+    margin-top: 16px;
     font-size: 14px;
   }
 
