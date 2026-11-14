@@ -1635,6 +1635,10 @@ button:focus-visible {
   display: flex;
   column-gap: calc(30 * var(--u));
   overflow-x: auto;
+  /* Vertical room so cards can rise and tilt in without being clipped. */
+  padding-block: 130px 40px;
+  margin-block: -130px -40px;
+  overflow-y: hidden;
   padding-inline: var(--services-inset);
   scroll-padding-inline: var(--services-inset);
   scroll-snap-type: x mandatory;
@@ -2178,5 +2182,230 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .consult-nudge {
     animation: none;
+  }
+}
+
+/* ── Scroll motion ──
+   `html.motion` is set before first paint (root layout), so nothing is hidden
+   when scripts are off. Reveals use the standalone translate / scale / rotate
+   properties so they never fight an element's own `transform`. */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: 100%;
+  height: 3px;
+  background: var(--yellow);
+  scale: 0 1;
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
+html.motion [data-reveal] {
+  --reveal-ease: cubic-bezier(0.16, 0.8, 0.2, 1);
+  --reveal-delay: calc(var(--reveal-i, 0) * 110ms);
+  opacity: 0;
+  translate: 0 48px;
+  transition:
+    opacity 0.9s var(--reveal-ease) var(--reveal-delay),
+    translate 1s var(--reveal-ease) var(--reveal-delay),
+    scale 1s var(--reveal-ease) var(--reveal-delay),
+    rotate 1s var(--reveal-ease) var(--reveal-delay),
+    clip-path 1.1s var(--reveal-ease) var(--reveal-delay);
+}
+
+html.motion [data-reveal].is-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Image curtain: the cover is unveiled from the bottom while it settles. */
+html.motion [data-reveal="clip"] {
+  opacity: 1;
+  translate: 0 0;
+  clip-path: inset(100% 0 0 0);
+}
+
+html.motion [data-reveal="clip"].is-in {
+  clip-path: inset(0 0 0 0);
+}
+
+html.motion [data-reveal="clip"] img {
+  scale: 1.22;
+  transition: scale 1.6s cubic-bezier(0.16, 0.8, 0.2, 1) var(--reveal-delay);
+}
+
+html.motion [data-reveal="clip"].is-in img {
+  scale: 1;
+}
+
+/* Colour tag wiping in from the left. */
+html.motion [data-reveal="wipe"] {
+  opacity: 1;
+  translate: 0 0;
+  clip-path: inset(0 100% 0 0);
+}
+
+html.motion [data-reveal="wipe"].is-in {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Cards tilting up into place. */
+html.motion [data-reveal="card"] {
+  translate: 0 110px;
+  rotate: 5deg;
+  transform-origin: 0 100%;
+}
+
+html.motion [data-reveal="card"].is-in {
+  translate: 0 0;
+  rotate: 0deg;
+}
+
+/* Buttons popping in. */
+html.motion [data-reveal="pop"] {
+  translate: 0 0;
+  scale: 0.7;
+}
+
+html.motion [data-reveal="pop"].is-in {
+  scale: 1;
+}
+
+/* Headline whose parts rise one after another. */
+html.motion [data-reveal="split"] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* :where keeps this below the phone layout, which stacks the two parts. */
+html.motion :where([data-reveal="split"] > span) {
+  display: inline-block;
+  white-space: pre;
+}
+
+html.motion [data-reveal="split"] > span {
+  opacity: 0;
+  translate: 0 60%;
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 0.8, 0.2, 1),
+    translate 1.1s cubic-bezier(0.16, 0.8, 0.2, 1);
+}
+
+html.motion [data-reveal="split"] > span + span {
+  transition-delay: 0.14s;
+}
+
+html.motion [data-reveal="split"].is-in > span {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Text that lights up word by word as it is scrolled through. */
+html.motion .scroll-word {
+  opacity: 0.16;
+  transition: opacity 0.25s linear;
+}
+
+/* Elements already on screen when a page opens. */
+@keyframes load-rise {
+  from {
+    opacity: 0;
+    translate: 0 36px;
+  }
+}
+
+.load-rise {
+  animation: load-rise 1s cubic-bezier(0.16, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--load-i, 0) * 140ms + 80ms);
+}
+
+/* Cover hover: a slow push in. */
+.project-cover img {
+  transition:
+    scale 1.2s cubic-bezier(0.16, 0.8, 0.2, 1),
+    opacity 0.3s;
+}
+
+@media (hover: hover) {
+  a:hover .project-cover.is-in img,
+  html:not(.motion) a:hover .project-cover img {
+    scale: 1.045;
+  }
+
+  .service-card {
+    transition:
+      translate 0.5s cubic-bezier(0.16, 0.8, 0.2, 1),
+      rotate 0.5s cubic-bezier(0.16, 0.8, 0.2, 1);
+  }
+}
+
+.connect-button {
+  transition:
+    translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    scale 0.7s cubic-bezier(0.16, 0.8, 0.2, 1),
+    opacity 0.6s;
+}
+
+.site-footer a {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size 0.45s cubic-bezier(0.16, 0.8, 0.2, 1);
+}
+
+.site-footer a:hover {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.motion [data-reveal],
+  html.motion [data-reveal] > span,
+  html.motion [data-reveal] img {
+    opacity: 1;
+    translate: none;
+    scale: none;
+    rotate: none;
+    clip-path: none;
+    transition: none;
+  }
+
+  html.motion .scroll-word {
+    opacity: 1;
+  }
+
+  .load-rise {
+    animation: none;
+  }
+
+  .scroll-progress {
+    display: none;
+  }
+}
+
+/* If the script never starts, show everything. */
+html.motion.motion-failed [data-reveal],
+html.motion.motion-failed [data-reveal] > span,
+html.motion.motion-failed [data-reveal] img {
+  opacity: 1;
+  translate: none;
+  scale: none;
+  rotate: none;
+  clip-path: none;
+}
+
+html.motion.motion-failed .scroll-word {
+  opacity: 1;
+}
+
+/* Phones keep the closing line's natural wrapping, so it only fades in. */
+@media (max-width: 767px) {
+  html.motion [data-reveal="split"] > span {
+    display: inline;
+    white-space: inherit;
+    translate: none;
   }
 }

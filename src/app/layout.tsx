@@ -71,9 +71,17 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${acuminPro.variable} ${koSans.variable} h-full antialiased`}
+      // The inline script below adds the `motion` class before hydration.
+      suppressHydrationWarning
     >
       {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) inject attributes on <body>. */}
       <body className="min-h-full bg-bg text-cream" suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('motion');setTimeout(function(){if(!window.__motionReady)document.documentElement.classList.add('motion-failed')},4000)",
+          }}
+        />
         <div className="site-frame">{children}</div>
       </body>
     </html>

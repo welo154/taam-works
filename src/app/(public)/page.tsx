@@ -89,7 +89,7 @@ export default async function HomePage() {
                 placements={homeProjects.data}
                 labelledBy="selected-work-heading"
               />
-              <Link href="/works" className="works-view-all">
+              <Link href="/works" className="works-view-all" data-reveal>
                 <span className="works-view-all-label">VIEW ALL</span>
               </Link>
             </>

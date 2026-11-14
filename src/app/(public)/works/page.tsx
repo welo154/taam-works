@@ -18,13 +18,16 @@ export default async function WorksPage() {
     <>
       <div className="works-banner" />
       <section className="works-page" aria-labelledby="works-heading">
-        <h1 id="works-heading" className="works-lead">
+        <h1 id="works-heading" className="works-lead load-rise">
           <span className="works-lead-line">
             {worksIntro.lineOne} {worksIntro.lineTwoLead}{" "}
           </span>
           <span className="works-lead-mark">{worksIntro.mark}</span>
         </h1>
-        <p className="works-intro">{worksIntro.lead}</p>
+        <p
+          className="works-intro load-rise"
+          style={{ "--load-i": 1 } as React.CSSProperties}
+        >{worksIntro.lead}</p>
         <div className="site-shell">
           {result.ok ? (
             result.data.length > 0 ? (

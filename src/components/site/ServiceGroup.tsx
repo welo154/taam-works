@@ -16,13 +16,18 @@ export function ServiceGroups() {
       aria-labelledby="services-heading"
     >
       <h2 id="services-heading" className="services-heading">
-        <span className="services-heading-label">SERVICES</span>
+        <span className="services-heading-label" data-reveal="wipe">SERVICES</span>
       </h2>
       <ServicesCarousel>
         {serviceGroups.map((group) => {
           const [first, second] = titleLines(group.number, group.title);
           return (
-            <article key={group.number} className="service-card" role="listitem">
+            <article
+              key={group.number}
+              className="service-card"
+              role="listitem"
+              data-reveal="card"
+            >
               <h3 className="service-card-title">
                 <span>{first}</span>
                 <span>{second}</span>
