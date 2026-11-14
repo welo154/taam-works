@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { FormEvent, useMemo, useState } from "react";
+import { DateField, SelectField } from "@/components/consultation/BookingPickers";
 import { contact, serviceGroups } from "@/content/site";
 
 const TIMES = [
@@ -21,19 +21,6 @@ function today() {
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
   return `${now.getFullYear()}-${month}-${day}`;
-}
-
-function Chevron() {
-  return (
-    <Image
-      src="/brand/chevron.svg"
-      alt=""
-      width={11}
-      height={20}
-      className="booking-chevron"
-      aria-hidden="true"
-    />
-  );
 }
 
 type Errors = Partial<Record<"date" | "time" | "service" | "name" | "phone", string>>;
@@ -117,58 +104,27 @@ export function BookingForm({ sourcePage }: { sourcePage: string }) {
   return (
     <form onSubmit={onSubmit} noValidate className="booking-form">
       <div className="booking-row booking-row-3">
-        <label className={`booking-field${errors.date ? " is-invalid" : ""}`}>
-          <span className="sr-only">Date</span>
-          {date ? null : (
-            <span className="booking-placeholder" aria-hidden="true">
-              DATE
-            </span>
-          )}
-          <input
-            type="date"
-            name="preferredDate"
-            min={minDate}
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-            className={date ? "" : "is-empty"}
-            aria-invalid={Boolean(errors.date)}
-          />
-          <Chevron />
-        </label>
-        <label className={`booking-field${errors.time ? " is-invalid" : ""}`}>
-          <span className="sr-only">Time</span>
-          <select
-            name="preferredTime"
-            value={time}
-            onChange={(event) => setTime(event.target.value)}
-            aria-invalid={Boolean(errors.time)}
-          >
-            <option value="">TIME</option>
-            {TIMES.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
-          <Chevron />
-        </label>
-        <label className={`booking-field${errors.service ? " is-invalid" : ""}`}>
-          <span className="sr-only">Service</span>
-          <select
-            name="serviceInterest"
-            value={service}
-            onChange={(event) => setService(event.target.value)}
-            aria-invalid={Boolean(errors.service)}
-          >
-            <option value="">SERVICE</option>
-            {services.map((title) => (
-              <option key={title} value={title}>
-                {title}
-              </option>
-            ))}
-          </select>
-          <Chevron />
-        </label>
+        <DateField
+          label="DATE"
+          value={date}
+          min={minDate}
+          invalid={Boolean(errors.date)}
+          onChange={setDate}
+        />
+        <SelectField
+          label="TIME"
+          value={time}
+          options={TIMES}
+          invalid={Boolean(errors.time)}
+          onChange={setTime}
+        />
+        <SelectField
+          label="SERVICE"
+          value={service}
+          options={services}
+          invalid={Boolean(errors.service)}
+          onChange={setService}
+        />
       </div>
 
       <div className="booking-row booking-row-2">
