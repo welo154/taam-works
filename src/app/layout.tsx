@@ -37,8 +37,8 @@ export const metadata: Metadata = {
   description,
   applicationName: "TaamWorks",
   icons: {
-    icon: [{ url: "/brand/logo-dot.svg", type: "image/svg+xml" }],
-    shortcut: "/brand/logo-dot.svg",
+    icon: [{ url: "/brand/tab-icon.svg", type: "image/svg+xml" }],
+    shortcut: "/brand/tab-icon.svg",
   },
   alternates: { canonical: "./" },
   openGraph: {
