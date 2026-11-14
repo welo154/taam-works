@@ -2504,3 +2504,220 @@ html.motion.motion-failed .idea-media > * {
   translate: none;
   scale: none;
 }
+
+/* ── Let's connect: press feedback and the dialog's entrance / exit ── */
+
+.connect-button:active,
+.consult-nudge-button:active {
+  scale: 0.94;
+}
+
+@keyframes booking-backdrop-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+}
+
+@keyframes booking-panel-in {
+  0% {
+    opacity: 0;
+    translate: 0 70px;
+    scale: 0.86;
+    rotate: -2deg;
+  }
+
+  60% {
+    opacity: 1;
+    scale: 1.015;
+    rotate: 0.3deg;
+  }
+
+  100% {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    rotate: 0deg;
+  }
+}
+
+@keyframes booking-rise {
+  from {
+    opacity: 0;
+    translate: 0 26px;
+  }
+}
+
+@keyframes booking-mark-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes booking-line-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(-40px 0 -40px 0);
+  }
+}
+
+@keyframes booking-pop {
+  0% {
+    opacity: 0;
+    scale: 0.6;
+  }
+
+  70% {
+    opacity: 1;
+    scale: 1.05;
+  }
+
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes booking-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(245 230 0 / 0);
+  }
+
+  50% {
+    box-shadow: 0 0 46px 2px rgb(245 230 0 / 0.28);
+  }
+}
+
+.booking-backdrop {
+  backdrop-filter: blur(6px);
+  animation: booking-backdrop-in 0.45s ease both;
+}
+
+.booking-panel {
+  --ease-out: cubic-bezier(0.16, 0.8, 0.2, 1);
+  animation:
+    booking-panel-in 0.75s var(--ease-out) both,
+    booking-glow 1.6s ease-out 0.35s 1;
+}
+
+/* Contents arrive one after another once the panel has landed. */
+.booking-title-lead,
+.booking-subtitle,
+.booking-note,
+.booking-close {
+  animation: booking-rise 0.7s var(--ease-out) both;
+}
+
+.booking-title-lead {
+  display: inline-block;
+  white-space: pre;
+  animation-delay: 0.22s;
+}
+
+/* The yellow tag wipes in, then its words rise inside it. */
+.booking-title-mark {
+  overflow: hidden;
+  animation: booking-mark-wipe 0.6s var(--ease-out) 0.3s both;
+}
+
+.booking-title-mark > span {
+  display: inline-block;
+  animation: booking-rise 0.6s var(--ease-out) 0.5s both;
+}
+
+.booking-subtitle {
+  animation-delay: 0.42s;
+}
+
+/* Each field draws its underline left to right. */
+.booking-field {
+  animation: booking-line-draw 0.8s var(--ease-out) both;
+}
+
+.booking-row-3 .booking-field:nth-child(1) {
+  animation-delay: 0.5s;
+}
+
+.booking-row-3 .booking-field:nth-child(2) {
+  animation-delay: 0.58s;
+}
+
+.booking-row-3 .booking-field:nth-child(3) {
+  animation-delay: 0.66s;
+}
+
+.booking-row-2 .booking-field:nth-child(1) {
+  animation-delay: 0.74s;
+}
+
+.booking-row-2 .booking-field:nth-child(2) {
+  animation-delay: 0.82s;
+}
+
+.booking-submit {
+  animation: booking-pop 0.7s var(--ease-out) 0.92s both;
+}
+
+.booking-note {
+  animation-delay: 1.05s;
+}
+
+.booking-close {
+  animation-delay: 0.6s;
+  transition:
+    opacity 0.2s,
+    rotate 0.35s cubic-bezier(0.16, 0.8, 0.2, 1);
+}
+
+.booking-close:hover {
+  rotate: 90deg;
+}
+
+.booking-done {
+  animation: booking-pop 0.7s cubic-bezier(0.16, 0.8, 0.2, 1) both;
+}
+
+/* Exit: the panel drops away and the backdrop clears. Keyframes, because a
+   finished entrance animation would otherwise keep overriding the styles. */
+@keyframes booking-panel-out {
+  to {
+    opacity: 0;
+    translate: 0 40px;
+    scale: 0.94;
+  }
+}
+
+@keyframes booking-backdrop-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.booking-overlay.is-closing .booking-panel {
+  animation: booking-panel-out 0.28s cubic-bezier(0.5, 0, 0.8, 0.4) both;
+}
+
+.booking-overlay.is-closing .booking-backdrop {
+  animation: booking-backdrop-out 0.28s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-backdrop,
+  .booking-panel,
+  .booking-panel *,
+  .booking-done {
+    animation: none;
+  }
+
+  .booking-close:hover {
+    rotate: none;
+  }
+}
