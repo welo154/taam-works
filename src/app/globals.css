@@ -2112,99 +2112,175 @@ button:focus-visible {
   }
 }
 
-/* ── First-visit "book your free consultation" notice ── */
+/* ── First-visit "free consultation" notice ──
+   One line of text in a small shape. Three looks, chosen in content/site.ts:
+   pill (yellow), line (dark, outlined) and tab (on the right screen edge). */
 
 .consult-nudge {
   position: fixed;
   right: 20px;
   bottom: 20px;
   z-index: 40;
-  width: min(330px, calc(100vw - 40px));
-  padding: 22px 24px;
-  border: 1px solid var(--yellow);
-  border-radius: 30px;
-  background: #000;
-  color: var(--cream);
+  display: flex;
+  align-items: center;
+  max-width: calc(100vw - 32px);
+  border-radius: 999px;
   font-family: var(--font-acumin), "Acumin Pro", "Segoe UI", sans-serif;
-  box-shadow: 0 18px 60px rgb(0 0 0 / 0.55);
-  animation: consult-nudge-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  box-shadow: 0 12px 36px rgb(0 0 0 / 0.45);
+  animation: consult-nudge-in 0.6s cubic-bezier(0.2, 1.2, 0.35, 1) both;
 }
 
 @keyframes consult-nudge-in {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    translate: 0 20px;
+    scale: 0.92;
   }
 }
 
+.consult-nudge-open,
 .consult-nudge-close {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
   border: 0;
   background: transparent;
-  color: var(--cream);
-  font-size: 24px;
-  line-height: 1;
-  opacity: 0.6;
+  color: inherit;
+  font: inherit;
   cursor: pointer;
+}
+
+.consult-nudge-open {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 3px 4px 0 18px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.consult-nudge-mark {
+  font-weight: 700;
+}
+
+.consult-nudge-arrow {
+  transition: translate 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.consult-nudge-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 42px;
+  padding: 0 6px 0 0;
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.55;
 }
 
 .consult-nudge-close:hover {
   opacity: 1;
 }
 
-.consult-nudge-title {
-  margin: 0;
-  padding-right: 20px;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+@media (hover: hover) {
+  .consult-nudge-open:hover .consult-nudge-arrow {
+    translate: 4px 0;
+  }
 }
 
-.consult-nudge-mark {
+/* Pill: solid yellow. */
+.consult-nudge-pill {
+  background: var(--yellow);
+  color: #000;
+}
+
+/* Line: dark, thin yellow outline, the word "free" highlighted. */
+.consult-nudge-line {
+  border: 1px solid var(--yellow);
+  background: #000;
+  color: var(--cream);
+}
+
+.consult-nudge-line .consult-nudge-mark {
   display: inline-block;
   padding: 3px 4px 0;
+  margin-top: -3px;
   background: var(--yellow);
   color: #000;
-  line-height: 0.95;
 }
 
-.consult-nudge-text {
-  margin: 10px 0 0;
-  font-size: 15px;
-  line-height: 1.3;
-  opacity: 0.7;
-}
-
-.consult-nudge-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 46px;
-  margin-top: 16px;
-  border: 0;
-  border-radius: 50px;
+/* Tab: sits on the right edge, text running up the side. */
+.consult-nudge-tab {
+  top: 50%;
+  right: 0;
+  bottom: auto;
+  flex-direction: column-reverse;
+  border-radius: 12px 0 0 12px;
   background: var(--yellow);
   color: #000;
-  font: inherit;
-  font-size: 22px;
-  letter-spacing: -1.4px;
-  cursor: pointer;
-  transition: transform 0.2s;
+  translate: 0 -50%;
+  animation-name: consult-nudge-tab-in;
 }
 
-.consult-nudge-button > span {
-  transform: translateY(2px);
+@keyframes consult-nudge-tab-in {
+  from {
+    opacity: 0;
+    translate: 100% -50%;
+  }
 }
 
-.consult-nudge-button:hover {
-  transform: scale(1.02);
+.consult-nudge-tab .consult-nudge-open {
+  width: 38px;
+  height: auto;
+  padding: 4px 0 14px 3px;
+  font-size: 14px;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+}
+
+.consult-nudge-tab .consult-nudge-close {
+  width: 38px;
+  height: 30px;
+  padding: 4px 0 0;
+}
+
+@media (max-width: 767px) {
+  .consult-nudge {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .consult-nudge-open {
+    height: 40px;
+    padding-left: 16px;
+    font-size: 13.5px;
+  }
+
+  .consult-nudge-close {
+    height: 40px;
+  }
+
+  .consult-nudge-tab {
+    right: 0;
+    bottom: auto;
+  }
+
+  .consult-nudge-tab .consult-nudge-open {
+    width: 28px;
+    height: auto;
+    padding: 4px 0 10px 2px;
+    font-size: 12px;
+  }
+
+  .consult-nudge-tab .consult-nudge-close {
+    width: 28px;
+    height: 26px;
+    font-size: 17px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2536,7 +2612,7 @@ html.motion.motion-failed .idea-media > * {
 /* ── Let's connect: press feedback and the dialog's entrance / exit ── */
 
 .connect-button:active,
-.consult-nudge-button:active {
+.consult-nudge-open:active {
   scale: 0.94;
 }
 

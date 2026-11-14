@@ -242,6 +242,13 @@ export const worksIntro = {
   lead: "A closer look at what we do, how we think, and what we bring to life. A selection of identities, ideas, and experiences shaped through our work.",
 } as const;
 
+export type NudgeVariant = "pill" | "line" | "tab";
+
+/** Look of the small first-visit "free consultation" notice. */
+export const consultationNudge: { variant: NudgeVariant } = {
+  variant: "pill",
+};
+
 export const consultation = {
   title: "Book a free consultation",
   lead: "Tell us a little about the work. This sends a request — it is not a confirmed appointment.",
