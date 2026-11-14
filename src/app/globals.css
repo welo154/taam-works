@@ -1295,10 +1295,6 @@ button:focus-visible {
     padding-inline: calc(var(--m) * 24);
   }
 
-  .works-page .site-shell > .grid > :nth-child(n + 4) {
-    display: none;
-  }
-
   .relative:has(.works-page) .page-close .let-taam-section {
     padding-top: calc(var(--m) * 271);
   }

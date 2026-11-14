@@ -153,7 +153,12 @@ export function toProject({ row, assets, rows }: LoadedProject): Project {
     }
   }
   const labels = [row.title.toUpperCase()];
-  if (row.card_meta) labels.push(row.card_meta);
+  // "EVENT, MALAYSIA, 2025" becomes three labels spread across the card.
+  const meta = (row.card_meta ?? "")
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (meta.length > 0) labels.push(...meta);
   else if (row.project_year) labels.push(String(row.project_year));
 
   return {
