@@ -222,7 +222,7 @@ export function BookingForm({ sourcePage }: { sourcePage: string }) {
       ) : null}
 
       <button type="submit" disabled={pending} className="booking-submit">
-        <span>{pending ? "SENDING…" : "LET’S CONNECT"}</span>
+        <span>{pending ? "SENDING…" : "BOOK NOW"}</span>
       </button>
       <p className="booking-note">
         Please provide your information and someone will contact you confirming
