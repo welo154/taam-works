@@ -2936,3 +2936,31 @@ html.motion.motion-failed .idea-media > * {
     translate: calc(var(--m) * 12) 0;
   }
 }
+
+/* A pill without a destination answers "COMING SOON" when pressed. */
+@keyframes hero-label-text-in {
+  from {
+    opacity: 0;
+    translate: 0 0.35em;
+  }
+}
+
+.hero-label .hero-label-text {
+  display: inline-block;
+  animation: hero-label-text-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.hero-label.is-soon {
+  padding-inline: 0;
+}
+
+.hero-label.is-soon .hero-label-text {
+  scale: 0.78;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-label .hero-label-text {
+    animation: none;
+  }
+}
