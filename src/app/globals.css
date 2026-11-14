@@ -426,12 +426,12 @@ button:focus-visible {
 }
 
 .works-page .site-shell {
-  width: min(1340px, calc(100cqw - 50px));
+  /* The 1340px grid of the 1440 frame, centred like the header and home page,
+     so the left and right margins always match. */
+  width: min(1340px, calc(100% - 2 * var(--space-gutter)));
   max-width: none;
   margin-top: 152px;
-  /* 50px from the page's left edge, outside the centered 1440 frame. */
-  margin-left: calc(50px - max(0px, (100cqw - var(--page-width)) / 2));
-  margin-right: 0;
+  margin-inline: auto;
   padding-inline: 0;
 }
 
