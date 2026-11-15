@@ -26,13 +26,13 @@ const acuminPro = localFont({
 });
 
 const description =
-  "TAAM Works (taamworks) is an interdisciplinary studio based in London, working across design, technology, events, experiences, and spaces.";
+  "TAAM Works (TAAM, taamworks) is an interdisciplinary studio based in London, working across design, technology, events, experiences, and spaces.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "TaamWorks",
-    template: "%s · TaamWorks",
+    default: "TAAM Works — Design, Technology, Events & Spaces Studio",
+    template: "%s · TAAM Works",
   },
   description,
   applicationName: "TaamWorks",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "./" },
   openGraph: {
     type: "website",
-    siteName: "TaamWorks",
+    siteName: "TAAM Works",
     locale: "en_GB",
     title: "TaamWorks",
     description,

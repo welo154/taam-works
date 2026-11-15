@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   description: worksIntro.lead,
 };
 
-export const dynamic = "force-dynamic";
+// Rebuilt at most every five minutes; dashboard saves refresh it at once.
+export const revalidate = 300;
 
 export default async function WorksPage() {
   const result = await getWorksProjects();

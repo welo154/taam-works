@@ -1,7 +1,25 @@
+import { unstable_cache } from "next/cache";
 import { fixtureProjects } from "@/content/fixtures/projects";
 import type { NextProjectDto } from "@/lib/projects/next-project";
-import { getPublishedBySlug, listPublished } from "@/lib/projects/db";
+import {
+  getPublishedBySlug as readPublishedBySlug,
+  listPublished as readPublished,
+} from "@/lib/projects/db";
 import type { Project, ProjectCardPlacement } from "@/lib/projects/types";
+
+/**
+ * Public reads are cached for five minutes so pages can be served from the
+ * edge instead of waiting on the database for every visitor and crawler.
+ * Dashboard changes clear the cache at once (see PROJECTS_TAG in actions.ts).
+ */
+export const PROJECTS_TAG = "projects";
+const CACHE = { revalidate: 300, tags: [PROJECTS_TAG] };
+const listPublished = unstable_cache(readPublished, ["projects-list"], CACHE);
+const getPublishedBySlug = unstable_cache(
+  readPublishedBySlug,
+  ["projects-by-slug"],
+  CACHE,
+);
 
 export type ProjectLoadResult<T> =
   | { ok: true; data: T }

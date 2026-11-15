@@ -60,6 +60,8 @@ export type Project = {
   showOnHome: boolean;
   homeOrder: number;
   homeLayout: ProjectLayout;
+  /** When the project was last edited, as an ISO date. */
+  updatedAt?: string;
   seoTitle?: string;
   seoDescription?: string;
 };

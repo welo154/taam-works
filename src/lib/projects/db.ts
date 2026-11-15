@@ -180,6 +180,7 @@ export function toProject({ row, assets, rows }: LoadedProject): Project {
     showOnHome: row.show_on_home,
     homeOrder: row.home_order,
     homeLayout: row.home_layout,
+    updatedAt: row.updated_at,
     seoTitle: row.seo_title ?? undefined,
     seoDescription: row.seo_description ?? undefined,
   };

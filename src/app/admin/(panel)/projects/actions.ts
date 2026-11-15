@@ -1,7 +1,7 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { fixtureProjects } from "@/content/fixtures/projects";
 import { isAdmin } from "@/lib/admin-session";
 import {
@@ -34,6 +34,13 @@ const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const LAYOUTS: ProjectLayout[] = ["third", "half", "wide", "full"];
 const RESERVED_SLUGS = new Set(["idea", "new"]);
+/** Publish dashboard changes to the public site straight away. */
+function refreshSite() {
+  revalidateTag("projects", { expire: 0 });
+  revalidatePath("/admin/projects");
+  revalidatePath("/", "layout");
+}
+
 const SIGNED_OUT = "You are not signed in to the dashboard.";
 
 async function requireAdmin() {
@@ -265,7 +272,7 @@ async function saveProjectUnsafe(input: EditorProject): Promise<SaveResult> {
     );
   }
 
-  revalidatePath("/admin/projects");
+  refreshSite();
   return { ok: true, id, slug };
 }
 
@@ -289,7 +296,7 @@ export async function updatePlacement(formData: FormData) {
     home_layout: pick("homeLayout"),
     works_layout: pick("worksLayout"),
   });
-  revalidatePath("/admin/projects");
+  refreshSite();
 }
 
 export async function moveProject(formData: FormData) {
@@ -311,7 +318,7 @@ export async function moveProject(formData: FormData) {
       dbUpdate(`projects?id=eq.${project.id}`, { [column]: index + 1 }),
     ),
   );
-  revalidatePath("/admin/projects");
+  refreshSite();
 }
 
 export async function setStatus(formData: FormData) {
@@ -326,7 +333,7 @@ export async function setStatus(formData: FormData) {
     if (!project?.cover_asset_id) return;
   }
   await dbUpdate(`projects?id=eq.${id}`, { status });
-  revalidatePath("/admin/projects");
+  refreshSite();
 }
 
 export async function deleteProject(formData: FormData) {
@@ -344,5 +351,5 @@ export async function deleteProject(formData: FormData) {
   await removeStorageObjects(assets.map((asset) => asset.object_path)).catch(
     () => undefined,
   );
-  revalidatePath("/admin/projects");
+  refreshSite();
 }
