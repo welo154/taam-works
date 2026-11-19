@@ -17,7 +17,6 @@ const homeDescription =
 export const metadata: Metadata = {
   title: { absolute: homeTitle },
   description: homeDescription,
-  alternates: { canonical: "/" },
   openGraph: {
     title: homeTitle,
     description: homeDescription,

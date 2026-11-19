@@ -9,12 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const entries: MetadataRoute.Sitemap = [
-    {
-      url: `${siteUrl}/`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 1,
-    },
+    { url: siteUrl, lastModified: now, changeFrequency: "monthly", priority: 1 },
     {
       url: `${siteUrl}/works`,
       lastModified: now,
@@ -22,29 +17,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/connect`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
       url: `${siteUrl}/works/idea`,
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${siteUrl}/connect`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.5,
+    },
   ];
 
-  const seen = new Set(entries.map((entry) => entry.url));
   const works = await getWorksProjects();
   if (works.ok) {
     for (const { project } of works.data) {
-      const url = `${siteUrl}/works/${project.slug}`;
-      if (seen.has(url)) continue;
-      seen.add(url);
-      const cover = project.cover?.src;
+      if (project.slug === "idea") continue;
+      const cover = project.cover.src;
       entries.push({
-        url,
+        url: `${siteUrl}/works/${project.slug}`,
         lastModified: now,
         changeFrequency: "monthly",
         priority: 0.8,
