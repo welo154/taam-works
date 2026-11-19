@@ -10,9 +10,9 @@ import { StudioIntro } from "@/components/site/StudioIntro";
 import { getHomeProjects } from "@/lib/projects/queries";
 import { isComingSoon } from "@/lib/coming-soon";
 
-const homeTitle = "TAAM Works — Design, Technology, Events & Spaces Studio";
+const homeTitle = "TaamWorks - Design Studio";
 const homeDescription =
-  "TAAM Works (TAAM, taamworks) is an interdisciplinary studio in London for design, technology, events, and spaces. We build brand identities, digital products, exhibitions, and experiences.";
+  "TAAM (TaamWorks) is a design studio in London for branding, technology, events, and spaces. Search TAAM or taamworks for identities, digital products, exhibitions, and experiences.";
 
 export const metadata: Metadata = {
   title: { absolute: homeTitle },
@@ -38,8 +38,7 @@ export default async function HomePage() {
       <div className="coming-soon-home">
         <section className="hero-frame" aria-label="Hero">
           <h1 className="sr-only">
-            TAAM Works — interdisciplinary studio for design, technology,
-            events, and spaces in London
+            TAAM — TaamWorks design studio in London
           </h1>
           <Image
             src="/brand/taam-wordmark.png"
@@ -63,8 +62,7 @@ export default async function HomePage() {
     <>
       <section className="hero-frame" aria-label="Hero">
         <h1 className="sr-only">
-          TAAM Works — interdisciplinary studio for design, technology,
-          events, and spaces in London
+          TAAM — TaamWorks design studio in London
         </h1>
         <Image
           src="/brand/taam-wordmark.png"

@@ -21,12 +21,13 @@ export default function PublicLayout({
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Organization",
-        name: siteMeta.name,
-        alternateName: ["TAAM", "taamworks", "TAAM Works"],
+        "@type": ["Organization", "ProfessionalService"],
+        name: "TaamWorks",
+        alternateName: ["TAAM", "taamworks", "TAAM Works", siteMeta.name],
         url: siteUrl,
         logo: `${siteUrl}/brand/taam-wordmark.png`,
-        description: `${siteMeta.name} is ${studioIntro.lead.replace(/\n/g, " ")} ${studioIntro.body}`,
+        description:
+          "TAAM (TaamWorks) is a design studio in London for branding, technology, events, and spaces.",
         email: contact.email,
         telephone: contact.phone,
         address: {
@@ -34,12 +35,20 @@ export default function PublicLayout({
           addressLocality: "London",
           addressCountry: "GB",
         },
+        areaServed: "GB",
+        knowsAbout: [
+          "design studio",
+          "brand identity",
+          "TAAM",
+          "taamworks",
+        ],
       },
       {
         "@type": "WebSite",
-        name: siteMeta.name,
-        alternateName: ["TAAM", "taamworks"],
+        name: "TaamWorks",
+        alternateName: ["TAAM", "taamworks", "TAAM Works"],
         url: siteUrl,
+        description: "TaamWorks - Design Studio",
       },
     ],
   };
