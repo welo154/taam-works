@@ -16,7 +16,12 @@ export function ConnectSection({
   const { open } = useConsultation();
 
   const button = (
-    <button type="button" onClick={open} className="connect-button">
+    <button
+      type="button"
+      onClick={open}
+      className="connect-button"
+      data-reveal="pop"
+    >
       <span className="connect-button-label">{connectCta}</span>
     </button>
   );

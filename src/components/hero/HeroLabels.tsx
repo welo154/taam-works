@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useConsultation } from "@/components/consultation/ConsultationContext";
 import { heroNav, type NavItem } from "@/content/site";
 
@@ -15,6 +16,39 @@ type HeroLabelsProps = {
   /** Coming-soon gate: keep the pills visual, remove destinations. */
   locked?: boolean;
 };
+
+const SOON_MS = 2200;
+
+/** A pill with no destination yet: pressing it answers "COMING SOON". */
+function SoonLabel({ label, className }: { label: string; className: string }) {
+  const [soon, setSoon] = useState(false);
+
+  useEffect(() => {
+    if (!soon) return;
+    const timer = window.setTimeout(() => setSoon(false), SOON_MS);
+    return () => window.clearTimeout(timer);
+  }, [soon]);
+
+  return (
+    <button
+      type="button"
+      className={`${className}${soon ? " is-soon" : ""}`}
+      aria-label={`${label} — coming soon`}
+      onClick={(event) => {
+        // Hold the pill at its current width while the text changes.
+        event.currentTarget.style.width = `${event.currentTarget.offsetWidth}px`;
+        setSoon(true);
+      }}
+    >
+      <span key={soon ? "soon" : "label"} className="hero-label-text">
+        {soon ? "COMING SOON" : label}
+      </span>
+      <span className="sr-only" role="status">
+        {soon ? "Coming soon" : ""}
+      </span>
+    </button>
+  );
+}
 
 function showComingSoon() {
   const target = document.getElementById("coming-soon");
@@ -52,13 +86,7 @@ export function HeroLabels({ locked = false }: HeroLabelsProps) {
 
         if (!item.href) {
           return (
-            <span
-              key={item.id}
-              className={className}
-              aria-label={`${item.label} (destination forthcoming)`}
-            >
-              {item.label}
-            </span>
+            <SoonLabel key={item.id} label={item.label} className={className} />
           );
         }
 

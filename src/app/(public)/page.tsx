@@ -10,9 +10,9 @@ import { StudioIntro } from "@/components/site/StudioIntro";
 import { getHomeProjects } from "@/lib/projects/queries";
 import { isComingSoon } from "@/lib/coming-soon";
 
-const homeTitle = "TaamWorks";
+const homeTitle = "TAAM Works — Design, Technology, Events & Spaces Studio";
 const homeDescription =
-  "TAAM Works (taamworks.com) is a London studio for design, technology, events, and spaces. TAAM builds identities, exhibitions, and experiences.";
+  "TAAM Works (TAAM, taamworks) is an interdisciplinary studio in London for design, technology, events, and spaces. We build brand identities, digital products, exhibitions, and experiences.";
 
 export const metadata: Metadata = {
   title: { absolute: homeTitle },
@@ -28,7 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = "force-dynamic";
+// Rebuilt at most every five minutes; dashboard saves refresh it at once.
+export const revalidate = 300;
 
 export default async function HomePage() {
   if (isComingSoon()) {
@@ -89,7 +90,7 @@ export default async function HomePage() {
                 placements={homeProjects.data}
                 labelledBy="selected-work-heading"
               />
-              <Link href="/works" className="works-view-all">
+              <Link href="/works" className="works-view-all" data-reveal>
                 <span className="works-view-all-label">VIEW ALL</span>
               </Link>
             </>

@@ -3,7 +3,7 @@ import { contact, siteMeta } from "@/content/site";
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <div className="site-footer-cluster">
+      <div className="site-footer-cluster" data-reveal>
         <div className="site-footer-contact">
           <a href={`mailto:${contact.email}`}>{contact.email}</a>
           <a href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}>
@@ -23,7 +23,7 @@ export function SiteFooter() {
           </a>
         </div>
       </div>
-      <p className="site-footer-copy">©{siteMeta.copyrightYear} TAAMWORKS</p>
+      <p className="site-footer-copy" data-reveal>©{siteMeta.copyrightYear} TAAMWORKS</p>
     </footer>
   );
 }

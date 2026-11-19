@@ -1,5 +1,7 @@
 import { ConsultationProvider } from "@/components/consultation/ConsultationContext";
 import { ConsultationModal } from "@/components/consultation/ConsultationModal";
+import { ConsultationNudge } from "@/components/consultation/ConsultationNudge";
+import { ScrollMotion } from "@/components/motion/ScrollMotion";
 import { ConnectSection } from "@/components/site/ConnectSection";
 import { LetTaamWork } from "@/components/site/LetTaamWork";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -61,7 +63,13 @@ export default function PublicLayout({
           </>
         )}
       </div>
-      {comingSoon ? null : <ConsultationModal />}
+      {comingSoon ? null : (
+        <>
+          <ConsultationModal />
+          <ConsultationNudge />
+          <ScrollMotion />
+        </>
+      )}
     </ConsultationProvider>
   );
 }

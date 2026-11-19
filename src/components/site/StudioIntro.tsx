@@ -7,7 +7,7 @@ export function StudioIntro() {
       className="studio-intro scroll-mt-[var(--header-offset)]"
       aria-labelledby="studio-intro-label"
     >
-      <div className="studio-intro-mark">
+      <div className="studio-intro-mark" data-reveal="wipe">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="226"
@@ -58,8 +58,12 @@ export function StudioIntro() {
         </h2>
       </div>
       <div className="studio-intro-copy">
-        <p className="studio-intro-lead">{studioIntro.lead}</p>
-        <p className="studio-intro-body">{studioIntro.body}</p>
+        <p className="studio-intro-lead" data-scroll-words>
+          {studioIntro.lead}
+        </p>
+        <p className="studio-intro-body" data-scroll-words>
+          {studioIntro.body}
+        </p>
       </div>
     </section>
   );

@@ -26,24 +26,24 @@ const acuminPro = localFont({
 });
 
 const description =
-  "TAAM Works (taamworks) is an interdisciplinary studio based in London, working across design, technology, events, experiences, and spaces.";
+  "TAAM Works (TAAM, taamworks) is an interdisciplinary studio based in London, working across design, technology, events, experiences, and spaces.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "TaamWorks",
-    template: "%s · TaamWorks",
+    default: "TAAM Works — Design, Technology, Events & Spaces Studio",
+    template: "%s · TAAM Works",
   },
   description,
   applicationName: "TaamWorks",
   icons: {
-    icon: [{ url: "/brand/logo-dot.svg", type: "image/svg+xml" }],
-    shortcut: "/brand/logo-dot.svg",
+    icon: [{ url: "/brand/tab-icon.svg", type: "image/svg+xml" }],
+    shortcut: "/brand/tab-icon.svg",
   },
   alternates: { canonical: "./" },
   openGraph: {
     type: "website",
-    siteName: "TaamWorks",
+    siteName: "TAAM Works",
     locale: "en_GB",
     title: "TaamWorks",
     description,
@@ -71,9 +71,17 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${acuminPro.variable} ${koSans.variable} h-full antialiased`}
+      // The inline script below adds the `motion` class before hydration.
+      suppressHydrationWarning
     >
       {/* suppressHydrationWarning: browser extensions (e.g. Grammarly) inject attributes on <body>. */}
       <body className="min-h-full bg-bg text-cream" suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('motion');setTimeout(function(){if(!window.__motionReady)document.documentElement.classList.add('motion-failed')},4000)",
+          }}
+        />
         <div className="site-frame">{children}</div>
       </body>
     </html>

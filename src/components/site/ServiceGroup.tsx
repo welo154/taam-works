@@ -1,5 +1,12 @@
 import { serviceGroups } from "@/content/site";
-import { ServiceCopy } from "@/components/site/ServiceCopy";
+import { ServicesCarousel } from "@/components/site/ServicesCarousel";
+
+/** Card titles break onto two lines exactly as in the Figma cards. */
+function titleLines(number: string, title: string): [string, string] {
+  const words = title.split(" ");
+  if (words.length === 1) return [number, title];
+  return [`${number} ${words[0]}`, words.slice(1).join(" ")];
+}
 
 export function ServiceGroups() {
   return (
@@ -8,28 +15,38 @@ export function ServiceGroups() {
       className="services-section scroll-mt-[var(--header-offset)]"
       aria-labelledby="services-heading"
     >
-      <h2 id="services-heading" className="sr-only">
-        Services
+      <div className="services-sticky">
+      <h2 id="services-heading" className="services-heading">
+        <span className="services-heading-label" data-reveal="wipe">SERVICES</span>
       </h2>
-      <div className="flex flex-col">
-        {serviceGroups.map((group) => (
-          <article key={group.number} className="service-group">
-            <h3
-              className={
-                group.badgeLines.length > 1
-                  ? "service-badge service-badge-stack"
-                  : "service-badge"
-              }
+      <ServicesCarousel>
+        {serviceGroups.map((group) => {
+          const [first, second] = titleLines(group.number, group.title);
+          return (
+            <article
+              key={group.number}
+              className="service-card"
+              role="listitem"
+              data-reveal="card"
             >
-              {group.badgeLines.map((line) => (
-                <span key={line} className="service-badge-label">
-                  {line}
-                </span>
-              ))}
-            </h3>
-            <ServiceCopy intro={group.intro} items={group.items} />
-          </article>
-        ))}
+              <h3 className="service-card-title">
+                <span>{first}</span>
+                <span>{second}</span>
+              </h3>
+              <ol className="service-card-list">
+                {group.items.map((item, index) => (
+                  <li key={item.title}>
+                    <span aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span>{item.title}</span>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          );
+        })}
+      </ServicesCarousel>
       </div>
     </section>
   );

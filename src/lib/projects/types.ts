@@ -37,6 +37,9 @@ export type Project = {
   id: string;
   slug: string;
   title: string;
+  /** Arabic title and paragraph for the project page, when supplied. */
+  titleAr?: string;
+  descriptionAr?: string;
   projectYear: number | null;
   description: string;
   tags: string[];
@@ -57,6 +60,8 @@ export type Project = {
   showOnHome: boolean;
   homeOrder: number;
   homeLayout: ProjectLayout;
+  /** When the project was last edited, as an ISO date. */
+  updatedAt?: string;
   seoTitle?: string;
   seoDescription?: string;
 };

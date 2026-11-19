@@ -39,12 +39,13 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
       >
         <div
           className={`project-card-label${project.captionItalic ? " project-card-label-italic" : ""}`}
+          data-reveal
         >
           {labels.map((label, index) => (
             <span key={`${label}-${index}`}>{label}</span>
           ))}
         </div>
-        <div className="overflow-hidden bg-cream/5">
+        <div className="project-cover overflow-hidden bg-cream/5" data-reveal="clip">
           <ProjectImage
             src={cover.src}
             alt={cover.alt}
