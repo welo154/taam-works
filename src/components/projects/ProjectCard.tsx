@@ -63,9 +63,6 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
                     : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             }
           />
-          {project.comingSoon || project.media.length === 0 ? (
-            <span className="project-coming-badge">Coming soon</span>
-          ) : null}
         </div>
       </Link>
     </article>
