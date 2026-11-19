@@ -110,10 +110,7 @@ export default async function ProjectPage({ params }: PageProps) {
         tags={project.tags}
       />
       {showsComingSoon(project) ? (
-        <ProjectComingSoonCase
-          project={project}
-          nextSlug={next.kind === "project" ? next.slug : null}
-        />
+        <ProjectComingSoonCase project={project} />
       ) : (
         <ProjectCase
           project={caseFromProject(project)}

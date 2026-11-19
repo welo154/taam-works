@@ -891,23 +891,21 @@ button:focus-visible {
   pointer-events: none;
 }
 
-.project-coming-media {
+.project-coming-screen {
   display: flex;
   flex-direction: column;
-  gap: 0;
-}
-
-.project-coming-cover {
-  margin-top: 42px;
-}
-
-.project-coming-soon {
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.85rem, 1.5vw, 1.35rem);
   box-sizing: border-box;
-  width: min(719px, 100%);
-  margin-top: 48px;
-  margin-bottom: 64px;
-  padding: clamp(2.5rem, 6vw, 4rem) 0;
-  border-top: 0.5px solid color-mix(in srgb, var(--cream) 35%, transparent);
+  min-height: calc(100dvh - 74px);
+  padding: clamp(3rem, 8vw, 6rem) var(--space-gutter);
+  text-align: center;
+}
+
+.relative:has(.project-coming-screen) .page-close,
+.relative:has(.project-coming-screen) .site-footer {
+  display: none;
 }
 
 .project-coming-kicker {
@@ -921,10 +919,10 @@ button:focus-visible {
 }
 
 .project-coming-title {
-  margin: 0.85rem 0 0;
+  margin: 0;
   color: var(--cream);
   font-family: var(--font-acumin), "Segoe UI", sans-serif;
-  font-size: clamp(2.75rem, 1.6rem + 4vw, 5rem);
+  font-size: clamp(3rem, 1.8rem + 6vw, 6.5rem);
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.05em;
@@ -932,8 +930,8 @@ button:focus-visible {
 }
 
 .project-coming-lead {
-  margin: 1.25rem 0 0;
-  max-width: 28rem;
+  margin: 0;
+  max-width: 26rem;
   color: var(--gray);
   font-family: var(--font-acumin), "Segoe UI", sans-serif;
   font-size: clamp(1rem, 0.92rem + 0.35vw, 1.25rem);
