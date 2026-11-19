@@ -216,9 +216,11 @@ function SlotStatus({ slot }: { slot: Slot }) {
 export function ProjectEditor({
   initial,
   migrated,
+  comingSoonReady = true,
 }: {
   initial: EditorProject;
   migrated: boolean;
+  comingSoonReady?: boolean;
 }) {
   const router = useRouter();
   const coverInput = useRef<HTMLInputElement>(null);
@@ -232,6 +234,7 @@ export function ProjectEditor({
   const [tags, setTags] = useState(initial.tags.join(", "));
   const [cardMeta, setCardMeta] = useState(initial.cardMeta);
   const [showOnHome, setShowOnHome] = useState(initial.showOnHome);
+  const [comingSoon, setComingSoon] = useState(initial.comingSoon);
   const [homeLayout, setHomeLayout] = useState<ProjectLayout>(initial.homeLayout);
   const [worksLayout, setWorksLayout] = useState<ProjectLayout>(initial.worksLayout);
   const [cover, setCover] = useState<Slot | null>(
@@ -368,6 +371,7 @@ export function ProjectEditor({
       rows: rows.map((row) => ({
         items: row.slots.flatMap((slot) => (slot.media ? [withAlt(slot.media)] : [])),
       })),
+      comingSoon,
       showOnHome,
       homeLayout,
       worksLayout,
@@ -389,6 +393,14 @@ export function ProjectEditor({
           Arabic text and the Wide card size are switched off until the database
           update in <code>supabase/migrations/20261113000001_bilingual_wide.sql</code>{" "}
           is run in the Supabase SQL Editor.
+        </p>
+      ) : null}
+      {!comingSoonReady ? (
+        <p className="rounded-2xl border border-yellow/40 bg-yellow/10 px-5 py-4 text-sm text-yellow">
+          The Coming soon checkbox will save after you run{" "}
+          <code>supabase/migrations/20261119000001_coming_soon.sql</code> in the
+          Supabase SQL Editor. Cover-only projects still open as Coming soon on
+          the public site.
         </p>
       ) : null}
 
@@ -521,6 +533,21 @@ export function ProjectEditor({
                 onChange={(e) => setShowOnHome(e.target.checked)}
               />
               Show on the homepage
+            </label>
+            <label className="flex items-start gap-3 self-end rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-neutral-200 sm:col-span-2">
+              <input
+                type="checkbox"
+                className="mt-0.5 accent-[#f5e600]"
+                checked={comingSoon}
+                onChange={(e) => setComingSoon(e.target.checked)}
+              />
+              <span>
+                <span className="block font-medium text-cream">Coming soon</span>
+                <span className="mt-0.5 block text-neutral-400">
+                  Public project page shows the cover and a Coming soon state
+                  until the media stack is ready.
+                </span>
+              </span>
             </label>
             <label className={label}>
               Size on the homepage

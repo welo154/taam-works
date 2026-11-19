@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectEditor } from "@/app/admin/(panel)/projects/ProjectEditor";
 import {
+  comingSoonColumnApplied,
   loadProjects,
   migrationApplied,
   type AssetRow,
@@ -42,9 +43,10 @@ export default async function EditProjectPage({
 }) {
   const { id } = await params;
   if (!UUID.test(id)) notFound();
-  const [[loaded], migrated] = await Promise.all([
+  const [[loaded], migrated, comingSoonReady] = await Promise.all([
     loadProjects(`id=eq.${id}`),
     migrationApplied(),
+    comingSoonColumnApplied(),
   ]);
   if (!loaded) notFound();
 
@@ -80,6 +82,7 @@ export default async function EditProjectPage({
       </h1>
       <ProjectEditor
         migrated={migrated}
+        comingSoonReady={comingSoonReady}
         initial={{
           id: row.id,
           isNew: false,
@@ -94,6 +97,7 @@ export default async function EditProjectPage({
           status: row.status,
           cover: cover ? toEditorMedia(cover, assets) : null,
           rows: stack,
+          comingSoon: Boolean(row.coming_soon) || stack.length === 0,
           showOnHome: row.show_on_home,
           homeLayout: row.home_layout,
           worksLayout: row.works_layout,

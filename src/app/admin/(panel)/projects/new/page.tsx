@@ -2,13 +2,16 @@ import { randomUUID } from "node:crypto";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProjectEditor } from "@/app/admin/(panel)/projects/ProjectEditor";
-import { migrationApplied } from "@/lib/projects/db";
+import { comingSoonColumnApplied, migrationApplied } from "@/lib/projects/db";
 
 export const metadata: Metadata = { title: "Add project" };
 export const dynamic = "force-dynamic";
 
 export default async function NewProjectPage() {
-  const migrated = await migrationApplied();
+  const [migrated, comingSoonReady] = await Promise.all([
+    migrationApplied(),
+    comingSoonColumnApplied(),
+  ]);
   return (
     <div>
       <Link
@@ -25,6 +28,7 @@ export default async function NewProjectPage() {
       </h1>
       <ProjectEditor
         migrated={migrated}
+        comingSoonReady={comingSoonReady}
         initial={{
           id: randomUUID(),
           isNew: true,
@@ -39,6 +43,7 @@ export default async function NewProjectPage() {
           status: "draft",
           cover: null,
           rows: [],
+          comingSoon: true,
           showOnHome: false,
           homeLayout: "third",
           worksLayout: "third",

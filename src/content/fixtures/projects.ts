@@ -47,6 +47,7 @@ export const fixtureProjects: Project[] = [
     cardMeta: "CAI",
     homeLabels: ["TECH VALLEY", "CAI"],
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-tech-valley",
       "tech-valley.jpg",
@@ -84,6 +85,7 @@ export const fixtureProjects: Project[] = [
     cardMeta: "AMM",
     homeLabels: ["IDEA", "AMM"],
     status: "published",
+    comingSoon: false,
     cover: figmaCover("cover-idea", "idea-card.png", 434, 455, "IDEA project cover"),
     media: [
       {
@@ -120,6 +122,7 @@ export const fixtureProjects: Project[] = [
     cardMeta: "2026",
     homeLabels: ["EVENTS", "2026"],
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-events",
       "events.png",
@@ -151,6 +154,7 @@ export const fixtureProjects: Project[] = [
     cardMeta: "EVENT",
     homeLabels: ["MULTAQA ALKHATT", "EVENT", "MALAYSIA", "2025"],
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-featured",
       "multaqa-alkhatt.png",
@@ -194,6 +198,7 @@ export const fixtureProjects: Project[] = [
     tags: ["Branding", "Digital"],
     homeLabels: ["TECH VALLEY", "TECH VALLEY"],
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-tech-valley-wide",
       "tech-valley.jpg",
@@ -219,6 +224,7 @@ export const fixtureProjects: Project[] = [
     homeLabels: ["EVENTS", "2026"],
     captionItalic: true,
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-events-side",
       "events.png",
@@ -244,6 +250,7 @@ export const fixtureProjects: Project[] = [
     cardMeta: "CAI",
     homeLabels: ["TECH VALLEY", "CAI"],
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-tech-valley-below",
       "tech-valley.jpg",
@@ -269,6 +276,7 @@ export const fixtureProjects: Project[] = [
     cardMeta: "AMM",
     homeLabels: ["IDEA", "AMM"],
     status: "published",
+    comingSoon: false,
     cover: figmaCover("cover-idea-side", "idea-card.png", 434, 525, "IDEA project cover"),
     media: [],
     worksOrder: 8,
@@ -289,6 +297,7 @@ export const fixtureProjects: Project[] = [
     captionItalic: true,
     tightGap: true,
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-events-tight",
       "events.png",
@@ -314,6 +323,7 @@ export const fixtureProjects: Project[] = [
     homeLabels: ["TECH VALLEY", "TECH VALLEY"],
     cardAlign: "start",
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-tech-valley-pair",
       "tech-valley.jpg",
@@ -340,6 +350,7 @@ export const fixtureProjects: Project[] = [
     captionItalic: true,
     cardAlign: "end",
     status: "published",
+    comingSoon: false,
     cover: figmaCover(
       "cover-events-pair",
       "events.png",

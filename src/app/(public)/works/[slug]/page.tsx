@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { caseFromProject, ProjectCase } from "@/components/projects/ProjectCase";
+import {
+  ProjectComingSoonCase,
+  showsComingSoon,
+} from "@/components/projects/ProjectComingSoonCase";
 import { toNextProject } from "@/lib/projects/next-project";
 import { getProjectBySlug } from "@/lib/projects/queries";
 import { getSiteUrl } from "@/lib/site-url";
@@ -105,10 +109,17 @@ export default async function ProjectPage({ params }: PageProps) {
         year={project.projectYear}
         tags={project.tags}
       />
-      <ProjectCase
-        project={caseFromProject(project)}
-        nextSlug={next.kind === "project" ? next.slug : null}
-      />
+      {showsComingSoon(project) ? (
+        <ProjectComingSoonCase
+          project={project}
+          nextSlug={next.kind === "project" ? next.slug : null}
+        />
+      ) : (
+        <ProjectCase
+          project={caseFromProject(project)}
+          nextSlug={next.kind === "project" ? next.slug : null}
+        />
+      )}
     </>
   );
 }

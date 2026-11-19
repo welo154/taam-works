@@ -27,6 +27,7 @@ export type ProjectRow = {
   home_layout: ProjectLayout;
   seo_title: string | null;
   seo_description: string | null;
+  coming_soon?: boolean;
   updated_at: string;
 };
 
@@ -61,6 +62,7 @@ export type LoadedProject = {
 };
 
 let migrationProbe: { at: number; applied: boolean } | null = null;
+let comingSoonProbe: { at: number; applied: boolean } | null = null;
 
 /** True once supabase/migrations/20261113000001_bilingual_wide.sql has run. */
 export async function migrationApplied(): Promise<boolean> {
@@ -76,6 +78,26 @@ export async function migrationApplied(): Promise<boolean> {
     else throw error;
   }
   migrationProbe = { at: now, applied };
+  return applied;
+}
+
+/** True once supabase/migrations/20261119000001_coming_soon.sql has run. */
+export async function comingSoonColumnApplied(): Promise<boolean> {
+  const now = Date.now();
+  if (
+    comingSoonProbe &&
+    (comingSoonProbe.applied || now - comingSoonProbe.at < 30_000)
+  ) {
+    return comingSoonProbe.applied;
+  }
+  let applied = true;
+  try {
+    await db("projects?select=coming_soon&limit=1");
+  } catch (error) {
+    if (error instanceof SupabaseError && error.status === 400) applied = false;
+    else throw error;
+  }
+  comingSoonProbe = { at: now, applied };
   return applied;
 }
 
@@ -173,6 +195,7 @@ export function toProject({ row, assets, rows }: LoadedProject): Project {
     cardMeta: row.card_meta ?? undefined,
     homeLabels: labels,
     status: row.status,
+    comingSoon: Boolean(row.coming_soon),
     cover: coverRow ? assetToMedia(coverRow, assets) : FALLBACK_COVER,
     media,
     worksOrder: row.works_order,

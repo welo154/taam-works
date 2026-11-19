@@ -5,6 +5,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { fixtureProjects } from "@/content/fixtures/projects";
 import { isAdmin } from "@/lib/admin-session";
 import {
+  comingSoonColumnApplied,
   loadProjects,
   migrationApplied,
   type AssetRow,
@@ -170,6 +171,9 @@ async function saveProjectUnsafe(input: EditorProject): Promise<SaveResult> {
   if (migrated) {
     fields.title_ar = input.titleAr.trim();
     fields.description_ar = input.descriptionAr.trim();
+  }
+  if (await comingSoonColumnApplied()) {
+    fields.coming_soon = Boolean(input.comingSoon);
   }
 
   let slug: string;

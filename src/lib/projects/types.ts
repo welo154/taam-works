@@ -53,6 +53,8 @@ export type Project = {
   /** Pin the card to the cover width at the start or end of its grid cell. */
   cardAlign?: "start" | "end";
   status: ProjectStatus;
+  /** Project page shows the cover and a Coming soon state instead of the full stack. */
+  comingSoon: boolean;
   cover: MediaAsset;
   media: ProjectMediaRow[];
   worksOrder: number;

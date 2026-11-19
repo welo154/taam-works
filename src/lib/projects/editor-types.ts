@@ -34,6 +34,8 @@ export type EditorProject = {
   status: "draft" | "published" | "archived";
   cover: EditorMedia | null;
   rows: EditorRow[];
+  /** Cover-only project page until the media stack is ready. */
+  comingSoon: boolean;
   showOnHome: boolean;
   homeLayout: ProjectLayout;
   worksLayout: ProjectLayout;
