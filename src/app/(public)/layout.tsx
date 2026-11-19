@@ -6,7 +6,7 @@ import { ConnectSection } from "@/components/site/ConnectSection";
 import { LetTaamWork } from "@/components/site/LetTaamWork";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { contact, siteMeta, studioIntro } from "@/content/site";
+import { contact, siteMeta } from "@/content/site";
 import { isComingSoon } from "@/lib/coming-soon";
 import { getSiteUrl } from "@/lib/site-url";
 
