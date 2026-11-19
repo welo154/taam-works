@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     icon: [{ url: "/brand/tab-icon.svg", type: "image/svg+xml" }],
     shortcut: "/brand/tab-icon.svg",
   },
-  alternates: { canonical: "./" },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     siteName: "TAAM Works",
