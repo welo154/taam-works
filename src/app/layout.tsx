@@ -37,8 +37,14 @@ export const metadata: Metadata = {
   description,
   applicationName: "TaamWorks",
   icons: {
-    icon: [{ url: "/brand/tab-icon.svg", type: "image/svg+xml" }],
-    shortcut: "/brand/tab-icon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/brand/tab-icon-48.png", type: "image/png", sizes: "48x48" },
+      { url: "/brand/tab-icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/brand/tab-icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   alternates: { canonical: "/" },
   openGraph: {
