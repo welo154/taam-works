@@ -1,4 +1,4 @@
-import type { MediaKind, ProjectLayout } from "@/lib/projects/types";
+import type { CardHeight, MediaKind, ProjectLayout } from "@/lib/projects/types";
 
 /** One uploaded file as the dashboard editor tracks it. */
 export type EditorMedia = {
@@ -39,6 +39,8 @@ export type EditorProject = {
   showOnHome: boolean;
   homeLayout: ProjectLayout;
   worksLayout: ProjectLayout;
+  /** Applied when home or works size is Small (one third). */
+  cardHeight: CardHeight;
 };
 
 export type SaveResult =
@@ -70,4 +72,20 @@ export const LAYOUT_LABELS: Record<ProjectLayout, string> = {
   half: "Medium (half)",
   wide: "Wide (two thirds)",
   full: "Full width",
+};
+
+/** Pixel frames from the current Home / Works one-third cards. */
+export const THIRD_CARD_FRAMES: Record<
+  CardHeight,
+  { width: number; height: number }
+> = {
+  short: { width: 435, height: 263 },
+  medium: { width: 434, height: 455 },
+  tall: { width: 435, height: 525 },
+};
+
+export const CARD_HEIGHT_LABELS: Record<CardHeight, string> = {
+  short: "Short (landscape)",
+  medium: "Medium (square)",
+  tall: "Tall (portrait)",
 };

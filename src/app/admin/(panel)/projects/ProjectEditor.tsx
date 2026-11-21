@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUpload, saveProject } from "@/app/admin/(panel)/projects/actions";
 import {
+  CARD_HEIGHT_LABELS,
   IMAGE_TYPES,
   LAYOUT_LABELS,
   MAX_UPLOAD_BYTES,
@@ -20,7 +21,7 @@ import {
   input,
   label,
 } from "@/app/admin/ui";
-import type { ProjectLayout } from "@/lib/projects/types";
+import type { CardHeight, ProjectLayout } from "@/lib/projects/types";
 
 type Slot = {
   key: string;
@@ -234,10 +235,12 @@ export function ProjectEditor({
   initial,
   migrated,
   comingSoonReady = true,
+  cardHeightReady = true,
 }: {
   initial: EditorProject;
   migrated: boolean;
   comingSoonReady?: boolean;
+  cardHeightReady?: boolean;
 }) {
   const router = useRouter();
   const coverInput = useRef<HTMLInputElement>(null);
@@ -254,6 +257,7 @@ export function ProjectEditor({
   const [comingSoon, setComingSoon] = useState(initial.comingSoon);
   const [homeLayout, setHomeLayout] = useState<ProjectLayout>(initial.homeLayout);
   const [worksLayout, setWorksLayout] = useState<ProjectLayout>(initial.worksLayout);
+  const [cardHeight, setCardHeight] = useState<CardHeight>(initial.cardHeight);
   const [cover, setCover] = useState<Slot | null>(
     initial.cover ? slotFromMedia(initial.cover) : null,
   );
@@ -400,6 +404,7 @@ export function ProjectEditor({
       showOnHome,
       homeLayout,
       worksLayout,
+      cardHeight,
     }).catch(() => ({ ok: false as const, error: "Could not reach the server." }));
     setSaving(false);
     if (!result.ok) return setError(result.error);
@@ -410,6 +415,8 @@ export function ProjectEditor({
   const layouts = (Object.keys(LAYOUT_LABELS) as ProjectLayout[]).filter(
     (value) => migrated || value !== "wide",
   );
+  const usesThird = worksLayout === "third" || (showOnHome && homeLayout === "third");
+  const heights = Object.keys(CARD_HEIGHT_LABELS) as CardHeight[];
 
   return (
     <div className="space-y-6">
@@ -426,6 +433,13 @@ export function ProjectEditor({
           <code>supabase/migrations/20261119000001_coming_soon.sql</code> in the
           Supabase SQL Editor. Cover-only projects still open as Coming soon on
           the public site.
+        </p>
+      ) : null}
+      {!cardHeightReady ? (
+        <p className="rounded-2xl border border-yellow/40 bg-yellow/10 px-5 py-4 text-sm text-yellow">
+          One-third card heights will save after you run{" "}
+          <code>supabase/migrations/20261121000001_card_height.sql</code> in the
+          Supabase SQL Editor.
         </p>
       ) : null}
 
@@ -589,6 +603,28 @@ export function ProjectEditor({
                 ))}
               </select>
             </label>
+            {usesThird ? (
+              <label className={`${label} sm:col-span-2`}>
+                Height for one-third cards
+                <select
+                  className={input}
+                  value={cardHeight}
+                  disabled={!cardHeightReady}
+                  onChange={(e) => setCardHeight(e.target.value as CardHeight)}
+                >
+                  {heights.map((value) => (
+                    <option key={value} value={value}>
+                      {CARD_HEIGHT_LABELS[value]}
+                    </option>
+                  ))}
+                </select>
+                <span className="mt-1 block text-xs font-normal text-neutral-500">
+                  Matches the three frames already used on Home and Works: short
+                  landscape, medium square, tall portrait. Cover media is cropped
+                  to fit.
+                </span>
+              </label>
+            ) : null}
           </div>
         </div>
       </section>

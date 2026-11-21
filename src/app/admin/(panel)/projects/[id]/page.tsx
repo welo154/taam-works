@@ -3,13 +3,23 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectEditor } from "@/app/admin/(panel)/projects/ProjectEditor";
 import {
+  cardHeightColumnApplied,
   comingSoonColumnApplied,
   loadProjects,
   migrationApplied,
   type AssetRow,
 } from "@/lib/projects/db";
 import type { EditorMedia, EditorRow } from "@/lib/projects/editor-types";
+import type { CardHeight } from "@/lib/projects/types";
 import { publicMediaUrl } from "@/lib/supabase/rest";
+
+const CARD_HEIGHTS: CardHeight[] = ["short", "medium", "tall"];
+
+function asCardHeight(value: string | null | undefined): CardHeight {
+  return CARD_HEIGHTS.includes(value as CardHeight)
+    ? (value as CardHeight)
+    : "medium";
+}
 
 export const metadata: Metadata = { title: "Edit project" };
 export const dynamic = "force-dynamic";
@@ -43,11 +53,13 @@ export default async function EditProjectPage({
 }) {
   const { id } = await params;
   if (!UUID.test(id)) notFound();
-  const [[loaded], migrated, comingSoonReady] = await Promise.all([
-    loadProjects(`id=eq.${id}`),
-    migrationApplied(),
-    comingSoonColumnApplied(),
-  ]);
+  const [[loaded], migrated, comingSoonReady, cardHeightReady] =
+    await Promise.all([
+      loadProjects(`id=eq.${id}`),
+      migrationApplied(),
+      comingSoonColumnApplied(),
+      cardHeightColumnApplied(),
+    ]);
   if (!loaded) notFound();
 
   const { row, assets, rows } = loaded;
@@ -83,6 +95,7 @@ export default async function EditProjectPage({
       <ProjectEditor
         migrated={migrated}
         comingSoonReady={comingSoonReady}
+        cardHeightReady={cardHeightReady}
         initial={{
           id: row.id,
           isNew: false,
@@ -101,6 +114,7 @@ export default async function EditProjectPage({
           showOnHome: row.show_on_home,
           homeLayout: row.home_layout,
           worksLayout: row.works_layout,
+          cardHeight: asCardHeight(row.card_height),
         }}
       />
     </div>

@@ -1,5 +1,8 @@
 export type ProjectLayout = "third" | "half" | "wide" | "full";
 
+/** Fixed one-third card frames matching the Home / Works compositions. */
+export type CardHeight = "short" | "medium" | "tall";
+
 export type MediaKind = "image" | "video";
 
 export type MediaAsset = {
@@ -59,6 +62,8 @@ export type Project = {
   media: ProjectMediaRow[];
   worksOrder: number;
   worksLayout: ProjectLayout;
+  /** Height frame when the card is one third wide. */
+  cardHeight: CardHeight;
   showOnHome: boolean;
   homeOrder: number;
   homeLayout: ProjectLayout;

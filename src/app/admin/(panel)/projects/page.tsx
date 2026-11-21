@@ -26,8 +26,11 @@ import {
   migrationApplied,
   type LoadedProject,
 } from "@/lib/projects/db";
-import { LAYOUT_LABELS } from "@/lib/projects/editor-types";
-import type { ProjectLayout } from "@/lib/projects/types";
+import {
+  CARD_HEIGHT_LABELS,
+  LAYOUT_LABELS,
+} from "@/lib/projects/editor-types";
+import type { CardHeight, ProjectLayout } from "@/lib/projects/types";
 import { supabaseConfigured } from "@/lib/supabase/rest";
 
 export const metadata: Metadata = { title: "Projects" };
@@ -123,6 +126,7 @@ export default async function AdminProjectsPage() {
   const layouts = (Object.keys(LAYOUT_LABELS) as ProjectLayout[]).filter(
     (value) => migrated || value !== "wide",
   );
+  const heights = Object.keys(CARD_HEIGHT_LABELS) as CardHeight[];
 
   return (
     <div className="space-y-10">
@@ -236,6 +240,24 @@ export default async function AdminProjectsPage() {
                           </option>
                         ))}
                       </select>
+                      <label className="flex items-center gap-1.5">
+                        1/3 height
+                        <select
+                          name="cardHeight"
+                          defaultValue={
+                            heights.includes(row.card_height as CardHeight)
+                              ? row.card_height!
+                              : "medium"
+                          }
+                          className={selectSmall}
+                        >
+                          {heights.map((value) => (
+                            <option key={value} value={value}>
+                              {CARD_HEIGHT_LABELS[value]}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
                       <button className={btnSmall}>Apply</button>
                     </form>
                   </div>

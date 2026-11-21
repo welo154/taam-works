@@ -5,6 +5,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { fixtureProjects } from "@/content/fixtures/projects";
 import { isAdmin } from "@/lib/admin-session";
 import {
+  cardHeightColumnApplied,
   comingSoonColumnApplied,
   loadProjects,
   migrationApplied,
@@ -20,7 +21,7 @@ import {
   type SaveResult,
   type UploadTicket,
 } from "@/lib/projects/editor-types";
-import type { ProjectLayout } from "@/lib/projects/types";
+import type { CardHeight, ProjectLayout } from "@/lib/projects/types";
 import {
   createSignedUpload,
   db,
@@ -34,7 +35,14 @@ import {
 const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const LAYOUTS: ProjectLayout[] = ["third", "half", "wide", "full"];
+const CARD_HEIGHTS: CardHeight[] = ["short", "medium", "tall"];
 const RESERVED_SLUGS = new Set(["idea", "new"]);
+
+function pickCardHeight(value: unknown): CardHeight {
+  return CARD_HEIGHTS.includes(value as CardHeight)
+    ? (value as CardHeight)
+    : "medium";
+}
 /** Publish dashboard changes to the public site straight away. */
 function refreshSite() {
   revalidateTag("projects", { expire: 0 });
@@ -175,6 +183,9 @@ async function saveProjectUnsafe(input: EditorProject): Promise<SaveResult> {
   if (await comingSoonColumnApplied()) {
     fields.coming_soon = Boolean(input.comingSoon);
   }
+  if (await cardHeightColumnApplied()) {
+    fields.card_height = pickCardHeight(input.cardHeight);
+  }
 
   let slug: string;
   if (existing) {
@@ -295,11 +306,15 @@ export async function updatePlacement(formData: FormData) {
     if (!LAYOUTS.includes(value)) return "third";
     return value === "wide" && !migrated ? "half" : value;
   };
-  await dbUpdate(`projects?id=eq.${id}`, {
+  const fields: Record<string, unknown> = {
     show_on_home: formData.get("showOnHome") === "on",
     home_layout: pick("homeLayout"),
     works_layout: pick("worksLayout"),
-  });
+  };
+  if (await cardHeightColumnApplied()) {
+    fields.card_height = pickCardHeight(formData.get("cardHeight"));
+  }
+  await dbUpdate(`projects?id=eq.${id}`, fields);
   refreshSite();
 }
 

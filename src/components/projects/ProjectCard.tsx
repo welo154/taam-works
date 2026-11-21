@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ProjectImage } from "@/components/projects/ProjectImage";
+import { THIRD_CARD_FRAMES } from "@/lib/projects/editor-types";
 import type { Project, ProjectLayout } from "@/lib/projects/types";
 
 const spanClass: Record<ProjectLayout, string> = {
@@ -16,6 +17,10 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project, layout }: ProjectCardProps) {
   const { cover } = project;
+  const frame =
+    layout === "third"
+      ? THIRD_CARD_FRAMES[project.cardHeight ?? "medium"]
+      : { width: cover.width, height: cover.height };
   const labels = project.homeLabels ?? [
     project.title.toUpperCase(),
     project.cardMeta ?? String(project.projectYear),
@@ -35,7 +40,7 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
       style={
         project.cardAlign
           ? ({
-              "--card-width": `${cover.width}px`,
+              "--card-width": `${frame.width}px`,
               "--card-align": project.cardAlign,
             } as React.CSSProperties)
           : undefined
@@ -57,15 +62,15 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
           {cover.kind === "video" ? (
             <div
               className="relative w-full"
-              style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
+              style={{ aspectRatio: `${frame.width} / ${frame.height}` }}
             >
               {cover.posterSrc ? (
                 // eslint-disable-next-line @next/next/no-img-element -- poster underlay until video paints
                 <img
                   src={cover.posterSrc}
                   alt=""
-                  width={cover.width}
-                  height={cover.height}
+                  width={frame.width}
+                  height={frame.height}
                   className="absolute inset-0 h-full w-full object-cover"
                   aria-hidden
                 />
@@ -74,8 +79,8 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
                 className="relative z-[1] h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
                 src={cover.src}
                 poster={cover.posterSrc}
-                width={cover.width}
-                height={cover.height}
+                width={frame.width}
+                height={frame.height}
                 muted
                 playsInline
                 loop
@@ -88,8 +93,8 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
             <ProjectImage
               src={cover.src}
               alt={cover.alt}
-              width={cover.width}
-              height={cover.height}
+              width={frame.width}
+              height={frame.height}
               slug={project.slug}
               className="w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
               sizes={sizes}

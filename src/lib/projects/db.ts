@@ -1,5 +1,6 @@
 import { db, publicMediaUrl, SupabaseError } from "@/lib/supabase/rest";
 import type {
+  CardHeight,
   MediaAsset,
   MediaKind,
   Project,
@@ -7,6 +8,14 @@ import type {
   ProjectMediaRow,
   ProjectStatus,
 } from "@/lib/projects/types";
+
+const CARD_HEIGHTS: CardHeight[] = ["short", "medium", "tall"];
+
+function asCardHeight(value: string | null | undefined): CardHeight {
+  return CARD_HEIGHTS.includes(value as CardHeight)
+    ? (value as CardHeight)
+    : "medium";
+}
 
 export type ProjectRow = {
   id: string;
@@ -28,6 +37,7 @@ export type ProjectRow = {
   seo_title: string | null;
   seo_description: string | null;
   coming_soon?: boolean;
+  card_height?: string | null;
   updated_at: string;
 };
 
@@ -63,6 +73,7 @@ export type LoadedProject = {
 
 let migrationProbe: { at: number; applied: boolean } | null = null;
 let comingSoonProbe: { at: number; applied: boolean } | null = null;
+let cardHeightProbe: { at: number; applied: boolean } | null = null;
 
 /** True once supabase/migrations/20261113000001_bilingual_wide.sql has run. */
 export async function migrationApplied(): Promise<boolean> {
@@ -98,6 +109,26 @@ export async function comingSoonColumnApplied(): Promise<boolean> {
     else throw error;
   }
   comingSoonProbe = { at: now, applied };
+  return applied;
+}
+
+/** True once supabase/migrations/20261121000001_card_height.sql has run. */
+export async function cardHeightColumnApplied(): Promise<boolean> {
+  const now = Date.now();
+  if (
+    cardHeightProbe &&
+    (cardHeightProbe.applied || now - cardHeightProbe.at < 30_000)
+  ) {
+    return cardHeightProbe.applied;
+  }
+  let applied = true;
+  try {
+    await db("projects?select=card_height&limit=1");
+  } catch (error) {
+    if (error instanceof SupabaseError && error.status === 400) applied = false;
+    else throw error;
+  }
+  cardHeightProbe = { at: now, applied };
   return applied;
 }
 
@@ -200,6 +231,7 @@ export function toProject({ row, assets, rows }: LoadedProject): Project {
     media,
     worksOrder: row.works_order,
     worksLayout: row.works_layout,
+    cardHeight: asCardHeight(row.card_height),
     showOnHome: row.show_on_home,
     homeOrder: row.home_order,
     homeLayout: row.home_layout,
