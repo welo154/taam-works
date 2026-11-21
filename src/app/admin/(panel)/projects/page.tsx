@@ -38,8 +38,7 @@ function Thumb({ project, size = "h-24 w-20" }: { project: LoadedProject; size?:
     ? project.assets.get(project.row.cover_asset_id)
     : null;
   const media = cover ? assetToMedia(cover, project.assets) : null;
-  const src = media ? (media.kind === "video" ? media.posterSrc : media.src) : null;
-  if (!src) {
+  if (!media) {
     return (
       <div
         className={`${size} flex shrink-0 items-center justify-center rounded-xl bg-white/5 text-[10px] uppercase tracking-wider text-neutral-500`}
@@ -48,8 +47,23 @@ function Thumb({ project, size = "h-24 w-20" }: { project: LoadedProject; size?:
       </div>
     );
   }
+  if (media.kind === "video") {
+    return (
+      <video
+        src={media.src}
+        poster={media.posterSrc}
+        muted
+        playsInline
+        loop
+        autoPlay
+        preload="metadata"
+        className={`${size} shrink-0 rounded-xl object-cover`}
+        aria-hidden
+      />
+    );
+  }
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt="" className={`${size} shrink-0 rounded-xl object-cover`} />;
+  return <img src={media.src} alt="" className={`${size} shrink-0 rounded-xl object-cover`} />;
 }
 
 function Move({

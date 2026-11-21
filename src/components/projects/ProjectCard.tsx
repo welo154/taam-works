@@ -20,6 +20,14 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
     project.title.toUpperCase(),
     project.cardMeta ?? String(project.projectYear),
   ];
+  const sizes =
+    layout === "full"
+      ? "100vw"
+      : layout === "wide"
+        ? "(max-width: 1024px) 100vw, 887px"
+        : layout === "half"
+          ? "(max-width: 1024px) 50vw, 50vw"
+          : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw";
 
   return (
     <article
@@ -46,23 +54,32 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
           ))}
         </div>
         <div className="project-cover overflow-hidden bg-cream/5" data-reveal="clip">
-          <ProjectImage
-            src={cover.src}
-            alt={cover.alt}
-            width={cover.width}
-            height={cover.height}
-            slug={project.slug}
-            className="w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
-            sizes={
-              layout === "full"
-                ? "100vw"
-                : layout === "wide"
-                  ? "(max-width: 1024px) 100vw, 887px"
-                  : layout === "half"
-                    ? "(max-width: 1024px) 50vw, 50vw"
-                    : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            }
-          />
+          {cover.kind === "video" ? (
+            <video
+              className="w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+              style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
+              src={cover.src}
+              poster={cover.posterSrc}
+              width={cover.width}
+              height={cover.height}
+              muted
+              playsInline
+              loop
+              autoPlay
+              preload="metadata"
+              aria-label={cover.alt}
+            />
+          ) : (
+            <ProjectImage
+              src={cover.src}
+              alt={cover.alt}
+              width={cover.width}
+              height={cover.height}
+              slug={project.slug}
+              className="w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+              sizes={sizes}
+            />
+          )}
         </div>
       </Link>
     </article>
