@@ -49,17 +49,28 @@ function Thumb({ project, size = "h-24 w-20" }: { project: LoadedProject; size?:
   }
   if (media.kind === "video") {
     return (
-      <video
-        src={media.src}
-        poster={media.posterSrc}
-        muted
-        playsInline
-        loop
-        autoPlay
-        preload="metadata"
-        className={`${size} shrink-0 rounded-xl object-cover`}
-        aria-hidden
-      />
+      <div className={`${size} relative shrink-0 overflow-hidden rounded-xl`}>
+        {media.posterSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={media.posterSrc}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            aria-hidden
+          />
+        ) : null}
+        <video
+          src={media.src}
+          poster={media.posterSrc}
+          muted
+          playsInline
+          loop
+          autoPlay
+          preload="auto"
+          className="relative z-[1] h-full w-full object-cover"
+          aria-hidden
+        />
+      </div>
     );
   }
   // eslint-disable-next-line @next/next/no-img-element

@@ -55,20 +55,35 @@ export function ProjectCard({ project, layout }: ProjectCardProps) {
         </div>
         <div className="project-cover overflow-hidden bg-cream/5" data-reveal="clip">
           {cover.kind === "video" ? (
-            <video
-              className="w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+            <div
+              className="relative w-full"
               style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
-              src={cover.src}
-              poster={cover.posterSrc}
-              width={cover.width}
-              height={cover.height}
-              muted
-              playsInline
-              loop
-              autoPlay
-              preload="metadata"
-              aria-label={cover.alt}
-            />
+            >
+              {cover.posterSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element -- poster underlay until video paints
+                <img
+                  src={cover.posterSrc}
+                  alt=""
+                  width={cover.width}
+                  height={cover.height}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  aria-hidden
+                />
+              ) : null}
+              <video
+                className="relative z-[1] h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+                src={cover.src}
+                poster={cover.posterSrc}
+                width={cover.width}
+                height={cover.height}
+                muted
+                playsInline
+                loop
+                autoPlay
+                preload="auto"
+                aria-label={cover.alt}
+              />
+            </div>
           ) : (
             <ProjectImage
               src={cover.src}

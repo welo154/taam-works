@@ -11,6 +11,7 @@ import {
   type EditorMedia,
   type EditorProject,
 } from "@/lib/projects/editor-types";
+import { compressImage, compressVideo } from "@/lib/projects/compress-media";
 import {
   btnGhost,
   btnPrimary,
@@ -26,7 +27,7 @@ type Slot = {
   name: string;
   preview: string;
   kind: "image" | "video";
-  state: "uploading" | "ready" | "error";
+  state: "compressing" | "uploading" | "ready" | "error";
   progress: number;
   error?: string;
   media?: EditorMedia;
@@ -50,50 +51,6 @@ function slotFromMedia(media: EditorMedia): Slot {
     progress: 1,
     media,
   };
-}
-
-async function imageSize(file: Blob) {
-  const bitmap = await createImageBitmap(file);
-  const size = { width: bitmap.width, height: bitmap.height };
-  bitmap.close();
-  return size;
-}
-
-/** Read a video's pixel size and grab its first frame as a JPEG poster. */
-async function videoDetails(file: File) {
-  const url = URL.createObjectURL(file);
-  try {
-    const video = document.createElement("video");
-    video.muted = true;
-    video.playsInline = true;
-    video.preload = "auto";
-    await new Promise<void>((resolve, reject) => {
-      video.onloadeddata = () => resolve();
-      video.onerror = () => reject(new Error("Could not read this video."));
-      video.src = url;
-    });
-    const size = { width: video.videoWidth, height: video.videoHeight };
-    let poster: Blob | null = null;
-    try {
-      await new Promise<void>((resolve) => {
-        video.onseeked = () => resolve();
-        video.currentTime = Math.min(0.1, (video.duration || 1) / 2);
-        setTimeout(resolve, 2000);
-      });
-      const canvas = document.createElement("canvas");
-      canvas.width = size.width;
-      canvas.height = size.height;
-      canvas.getContext("2d")?.drawImage(video, 0, 0, size.width, size.height);
-      poster = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob(resolve, "image/jpeg", 0.82),
-      );
-    } catch {
-      poster = null;
-    }
-    return { ...size, poster };
-  } finally {
-    URL.revokeObjectURL(url);
-  }
 }
 
 function put(url: string, body: Blob, type: string, onProgress: (n: number) => void) {
@@ -130,36 +87,80 @@ async function uploadFile(
   projectId: string,
   file: File,
   alt: string,
-  onProgress: (n: number) => void,
+  onPhase: (phase: "compressing" | "uploading", progress: number) => void,
+  onPreview: (url: string) => void,
 ): Promise<EditorMedia> {
   if (file.size > MAX_UPLOAD_BYTES) {
     throw new Error("This file is larger than 50 MB.");
   }
   if (IMAGE_TYPES[file.type]) {
-    const size = await imageSize(file);
-    const path = await sendToStorage(projectId, file, file.type, onProgress);
-    return { path, kind: "image", mime: file.type, size: file.size, alt, ...size };
+    onPhase("compressing", 0.15);
+    const compressed = await compressImage(file);
+    onPreview(URL.createObjectURL(compressed.blob));
+    onPhase("uploading", 0);
+    const path = await sendToStorage(
+      projectId,
+      compressed.blob,
+      compressed.mime,
+      (progress) => onPhase("uploading", progress),
+    );
+    return {
+      path,
+      kind: "image",
+      mime: compressed.mime,
+      size: compressed.blob.size,
+      alt,
+      width: compressed.width,
+      height: compressed.height,
+    };
   }
   if (VIDEO_TYPES[file.type]) {
-    const { poster: frame, ...size } = await videoDetails(file);
-    const path = await sendToStorage(projectId, file, file.type, onProgress);
+    onPhase("compressing", 0);
+    const compressed = await compressVideo(file, (progress) =>
+      onPhase("compressing", progress),
+    );
+    onPreview(URL.createObjectURL(compressed.blob));
+    onPhase("uploading", 0);
+    const path = await sendToStorage(
+      projectId,
+      compressed.blob,
+      compressed.mime,
+      (progress) => onPhase("uploading", Math.min(0.9, progress * 0.9)),
+    );
     let poster: EditorMedia | null = null;
-    if (frame) {
+    if (compressed.poster) {
       try {
-        const posterPath = await sendToStorage(projectId, frame, "image/jpeg", () => {});
+        const posterPath = await sendToStorage(
+          projectId,
+          compressed.poster,
+          "image/jpeg",
+          () => {},
+        );
         poster = {
           path: posterPath,
           kind: "image",
           mime: "image/jpeg",
-          size: frame.size,
+          size: compressed.poster.size,
           alt,
-          ...size,
+          width: compressed.width,
+          height: compressed.height,
+          url: URL.createObjectURL(compressed.poster),
         };
       } catch {
         poster = null;
       }
     }
-    return { path, kind: "video", mime: file.type, size: file.size, alt, poster, ...size };
+    onPhase("uploading", 1);
+    return {
+      path,
+      kind: "video",
+      mime: compressed.mime,
+      size: compressed.blob.size,
+      alt,
+      poster,
+      width: compressed.width,
+      height: compressed.height,
+    };
   }
   throw new Error("Use JPG, PNG, WEBP or GIF photos, and MP4, WEBM or MOV videos.");
 }
@@ -169,17 +170,32 @@ const sectionTitle = "text-lg font-bold text-cream";
 function Preview({ slot, className }: { slot: Slot; className: string }) {
   if (!slot.preview) return <div className={`${className} bg-neutral-800`} />;
   if (slot.kind === "video") {
+    const poster = slot.media?.poster?.url;
     return (
-      <video
-        className={className}
-        src={slot.preview}
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        onMouseEnter={(event) => void event.currentTarget.play().catch(() => {})}
-        onMouseLeave={(event) => event.currentTarget.pause()}
-      />
+      <div className={`relative overflow-hidden ${className}`}>
+        {poster ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={poster}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            aria-hidden
+          />
+        ) : null}
+        <video
+          className="relative z-[1] h-full w-full object-cover"
+          src={slot.preview}
+          poster={poster}
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="auto"
+          onLoadedData={(event) => {
+            void event.currentTarget.play().catch(() => {});
+          }}
+        />
+      </div>
     );
   }
   // eslint-disable-next-line @next/next/no-img-element
@@ -187,7 +203,8 @@ function Preview({ slot, className }: { slot: Slot; className: string }) {
 }
 
 function SlotStatus({ slot }: { slot: Slot }) {
-  if (slot.state === "uploading") {
+  if (slot.state === "compressing" || slot.state === "uploading") {
+    const labelText = slot.state === "compressing" ? "Compressing" : "Uploading";
     return (
       <div className="mt-2">
         <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
@@ -197,7 +214,7 @@ function SlotStatus({ slot }: { slot: Slot }) {
           />
         </div>
         <p className="mt-1 text-xs text-neutral-400">
-          Uploading {Math.round(slot.progress * 100)}%
+          {labelText} {Math.round(slot.progress * 100)}%
         </p>
       </div>
     );
@@ -265,10 +282,16 @@ export function ProjectEditor({
       name: file.name,
       preview: URL.createObjectURL(file),
       kind: file.type.startsWith("video/") ? "video" : "image",
-      state: "uploading",
+      state: "compressing",
       progress: 0,
     };
-    uploadFile(initial.id, file, altBase, (progress) => patchSlot(slot.key, { progress }))
+    uploadFile(
+      initial.id,
+      file,
+      altBase,
+      (phase, progress) => patchSlot(slot.key, { state: phase, progress }),
+      (preview) => patchSlot(slot.key, { preview }),
+    )
       .then((media) => patchSlot(slot.key, { state: "ready", progress: 1, media }))
       .catch((reason: unknown) =>
         patchSlot(slot.key, {
@@ -342,7 +365,9 @@ export function ProjectEditor({
   }
 
   const allSlots = [...(cover ? [cover] : []), ...rows.flatMap((row) => row.slots)];
-  const uploading = allSlots.some((slot) => slot.state === "uploading");
+  const uploading = allSlots.some(
+    (slot) => slot.state === "compressing" || slot.state === "uploading",
+  );
   const failed = allSlots.some((slot) => slot.state === "error");
 
   async function save(status: EditorProject["status"]) {
@@ -667,7 +692,8 @@ export function ProjectEditor({
             Choose files
           </button>
           <p className="text-xs text-neutral-600">
-            JPG, PNG, WEBP, GIF, MP4, WEBM or MOV · up to 50 MB each
+            JPG, PNG, WEBP, GIF, MP4, WEBM or MOV · up to 50 MB each ·
+            compressed before upload
           </p>
           <input
             ref={stackInput}
@@ -709,7 +735,9 @@ export function ProjectEditor({
         >
           {initial.status === "published" ? "Unpublish and save as draft" : "Save draft"}
         </button>
-        {uploading ? <span className="text-sm text-neutral-400">Uploading files…</span> : null}
+        {uploading ? (
+          <span className="text-sm text-neutral-400">Compressing and uploading…</span>
+        ) : null}
       </div>
     </div>
   );
